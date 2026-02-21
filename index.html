@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>vote.rizz - WHO HAS THE MOST RIZZ?!</title>
+
+<!-- Firebase SDK (v9 compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Comic Neue', 'Comic Sans MS', cursive;
+    background: linear-gradient(135deg, #0f0024, #1a0033, #0d001a);
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== ANIMATED BACKGROUND ===== */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(circle at 20% 80%, rgba(255,0,255,0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(0,255,255,0.15) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(255,255,0,0.08) 0%, transparent 50%);
+    z-index: -1;
+    animation: bgPulse 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes bgPulse {
+    0% { opacity: 0.7; }
+    100% { opacity: 1; }
+  }
+
+  /* ===== FLOATING EMOJIS ===== */
+  .floating-emojis {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .floating-emoji {
+    position: absolute;
+    font-size: 2rem;
+    animation: floatUp linear infinite;
+    opacity: 0.3;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.3; }
+    90% { opacity: 0.3; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* ===== NAVBAR ===== */
+  .navbar {
+    background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff);
+    background-size: 200% 100%;
+    animation: rainbowSlide 3s linear infinite;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 30px rgba(255,0,255,0.5);
+  }
+
+  @keyframes rainbowSlide {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  .navbar .logo {
+    font-family: 'Bangers', cursive;
+    font-size: 2.2rem;
+    color: #0f0024;
+    text-shadow: 2px 2px 0 #fff, -1px -1px 0 #ff0;
+    cursor: pointer;
+    letter-spacing: 2px;
+  }
+
+  .navbar .nav-links {
+    display: flex;
+    gap: 8px;
+  }
+
+  .navbar .nav-links button {
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    border: 2px solid #fff;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-family: 'Comic Neue', cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .navbar .nav-links button:hover,
+  .navbar .nav-links button.active {
+    background: #fff;
+    color: #0f0024;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px #fff;
+  }
+
+  .navbar .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: #0f0024;
+    font-size: 1.1rem;
+  }
+
+  .navbar .logout-btn {
+    background: rgba(255,0,0,0.7);
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .navbar .logout-btn:hover {
+    background: red;
+    transform: scale(1.1);
+  }
+
+  /* ===== MAIN CONTAINER ===== */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== AUTH SCREEN ===== */
+  .auth-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+  }
+
+  .auth-screen .big-title {
+    font-family: 'Bangers', cursive;
+    font-size: 5rem;
+    background: linear-gradient(45deg, #ff00ff, #00ffff, #ff0, #ff00ff);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientText 2s ease infinite;
+    margin-bottom: 10px;
+    text-shadow: none;
+    filter: drop-shadow(0 0 20px rgba(255,0,255,0.5));
+  }
+
+  @keyframes gradientText {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .auth-screen .subtitle {
+    font-size: 1.5rem;
+    color: #ff0;
+    margin-bottom: 30px;
+    animation: bounce 1s ease infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .auth-box {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border: 3px solid rgba(255,0,255,0.5);
+    border-radius: 25px;
+    padding: 40px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 0 40px rgba(255,0,255,0.2), inset 0 0 40px rgba(0,255,255,0.05);
+  }
+
+  .auth-box h2 {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #0ff;
+    text-shadow: 0 0 10px #0ff;
+  }
+
+  .auth-box input {
+    width: 100%;
+    padding: 14px 18px;
+    margin-bottom: 15px;
+    border: 3px solid #ff00ff;
+    border-radius: 15px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 1.1rem;
+    font-family: 'Comic Neue', cursive;
+    outline: none;
+    transition: all 0.3s;
+  }
+
+  .auth-box input:focus {
+    border-color: #0ff;
+    box-shadow: 0 0 20px rgba(0,255,255,0.4);
+  }
+
+  .auth-box input::placeholder {
+    color: rgba(255,255,255,0.4);
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 15px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: linear-gradient(45deg, #ff00ff, #ff0080);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255,0,255,0.4);
+  }
+
+  .btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(255,0,255,0.7);
+  }
+
+  .auth-toggle {
+    margin-top: 15px;
+    color: #aaa;
+    font-size: 1rem;
+  }
+
+  .auth-toggle span {
+    color: #0ff;
+    cursor: pointer;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .auth-toggle span:hover {
+    color: #ff0;
+  }
+
+  .auth-error {
+    color: #ff4444;
+    margin-bottom: 10px;
+    font-weight: 700;
+    min-height: 1.2em;
+  }
+
+  /* ===== PAGE TITLE ===== */
+  .page-title {
+    font-family: 'Bangers', cursive;
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 25px;
+    text-shadow: 0 0 20px currentColor;
+  }
+
+  /* ===== VIDEO CARD ===== */
+  .video-card {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,0,255,0.3);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 25px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  .video-card:hover {
+    border-color: #0ff;
+    box-shadow: 0 0 30px rgba(0,255,255,0.2);
+    transform: translateY(-3px);
+  }
+
+  .video-card .video-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .video-card .video-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.6rem;
+    color: #ff0;
+    text-shadow: 0 0 8px rgba(255,255,0,0.4);
+  }
+
+  .video-card .video-author {
+    color: #0ff;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .video-card .video-embed {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .video-card .video-embed iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 12px;
+  }
+
+  .video-card .video-embed .video-link {
+    color: #0ff;
+    font-size: 1.1rem;
+    text-decoration: underline;
+    word-break: break-all;
+  }
+
+  .video-card .video-stats {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+  }
+
+  .video-card .avg-rating {
+    background: linear-gradient(45deg, #ff0080, #ff00ff);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .video-card .vote-count {
+    color: #aaa;
+    font-size: 0.95rem;
+  }
+
+  /* ===== COOL SCALE ===== */
+  .cool-scale {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .cool-scale-label {
+    font-weight: 700;
+    color: #ff0;
+    margin-right: 5px;
+    font-size: 1rem;
+  }
+
+  .cool-scale button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Comic Neue', cursive;
+  }
+
+  .cool-scale button:hover {
+    background: #ff00ff;
+    border-color: #ff00ff;
+    transform: scale(1.2);
+    box-shadow: 0 0 15px #ff00ff;
+  }
+
+  .cool-scale button.selected {
+    background: linear-gradient(45deg, #ff00ff, #0ff);
+    border-color: #fff;
+    transform: scale(1.15);
+    box-shadow: 0 0 15px rgba(255,0,255,0.6);
+  }
+
+  .cool-scale .already-voted {
+    color: #0f0;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  /* ===== POST FORM ===== */
+  .post-form {
+    background: rgba(255,255,255,0.06);
+    border: 3px solid rgba(0,255,255,0.4);
+    border-radius: 25px;
+    padding: 35px;
+    max-width: 550px;
+    margin: 0 auto;
+    box-shadow: 0 0 40px rgba(0,255,255,0.15);
+  }
+
+  .post-form input {
+    width: 100%;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    border: 3px solid #ff00ff;
+    border-radius: 15px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 1.1rem;
+    font-family: 'Comic Neue', cursive;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .post-form input:focus {
+    border-color: #0ff;
+    box-shadow: 0 0 20px rgba(0,255,255,0.4);
+  }
+
+  .post-form input::placeholder {
+    color: rgba(255,255,255,0.4);
+  }
+
+  .post-form .hint {
+    color: #aaa;
+    font-size: 0.9rem;
+    margin-bottom: 18px;
+    margin-top: -10px;
+  }
+
+  .post-success {
+    color: #0f0;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 1.2rem;
+    min-height: 1.4em;
+  }
+
+  /* ===== LEADERBOARD ===== */
+  .leaderboard-list {
+    list-style: none;
+  }
+
+  .leaderboard-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.1);
+    transition: all 0.3s;
+  }
+
+  .leaderboard-item:hover {
+    transform: translateX(5px);
+    border-color: rgba(255,0,255,0.4);
+  }
+
+  .leaderboard-item.rank-1 {
+    background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,165,0,0.15));
+    border: 3px solid gold;
+    box-shadow: 0 0 30px rgba(255,215,0,0.3);
+    padding: 22px 20px;
+  }
+
+  .leaderboard-item.rank-2 {
+    background: linear-gradient(135deg, rgba(192,192,192,0.15), rgba(150,150,150,0.1));
+    border-color: silver;
+  }
+
+  .leaderboard-item.rank-3 {
+    background: linear-gradient(135deg, rgba(205,127,50,0.15), rgba(180,100,30,0.1));
+    border-color: #cd7f32;
+  }
+
+  .leaderboard-rank {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  .rank-1 .leaderboard-rank {
+    font-size: 2.5rem;
+    color: gold;
+    text-shadow: 0 0 15px rgba(255,215,0,0.6);
+  }
+
+  .rank-2 .leaderboard-rank { color: silver; }
+  .rank-3 .leaderboard-rank { color: #cd7f32; }
+
+  .leaderboard-info {
+    flex: 1;
+  }
+
+  .leaderboard-username {
+    font-family: 'Bangers', cursive;
+    font-size: 1.5rem;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+
+  .rank-1 .leaderboard-username {
+    color: gold;
+    font-size: 1.8rem;
+  }
+
+  .leaderboard-details {
+    color: #aaa;
+    font-size: 0.9rem;
+  }
+
+  .leaderboard-score {
+    font-family: 'Bangers', cursive;
+    font-size: 1.8rem;
+    color: #ff00ff;
+    text-shadow: 0 0 10px rgba(255,0,255,0.5);
+  }
+
+  .rizz-king-badge {
+    display: inline-block;
+    animation: crownBounce 0.6s ease infinite alternate;
+    font-size: 2rem;
+    margin-left: 5px;
+  }
+
+  @keyframes crownBounce {
+    0% { transform: translateY(0) rotate(-5deg); }
+    100% { transform: translateY(-6px) rotate(5deg); }
+  }
+
+  .rizz-king-label {
+    font-family: 'Bangers', cursive;
+    background: linear-gradient(45deg, gold, #ff8c00, gold);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientText 1.5s ease infinite;
+    font-size: 1rem;
+    letter-spacing: 2px;
+  }
+
+  .leaderboard-empty {
+    text-align: center;
+    color: #aaa;
+    font-size: 1.2rem;
+    padding: 40px;
+  }
+
+  /* ===== PROFILE ===== */
+  .profile-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .profile-avatar {
+    font-size: 5rem;
+    margin-bottom: 10px;
+    animation: bounce 2s ease infinite;
+  }
+
+  .profile-username {
+    font-family: 'Bangers', cursive;
+    font-size: 2.5rem;
+    color: #0ff;
+    text-shadow: 0 0 15px rgba(0,255,255,0.5);
+  }
+
+  .profile-stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 15px;
+  }
+
+  .profile-stat {
+    text-align: center;
+  }
+
+  .profile-stat .stat-num {
+    font-family: 'Bangers', cursive;
+    font-size: 2.5rem;
+    color: #ff00ff;
+    text-shadow: 0 0 10px rgba(255,0,255,0.5);
+  }
+
+  .profile-stat .stat-label {
+    color: #aaa;
+    font-size: 0.9rem;
+  }
+
+  .profile-videos-title {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    color: #ff0;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(255,255,0,0.4);
+  }
+
+  .no-videos {
+    text-align: center;
+    color: #aaa;
+    font-size: 1.1rem;
+    padding: 30px;
+  }
+
+  /* ===== LOADING STATE ===== */
+  .loading-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    text-align: center;
+  }
+
+  .loading-screen .loading-spinner {
+    font-size: 3rem;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .loading-screen .loading-text {
+    font-family: 'Bangers', cursive;
+    font-size: 1.8rem;
+    color: #ff00ff;
+    text-shadow: 0 0 15px rgba(255,0,255,0.5);
+  }
+
+  /* ===== MISC ===== */
+  .hidden { display: none !important; }
+
+  .empty-feed {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .empty-feed .big-emoji {
+    font-size: 4rem;
+    margin-bottom: 15px;
+  }
+
+  .empty-feed p {
+    color: #aaa;
+    font-size: 1.2rem;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
+    .auth-screen .big-title { font-size: 3rem; }
+    .navbar { flex-wrap: wrap; gap: 8px; }
+    .navbar .nav-links { flex-wrap: wrap; justify-content: center; }
+    .navbar .nav-links button { padding: 6px 12px; font-size: 0.85rem; }
+    .page-title { font-size: 2.2rem; }
+    .cool-scale button { width: 34px; height: 34px; font-size: 0.85rem; }
+    .leaderboard-item { padding: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating Emojis Background -->
+<div class="floating-emojis" id="floatingEmojis"></div>
+
+<!-- ===== NAVBAR (hidden until logged in) ===== -->
+<nav class="navbar hidden" id="navbar">
+  <div class="logo" onclick="showPage('feed')">vote.rizz</div>
+  <div class="nav-links">
+    <button onclick="showPage('feed')" id="nav-feed">Home</button>
+    <button onclick="showPage('post')" id="nav-post">Post</button>
+    <button onclick="showPage('leaderboard')" id="nav-leaderboard">Leaderboard</button>
+    <button onclick="showPage('profile')" id="nav-profile">Profile</button>
+  </div>
+  <div class="user-info">
+    <span id="navUsername"></span>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<!-- ===== AUTH SCREEN ===== -->
+<div class="container" id="authScreen">
+  <div class="auth-screen">
+    <div class="big-title">vote.rizz</div>
+    <div class="subtitle">WHO HAS THE MOST RIZZ?! 😎🔥👑</div>
+    <div class="auth-box">
+      <h2 id="authTitle">Login</h2>
+      <div class="auth-error" id="authError"></div>
+      <input type="text" id="authUsername" placeholder="Username" autocomplete="off" maxlength="20">
+      <input type="password" id="authPassword" placeholder="Password" maxlength="30">
+      <button class="btn-primary" id="authBtn" onclick="handleAuth()">LET'S GO! 🚀</button>
+      <div class="auth-toggle">
+        <span id="authToggle" onclick="toggleAuthMode()">Don't have an account? Sign Up!</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LOADING SCREEN (shown while waiting for Firebase data) ===== -->
+<div class="container hidden" id="loadingScreen">
+  <div class="loading-screen">
+    <div class="loading-spinner">🔥</div>
+    <div class="loading-text">Loading the vibes...</div>
+  </div>
+</div>
+
+<!-- ===== FEED PAGE ===== -->
+<div class="container hidden" id="feedPage">
+  <div class="page-title" style="color: #0ff;">🔥 THE FEED 🔥</div>
+  <div id="feedList"></div>
+</div>
+
+<!-- ===== POST PAGE ===== -->
+<div class="container hidden" id="postPage">
+  <div class="page-title" style="color: #ff0;">📹 POST A VIDEO 📹</div>
+  <div class="post-form">
+    <input type="text" id="postTitle" placeholder="Give it a fire title 🔥" maxlength="60">
+    <input type="text" id="postUrl" placeholder="Paste video link here">
+    <div class="hint">YouTube or TikTok links work best!</div>
+    <button class="btn-primary" onclick="postVideo()">POST IT! 🎬</button>
+    <div class="post-success" id="postSuccess"></div>
+  </div>
+</div>
+
+<!-- ===== LEADERBOARD PAGE ===== -->
+<div class="container hidden" id="leaderboardPage">
+  <div class="page-title" style="color: gold;">👑 LEADERBOARD 👑</div>
+  <ul class="leaderboard-list" id="leaderboardList"></ul>
+</div>
+
+<!-- ===== PROFILE PAGE ===== -->
+<div class="container hidden" id="profilePage">
+  <div class="profile-header">
+    <div class="profile-avatar">😎</div>
+    <div class="profile-username" id="profileUsername"></div>
+    <div class="profile-stats">
+      <div class="profile-stat">
+        <div class="stat-num" id="profileVideos">0</div>
+        <div class="stat-label">Videos</div>
+      </div>
+      <div class="profile-stat">
+        <div class="stat-num" id="profileAvgRating">-</div>
+        <div class="stat-label">Avg Rating</div>
+      </div>
+      <div class="profile-stat">
+        <div class="stat-num" id="profileTotalVotes">0</div>
+        <div class="stat-label">Total Votes</div>
+      </div>
+    </div>
+  </div>
+  <div class="profile-videos-title">Your Videos</div>
+  <div id="profileVideosList"></div>
+</div>
+
+<script>
+  // ==========================================================
+  // ===== FIREBASE CONFIG ====================================
+  // ==========================================================
+  // 1. Go to https://console.firebase.google.com
+  // 2. Create a project (free Spark plan works!)
+  // 3. Add a Web app -> copy the config values below
+  // 4. Go to Realtime Database -> Create database -> Start in TEST MODE
+  // 5. Paste YOUR values below replacing the "YOUR_..." placeholders
+  // ==========================================================
+  const firebaseConfig = {
+    apiKey:            "YOUR_API_KEY",
+    authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
+    databaseURL:       "YOUR_DATABASE_URL",       // e.g. "https://your-project-id-default-rtdb.firebaseio.com"
+    projectId:         "YOUR_PROJECT_ID",
+    storageBucket:     "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId:             "YOUR_APP_ID"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  // ===== LOCAL SESSION (just the username string) =====
+  function getCurrentUser() {
+    return localStorage.getItem('vrizz_current_user');
+  }
+  function setCurrentUser(username) {
+    localStorage.setItem('vrizz_current_user', username);
+  }
+  function clearCurrentUser() {
+    localStorage.removeItem('vrizz_current_user');
+  }
+
+  // ===== CACHED FIREBASE DATA =====
+  // The real-time listener keeps this up to date
+  let cachedVideos = [];   // Array of video objects (converted from Firebase map)
+  let videosLoaded = false;
+  let videosListener = null;
+
+  // Convert Firebase videos object { id: {…}, id2: {…} } → array
+  function firebaseVideosToArray(fbVideos) {
+    if (!fbVideos) return [];
+    return Object.entries(fbVideos).map(([id, data]) => {
+      // Convert votes from { username: rating } map to [{ user, rating }] array
+      const votesMap = data.votes || {};
+      const votesArray = Object.entries(votesMap).map(([user, rating]) => ({ user, rating }));
+      return {
+        id: id,
+        title: data.title,
+        url: data.url,
+        author: data.author,
+        created: data.created,
+        votes: votesArray
+      };
+    });
+  }
+
+  // ===== FLOATING EMOJIS =====
+  function spawnFloatingEmojis() {
+    const emojis = ['👑', '🔥', '😎', '💯', '⚡', '✨', '🏆', '💎', '🎯', '🤩'];
+    const container = document.getElementById('floatingEmojis');
+    for (let i = 0; i < 15; i++) {
+      const el = document.createElement('div');
+      el.className = 'floating-emoji';
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      el.style.left = Math.random() * 100 + '%';
+      el.style.animationDuration = (8 + Math.random() * 12) + 's';
+      el.style.animationDelay = (Math.random() * 10) + 's';
+      el.style.fontSize = (1.2 + Math.random() * 1.5) + 'rem';
+      container.appendChild(el);
+    }
+  }
+  spawnFloatingEmojis();
+
+  // ===== AUTH =====
+  let isSignUp = false;
+
+  function toggleAuthMode() {
+    isSignUp = !isSignUp;
+    document.getElementById('authTitle').textContent = isSignUp ? 'Sign Up' : 'Login';
+    document.getElementById('authBtn').textContent = isSignUp ? "LET'S GOOO! 🎉" : "LET'S GO! 🚀";
+    document.getElementById('authToggle').textContent = isSignUp
+      ? 'Already have an account? Login!'
+      : "Don't have an account? Sign Up!";
+    document.getElementById('authError').textContent = '';
+  }
+
+  function handleAuth() {
+    const username = document.getElementById('authUsername').value.trim().toLowerCase();
+    const password = document.getElementById('authPassword').value;
+    const errorEl = document.getElementById('authError');
+    const authBtn = document.getElementById('authBtn');
+
+    if (!username || !password) {
+      errorEl.textContent = 'Bruh fill in both fields!! 😤';
+      return;
+    }
+    if (username.length < 2) {
+      errorEl.textContent = 'Username too short fam! 🙄';
+      return;
+    }
+
+    // Disable button while checking Firebase
+    authBtn.disabled = true;
+    authBtn.textContent = 'HOLD ON...';
+
+    if (isSignUp) {
+      db.ref('users/' + username).once('value').then(function(snapshot) {
+        if (snapshot.exists()) {
+          errorEl.textContent = 'That username is taken bro!! 😬';
+          authBtn.disabled = false;
+          authBtn.textContent = "LET'S GOOO! 🎉";
+          return;
+        }
+        db.ref('users/' + username).set({
+          password: password,
+          created: Date.now()
+        }).then(function() {
+          setCurrentUser(username);
+          authBtn.disabled = false;
+          enterApp();
+        });
+      }).catch(function(err) {
+        errorEl.textContent = 'Firebase error! Check your config 😵';
+        authBtn.disabled = false;
+        authBtn.textContent = "LET'S GOOO! 🎉";
+        console.error(err);
+      });
+    } else {
+      db.ref('users/' + username).once('value').then(function(snapshot) {
+        if (!snapshot.exists()) {
+          errorEl.textContent = "No account with that name! 🤔";
+          authBtn.disabled = false;
+          authBtn.textContent = "LET'S GO! 🚀";
+          return;
+        }
+        if (snapshot.val().password !== password) {
+          errorEl.textContent = 'Wrong password!! 🔒';
+          authBtn.disabled = false;
+          authBtn.textContent = "LET'S GO! 🚀";
+          return;
+        }
+        setCurrentUser(username);
+        authBtn.disabled = false;
+        enterApp();
+      }).catch(function(err) {
+        errorEl.textContent = 'Firebase error! Check your config 😵';
+        authBtn.disabled = false;
+        authBtn.textContent = "LET'S GO! 🚀";
+        console.error(err);
+      });
+    }
+  }
+
+  // Enter on password field
+  document.getElementById('authPassword').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') handleAuth();
+  });
+  document.getElementById('authUsername').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('authPassword').focus();
+  });
+
+  function logout() {
+    // Detach real-time listener
+    if (videosListener) {
+      db.ref('videos').off('value', videosListener);
+      videosListener = null;
+    }
+    videosLoaded = false;
+    cachedVideos = [];
+
+    clearCurrentUser();
+    document.getElementById('authScreen').classList.remove('hidden');
+    document.getElementById('navbar').classList.add('hidden');
+    hideAllPages();
+    document.getElementById('loadingScreen').classList.add('hidden');
+    document.getElementById('authUsername').value = '';
+    document.getElementById('authPassword').value = '';
+    document.getElementById('authError').textContent = '';
+  }
+
+  function enterApp() {
+    document.getElementById('authScreen').classList.add('hidden');
+    document.getElementById('navbar').classList.remove('hidden');
+    document.getElementById('navUsername').textContent = '😎 ' + getCurrentUser();
+
+    // Show loading screen while we wait for the first Firebase snapshot
+    if (!videosLoaded) {
+      hideAllPages();
+      document.getElementById('loadingScreen').classList.remove('hidden');
+    }
+
+    // Attach real-time listener for videos
+    if (!videosListener) {
+      videosListener = db.ref('videos').on('value', function(snapshot) {
+        cachedVideos = firebaseVideosToArray(snapshot.val());
+        var wasLoaded = videosLoaded;
+        videosLoaded = true;
+
+        // If this is the first load, switch from loading screen to feed
+        if (!wasLoaded) {
+          document.getElementById('loadingScreen').classList.add('hidden');
+          showPage('feed');
+        } else {
+          // Re-render whatever page is currently visible
+          rerenderCurrentPage();
+        }
+      });
+    } else {
+      showPage('feed');
+    }
+  }
+
+  // Figure out which page is showing and re-render it
+  function rerenderCurrentPage() {
+    if (!document.getElementById('feedPage').classList.contains('hidden')) {
+      renderFeed();
+    } else if (!document.getElementById('leaderboardPage').classList.contains('hidden')) {
+      renderLeaderboard();
+    } else if (!document.getElementById('profilePage').classList.contains('hidden')) {
+      renderProfile();
+    }
+  }
+
+  // ===== NAVIGATION =====
+  function hideAllPages() {
+    ['feedPage', 'postPage', 'leaderboardPage', 'profilePage'].forEach(id => {
+      document.getElementById(id).classList.add('hidden');
+    });
+    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-profile'].forEach(id => {
+      document.getElementById(id).classList.remove('active');
+    });
+  }
+
+  function showPage(page) {
+    hideAllPages();
+    document.getElementById('loadingScreen').classList.add('hidden');
+    switch(page) {
+      case 'feed':
+        document.getElementById('feedPage').classList.remove('hidden');
+        document.getElementById('nav-feed').classList.add('active');
+        renderFeed();
+        break;
+      case 'post':
+        document.getElementById('postPage').classList.remove('hidden');
+        document.getElementById('nav-post').classList.add('active');
+        document.getElementById('postSuccess').textContent = '';
+        break;
+      case 'leaderboard':
+        document.getElementById('leaderboardPage').classList.remove('hidden');
+        document.getElementById('nav-leaderboard').classList.add('active');
+        renderLeaderboard();
+        break;
+      case 'profile':
+        document.getElementById('profilePage').classList.remove('hidden');
+        document.getElementById('nav-profile').classList.add('active');
+        renderProfile();
+        break;
+    }
+  }
+
+  // ===== VIDEO EMBED HELPER =====
+  function getEmbedUrl(url) {
+    // YouTube
+    let m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
+    if (m) return 'https://www.youtube.com/embed/' + m[1];
+    // TikTok
+    m = url.match(/tiktok\.com\/@[^/]+\/video\/(\d+)/);
+    if (m) return 'https://www.tiktok.com/embed/v2/' + m[1];
+    return null;
+  }
+
+  function renderVideoEmbed(url) {
+    const embedUrl = getEmbedUrl(url);
+    if (embedUrl) {
+      return '<iframe src="' + embedUrl + '" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>';
+    }
+    return '<a href="' + escapeHtml(url) + '" target="_blank" class="video-link">🔗 ' + escapeHtml(url) + '</a>';
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // ===== FEED =====
+  function renderFeed() {
+    const videos = cachedVideos;
+    const container = document.getElementById('feedList');
+    const currentUser = getCurrentUser();
+
+    if (videos.length === 0) {
+      container.innerHTML = '<div class="empty-feed"><div class="big-emoji">😴</div><p>No videos yet!! Be the first to post something cool!</p></div>';
+      return;
+    }
+
+    // Show newest first
+    const sorted = [...videos].sort((a, b) => b.created - a.created);
+    container.innerHTML = sorted.map(v => {
+      const avgRating = v.votes.length > 0
+        ? (v.votes.reduce((sum, vote) => sum + vote.rating, 0) / v.votes.length).toFixed(1)
+        : '-';
+      const userVote = v.votes.find(vote => vote.user === currentUser);
+      const isOwnVideo = v.author === currentUser;
+
+      let voteHtml;
+      if (isOwnVideo) {
+        voteHtml = '<span class="already-voted">Your video!</span>';
+      } else if (userVote) {
+        voteHtml = '<span class="already-voted">You rated: ' + userVote.rating + '/10 ✅</span>';
+      } else {
+        voteHtml = '';
+        for (let i = 1; i <= 10; i++) {
+          voteHtml += '<button onclick="voteVideo(\'' + v.id + '\', ' + i + ')">' + i + '</button>';
+        }
+      }
+
+      return '<div class="video-card">'
+        + '<div class="video-header">'
+        + '<div class="video-title">' + escapeHtml(v.title) + '</div>'
+        + '<div class="video-author">by ' + escapeHtml(v.author) + '</div>'
+        + '</div>'
+        + '<div class="video-embed">' + renderVideoEmbed(v.url) + '</div>'
+        + '<div class="video-stats">'
+        + '<span class="avg-rating">⭐ ' + avgRating + '/10</span>'
+        + '<span class="vote-count">' + v.votes.length + ' vote' + (v.votes.length !== 1 ? 's' : '') + '</span>'
+        + '</div>'
+        + '<div class="cool-scale">'
+        + '<span class="cool-scale-label">COOL SCALE:</span>'
+        + voteHtml
+        + '</div>'
+        + '</div>';
+    }).join('');
+  }
+
+  function voteVideo(videoId, rating) {
+    const currentUser = getCurrentUser();
+    // Write directly to Firebase — the real-time listener will update the UI
+    db.ref('videos/' + videoId + '/votes/' + currentUser).set(rating);
+  }
+
+  // ===== POST VIDEO =====
+  function postVideo() {
+    const title = document.getElementById('postTitle').value.trim();
+    const url = document.getElementById('postUrl').value.trim();
+    const successEl = document.getElementById('postSuccess');
+
+    if (!title || !url) {
+      successEl.style.color = '#ff4444';
+      successEl.textContent = 'Fill in everything bro!! 😤';
+      return;
+    }
+
+    // Basic URL check
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      successEl.style.color = '#ff4444';
+      successEl.textContent = 'That doesn\'t look like a link! 🤨';
+      return;
+    }
+
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    db.ref('videos/' + id).set({
+      title: title,
+      url: url,
+      author: getCurrentUser(),
+      created: Date.now()
+      // votes intentionally omitted — starts empty in Firebase
+    }).then(function() {
+      document.getElementById('postTitle').value = '';
+      document.getElementById('postUrl').value = '';
+      successEl.style.color = '#0f0';
+      successEl.textContent = 'VIDEO POSTED!! 🎉🔥 GO CHECK THE FEED!';
+    }).catch(function(err) {
+      successEl.style.color = '#ff4444';
+      successEl.textContent = 'Firebase error! Check console 😵';
+      console.error(err);
+    });
+  }
+
+  // ===== LEADERBOARD =====
+  function renderLeaderboard() {
+    const videos = cachedVideos;
+    const container = document.getElementById('leaderboardList');
+
+    // Aggregate per user
+    const userStats = {};
+    videos.forEach(v => {
+      if (!userStats[v.author]) {
+        userStats[v.author] = { totalRating: 0, totalVotes: 0, videoCount: 0 };
+      }
+      userStats[v.author].videoCount++;
+      v.votes.forEach(vote => {
+        userStats[v.author].totalRating += vote.rating;
+        userStats[v.author].totalVotes++;
+      });
+    });
+
+    // Build sorted list
+    const ranked = Object.entries(userStats)
+      .map(([user, stats]) => ({
+        user,
+        avg: stats.totalVotes > 0 ? stats.totalRating / stats.totalVotes : 0,
+        totalVotes: stats.totalVotes,
+        videoCount: stats.videoCount
+      }))
+      .filter(u => u.totalVotes > 0)
+      .sort((a, b) => b.avg - a.avg);
+
+    if (ranked.length === 0) {
+      container.innerHTML = '<div class="leaderboard-empty">No votes yet! Go rate some videos! 🗳️</div>';
+      return;
+    }
+
+    container.innerHTML = ranked.map((entry, i) => {
+      const rank = i + 1;
+      const rankClass = rank <= 3 ? ' rank-' + rank : '';
+      const medal = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank;
+      const isKing = rank === 1;
+
+      return '<li class="leaderboard-item' + rankClass + '">'
+        + '<div class="leaderboard-rank">' + medal + '</div>'
+        + '<div class="leaderboard-info">'
+        + '<div class="leaderboard-username">'
+        + escapeHtml(entry.user)
+        + (isKing ? ' <span class="rizz-king-badge">👑</span>' : '')
+        + '</div>'
+        + (isKing ? '<div class="rizz-king-label">✨ RIZZ KING ✨</div>' : '')
+        + '<div class="leaderboard-details">'
+        + entry.videoCount + ' video' + (entry.videoCount !== 1 ? 's' : '')
+        + ' · ' + entry.totalVotes + ' vote' + (entry.totalVotes !== 1 ? 's' : '')
+        + '</div>'
+        + '</div>'
+        + '<div class="leaderboard-score">' + entry.avg.toFixed(1) + '</div>'
+        + '</li>';
+    }).join('');
+  }
+
+  // ===== PROFILE =====
+  function renderProfile() {
+    const currentUser = getCurrentUser();
+    const videos = cachedVideos;
+    const myVideos = videos.filter(v => v.author === currentUser);
+
+    document.getElementById('profileUsername').textContent = currentUser;
+    document.getElementById('profileVideos').textContent = myVideos.length;
+
+    let totalRating = 0, totalVotes = 0;
+    myVideos.forEach(v => {
+      v.votes.forEach(vote => {
+        totalRating += vote.rating;
+        totalVotes++;
+      });
+    });
+
+    document.getElementById('profileTotalVotes').textContent = totalVotes;
+    document.getElementById('profileAvgRating').textContent = totalVotes > 0
+      ? (totalRating / totalVotes).toFixed(1)
+      : '-';
+
+    const listEl = document.getElementById('profileVideosList');
+    if (myVideos.length === 0) {
+      listEl.innerHTML = '<div class="no-videos">You haven\'t posted any videos yet! 🎬</div>';
+      return;
+    }
+
+    listEl.innerHTML = [...myVideos].sort((a, b) => b.created - a.created).map(v => {
+      const avgRating = v.votes.length > 0
+        ? (v.votes.reduce((sum, vote) => sum + vote.rating, 0) / v.votes.length).toFixed(1)
+        : '-';
+
+      return '<div class="video-card">'
+        + '<div class="video-header">'
+        + '<div class="video-title">' + escapeHtml(v.title) + '</div>'
+        + '</div>'
+        + '<div class="video-embed">' + renderVideoEmbed(v.url) + '</div>'
+        + '<div class="video-stats">'
+        + '<span class="avg-rating">⭐ ' + avgRating + '/10</span>'
+        + '<span class="vote-count">' + v.votes.length + ' vote' + (v.votes.length !== 1 ? 's' : '') + '</span>'
+        + '</div>'
+        + '</div>';
+    }).join('');
+  }
+
+  // ===== INIT =====
+  // If user was previously logged in, verify they still exist in Firebase and re-enter
+  (function() {
+    const savedUser = getCurrentUser();
+    if (savedUser) {
+      db.ref('users/' + savedUser).once('value').then(function(snapshot) {
+        if (snapshot.exists()) {
+          enterApp();
+        } else {
+          clearCurrentUser();
+        }
+      }).catch(function() {
+        // Firebase not configured yet — just show login
+        clearCurrentUser();
+      });
+    }
+  })();
+</script>
+</body>
+</html>
