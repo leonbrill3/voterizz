@@ -2402,72 +2402,24 @@
   // ===== CONTENT MODERATION =====
   // Bad words list (covers swears, slurs, inappropriate content)
   const badWordsList = [
-    // Swear words
-    'fuck', 'shit', 'ass', 'damn', 'hell', 'bitch', 'bastard', 'crap', 'piss',
-    'dick', 'cock', 'pussy', 'cunt', 'whore', 'slut', 'hoe', 'thot',
-    // Slurs (abbreviated/common variations)
+    // Actual swear words
+    'fuck', 'shit', 'bitch', 'cunt', 'whore', 'slut', 'hoe', 'thot',
+    'dick', 'cock', 'pussy',
+    // Slurs
     'fag', 'faggot', 'retard', 'retarded', 'nigger', 'nigga', 'chink', 'spic', 'kike', 'gook',
-    'tranny', 'dyke', 'homo', 'queer',
-    // Mean/bullying words - single words
-    'ugly', 'fat', 'stupid', 'idiot', 'dumb', 'loser', 'pathetic', 'worthless', 'trash',
-    'lame', 'boring', 'annoying', 'gross', 'disgusting', 'ew', 'eww', 'ewww',
-    'weirdo', 'freak', 'creep', 'creepy', 'psycho', 'crazy', 'insane',
-    'nerd', 'geek', 'dork', 'loner', 'reject', 'failure', 'noob', 'newb',
-    'suck', 'sucks', 'sucked', 'stink', 'stinks', 'terrible', 'horrible', 'awful',
-    'worst', 'bad', 'weak', 'lame', 'basic', 'mid', 'trash', 'garbage',
-    // Harmful phrases
-    'kill yourself', 'kys', 'die', 'hate you', 'nobody likes you', 'kill', 'murder',
-    'go away', 'leave', 'get out', 'not wanted', 'not welcome',
-    // Mean phrases and bullying
-    'no one likes', 'nobody likes', 'everyone hates', 'we all hate',
-    'no friends', 'have no friends', 'friendless', 'lonely',
-    'try hard', 'tryhard', 'pick me', 'attention seeker', 'clout chaser',
-    'copycat', 'faker', 'fake', 'poser', 'wannabe', 'jealous',
-    'youre bad', 'ur bad', 'you bad', 'so bad', 'terrible at',
-    'cant do', 'can not do', 'never will', 'give up', 'just quit', 'stop trying',
-    'not good', 'not talented', 'no talent', 'untalented', 'no skill', 'unskilled',
-    'embarrassing', 'embarrassed', 'ashamed', 'shame on', 'should be ashamed',
-    'makes me sick', 'want to puke', 'gonna puke', 'throwing up',
-    'not funny', 'unfunny', 'cringe', 'cringy', 'cringey', 'so cringe',
-    'delete this', 'take this down', 'remove this', 'shouldnt post',
-    'why would you', 'why did you', 'what is wrong with',
-    'get a life', 'have no life', 'no life', 'touch grass',
-    'ratio', 'ratioed', 'take the l', 'big l', 'huge l',
-    'bozo', 'clown', 'joke', 'laughing at you', 'laugh at you',
-    'making fun', 'make fun', 'mocking', 'mock you',
-    // Exclusion/social bullying
-    'not invited', 'dont invite', 'leave them out', 'kick them out',
-    'ignore', 'ignoring', 'blocked', 'blocking', 'unfriend', 'unfollowed',
-    'not cool', 'uncool', 'unpopular', 'nobody knows you',
-    'irrelevant', 'doesnt matter', 'dont matter', 'who cares', 'who asked',
-    'didnt ask', 'nobody asked', 'no one asked', 'no one cares', 'nobody cares',
-    // Appearance/body shaming
-    'look like', 'looks like', 'looking like', 'face like',
-    'skinny', 'bony', 'chubby', 'overweight', 'obese',
-    'short', 'tall', 'tiny', 'giant', 'midget',
-    'pimple', 'acne', 'zit', 'braces', 'glasses',
-    'hair looks', 'bad hair', 'ugly hair', 'weird hair',
-    'dress like', 'outfit is', 'clothes are',
-    // Inappropriate content
-    'sex', 'sexy', 'nude', 'naked', 'porn', 'boobs', 'tits', 'penis', 'vagina',
-    'hot', 'horny', 'turned on', 'hookup', 'hook up', 'dating', 'date me',
-    'boyfriend', 'girlfriend', 'crush', 'love you', 'marry me',
-    'kiss', 'kissing', 'makeout', 'make out',
+    'tranny', 'dyke',
+    // Self-harm / violence
+    'kill yourself', 'kys', 'kms',
+    // Explicit / inappropriate content
+    'sex', 'nude', 'naked', 'porn', 'boobs', 'tits', 'penis', 'vagina',
+    'horny', 'turned on', 'hookup', 'hook up',
     // Personal info requests
-    'phone number', 'address', 'where do you live', 'what school', 'snapchat', 'snap',
-    'instagram', 'insta', 'dm me', 'text me', 'call me', 'facetime', 'discord',
-    'tiktok', 'whatsapp', 'telegram', 'kik',
-    // Common leetspeak/bypass attempts
+    'phone number', 'where do you live', 'what school',
+    // Leetspeak bypasses of actual swears
     'f*ck', 'sh*t', 'b*tch', 'a$$', 'd!ck', 'p*ssy', 'fck', 'sht', 'btch',
     'f u c k', 's h i t', 'b i t c h', 'fuk', 'phuck', 'shiit', 'biatch',
-    'st00pid', 'dum', 'dumm', 'stoopid', 'stpd',
-    // Additional mean phrases
-    'shut up', 'stfu', 'gtfo', 'kms', 'smh',
-    'youre ugly', 'ur ugly', 'you suck', 'u suck', 'they suck',
-    'hate this', 'hate it', 'hate them', 'hate him', 'hate her',
-    'worst ever', 'worst thing', 'worst person', 'worst video',
-    'downvote', 'dislike', 'thumbs down', 'report', 'reporting',
-    'get banned', 'hope banned', 'should be banned'
+    // Abbreviations of actual swears
+    'stfu', 'gtfo'
   ];
 
   // Patterns for detecting personal info
