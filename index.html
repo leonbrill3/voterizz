@@ -323,6 +323,59 @@
     font-size: 1.6rem;
     color: #ff0;
     text-shadow: 0 0 8px rgba(255,255,0,0.4);
+    flex: 1;
+  }
+
+  .video-card .post-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: 10px;
+  }
+
+  .video-card .post-actions button {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #aaa;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .video-card .post-actions button:hover {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+
+  .video-card .post-actions .delete-btn:hover {
+    background: rgba(255,0,0,0.3);
+    border-color: #ff4444;
+    color: #ff4444;
+  }
+
+  .comment-item .comment-actions {
+    display: flex;
+    gap: 6px;
+    margin-left: 8px;
+  }
+
+  .comment-item .comment-actions button {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 2px 4px;
+    transition: color 0.2s;
+  }
+
+  .comment-item .comment-actions button:hover {
+    color: #fff;
+  }
+
+  .comment-item .comment-actions .delete-btn:hover {
+    color: #ff4444;
   }
 
   .video-card .video-author {
@@ -1079,6 +1132,248 @@
     margin-top: 10px;
   }
 
+  /* ===== EDIT MODAL ===== */
+  .edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .edit-modal-box {
+    background: linear-gradient(135deg, #1a0033, #0f0024);
+    border: 3px solid #0ff;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 0 40px rgba(0,255,255,0.3);
+  }
+
+  .edit-modal-box h3 {
+    font-family: 'Bangers', cursive;
+    font-size: 1.8rem;
+    color: #0ff;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .edit-modal-box input,
+  .edit-modal-box textarea {
+    width: 100%;
+    padding: 12px 16px;
+    margin-bottom: 15px;
+    border: 2px solid #ff00ff;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Comic Neue', cursive;
+    outline: none;
+  }
+
+  .edit-modal-box textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  .edit-modal-box input:focus,
+  .edit-modal-box textarea:focus {
+    border-color: #0ff;
+    box-shadow: 0 0 15px rgba(0,255,255,0.3);
+  }
+
+  .edit-modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .edit-modal-buttons button {
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .edit-modal-buttons .save-btn {
+    background: linear-gradient(45deg, #ff00ff, #0ff);
+    border: none;
+    color: #fff;
+  }
+
+  .edit-modal-buttons .save-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0,255,255,0.5);
+  }
+
+  .edit-modal-buttons .cancel-btn {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: #aaa;
+  }
+
+  .edit-modal-buttons .cancel-btn:hover {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+
+  /* ===== SETTINGS MODAL ===== */
+  .settings-btn {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(0,255,255,0.4);
+    color: #0ff;
+    padding: 8px 16px;
+    border-radius: 15px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 15px;
+  }
+
+  .settings-btn:hover {
+    background: rgba(0,255,255,0.15);
+    box-shadow: 0 0 15px rgba(0,255,255,0.3);
+  }
+
+  /* ===== ADMIN PANEL ===== */
+  .admin-panel {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,0,255,0.4);
+    border-radius: 20px;
+    padding: 20px;
+  }
+
+  .admin-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    padding-bottom: 15px;
+  }
+
+  .admin-tabs button {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    color: #aaa;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .admin-tabs button:hover {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+
+  .admin-tabs button.active {
+    background: linear-gradient(45deg, #ff00ff, #0ff);
+    border-color: transparent;
+    color: #fff;
+  }
+
+  .admin-search {
+    width: 100%;
+    padding: 12px 18px;
+    margin-bottom: 20px;
+    border: 2px solid rgba(0,255,255,0.4);
+    border-radius: 15px;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Comic Neue', cursive;
+    outline: none;
+  }
+
+  .admin-search:focus {
+    border-color: #0ff;
+    box-shadow: 0 0 15px rgba(0,255,255,0.3);
+  }
+
+  .admin-list {
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  .admin-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    transition: all 0.2s;
+  }
+
+  .admin-item:hover {
+    border-color: rgba(255,0,255,0.4);
+    background: rgba(255,255,255,0.08);
+  }
+
+  .admin-item-info {
+    flex: 1;
+  }
+
+  .admin-item-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+
+  .admin-item-meta {
+    color: #888;
+    font-size: 0.85rem;
+  }
+
+  .admin-item-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .admin-item-actions button {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #aaa;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .admin-item-actions button:hover {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+
+  .admin-item-actions .ban-btn:hover {
+    background: rgba(255,0,0,0.3);
+    border-color: #ff4444;
+    color: #ff4444;
+  }
+
+  .admin-item.banned {
+    opacity: 0.6;
+    border-color: rgba(255,0,0,0.3);
+  }
+
   /* ===== RESPONSIVE ===== */
   @media (max-width: 600px) {
     .auth-screen .big-title { font-size: 3rem; }
@@ -1105,6 +1400,7 @@
     <button onclick="showPage('leaderboard')" id="nav-leaderboard">Leaderboard</button>
     <button onclick="showPage('rules')" id="nav-rules">Rules</button>
     <button onclick="showPage('profile')" id="nav-profile">Profile</button>
+    <button onclick="showPage('admin')" id="nav-admin" class="hidden" style="background:rgba(255,0,255,0.3);">Admin</button>
   </div>
   <div class="user-info">
     <span id="navUsername"></span>
@@ -1302,6 +1598,8 @@
 </div>
 
 <!-- ===== PROFILE PAGE ===== -->
+<div class="container hidden" id="profilePage">
+  <div class="page-title" style="color: #0ff;">😎 YOUR PROFILE 😎</div>
   <div class="profile-header">
     <div class="profile-avatar">😎</div>
     <div class="profile-username" id="profileUsername"></div>
@@ -1330,8 +1628,50 @@
       </div>
     </div>
   </div>
+  <button class="settings-btn" onclick="showSettingsModal()">⚙️ Settings</button>
+  </div>
   <div class="profile-videos-title">Your Videos</div>
   <div id="profileVideosList"></div>
+</div>
+
+<!-- ===== ADMIN PAGE ===== -->
+<div class="container hidden" id="adminPage">
+  <div class="page-title" style="color: #ff00ff;">🛡️ ADMIN PANEL 🛡️</div>
+  <div class="admin-panel">
+    <div class="admin-tabs">
+      <button class="active" onclick="showAdminTab('users')" id="admin-tab-users">Users</button>
+      <button onclick="showAdminTab('posts')" id="admin-tab-posts">Posts</button>
+      <button onclick="showAdminTab('comments')" id="admin-tab-comments">Comments</button>
+    </div>
+    <input type="text" class="admin-search" id="adminSearch" placeholder="Search..." oninput="renderAdminTab()">
+    <div class="admin-list" id="adminList"></div>
+  </div>
+</div>
+
+<!-- ===== EDIT MODAL ===== -->
+<div class="edit-modal hidden" id="editModal">
+  <div class="edit-modal-box">
+    <h3 id="editModalTitle">Edit</h3>
+    <input type="text" id="editModalInput" placeholder="Enter new value...">
+    <div class="edit-modal-buttons">
+      <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+      <button class="save-btn" onclick="saveEditModal()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SETTINGS MODAL ===== -->
+<div class="edit-modal hidden" id="settingsModal">
+  <div class="edit-modal-box">
+    <h3>⚙️ Settings</h3>
+    <p style="color:#aaa;margin-bottom:15px;text-align:center;">Change your username</p>
+    <input type="text" id="newUsernameInput" placeholder="New username..." maxlength="20">
+    <p style="color:#888;font-size:0.85rem;margin-bottom:15px;">This will update your username on all your posts and comments.</p>
+    <div class="edit-modal-buttons">
+      <button class="cancel-btn" onclick="closeSettingsModal()">Cancel</button>
+      <button class="save-btn" onclick="changeUsername()">Change Username</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1515,9 +1855,18 @@
           authBtn.textContent = "LET'S GO! 🚀";
           return;
         }
-        setCurrentUser(username);
-        authBtn.disabled = false;
-        enterApp();
+        // Check if banned
+        db.ref('banned/' + username).once('value').then(function(banSnap) {
+          if (banSnap.exists() && banSnap.val() === true) {
+            errorEl.textContent = 'Your account has been banned! 🚫';
+            authBtn.disabled = false;
+            authBtn.textContent = "LET'S GO! 🚀";
+            return;
+          }
+          setCurrentUser(username);
+          authBtn.disabled = false;
+          enterApp();
+        });
       }).catch(function(err) {
         errorEl.textContent = 'Firebase error! Check your config 😵';
         authBtn.disabled = false;
@@ -1545,14 +1894,26 @@
       db.ref('subscriptions').off('value', subsListener);
       subsListener = null;
     }
+    if (usersListener) {
+      db.ref('users').off('value', usersListener);
+      usersListener = null;
+    }
+    if (bannedListener) {
+      db.ref('banned').off('value', bannedListener);
+      bannedListener = null;
+    }
     videosLoaded = false;
     cachedVideos = [];
     cachedSubscriptions = {};
+    cachedUsers = {};
+    cachedBanned = {};
     expandedComments = {};
+    isAdmin = false;
 
     clearCurrentUser();
     document.getElementById('authScreen').classList.remove('hidden');
     document.getElementById('navbar').classList.add('hidden');
+    document.getElementById('nav-admin').classList.add('hidden');
     hideAllPages();
     document.getElementById('loadingScreen').classList.add('hidden');
     document.getElementById('authUsername').value = '';
@@ -1564,6 +1925,9 @@
     document.getElementById('authScreen').classList.add('hidden');
     document.getElementById('navbar').classList.remove('hidden');
     document.getElementById('navUsername').textContent = '😎 ' + getCurrentUser();
+
+    // Check if user is admin
+    checkAdminStatus();
 
     // Show loading screen while we wait for the first Firebase snapshot
     if (!videosLoaded) {
@@ -1613,10 +1977,10 @@
 
   // ===== NAVIGATION =====
   function hideAllPages() {
-    ['feedPage', 'postPage', 'leaderboardPage', 'rulesPage', 'profilePage'].forEach(id => {
+    ['feedPage', 'postPage', 'leaderboardPage', 'rulesPage', 'profilePage', 'adminPage'].forEach(id => {
       document.getElementById(id).classList.add('hidden');
     });
-    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-rules', 'nav-profile'].forEach(id => {
+    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-rules', 'nav-profile', 'nav-admin'].forEach(id => {
       document.getElementById(id).classList.remove('active');
     });
   }
@@ -1648,6 +2012,16 @@
         document.getElementById('profilePage').classList.remove('hidden');
         document.getElementById('nav-profile').classList.add('active');
         renderProfile();
+        break;
+      case 'admin':
+        if (!isAdmin) return;
+        document.getElementById('adminPage').classList.remove('hidden');
+        document.getElementById('nav-admin').classList.add('active');
+        currentAdminTab = 'users';
+        document.getElementById('admin-tab-users').classList.add('active');
+        document.getElementById('admin-tab-posts').classList.remove('active');
+        document.getElementById('admin-tab-comments').classList.remove('active');
+        renderAdminTab();
         break;
     }
   }
@@ -1718,6 +2092,15 @@
     var subCount = getSubscriberCount(v.author);
     var subCountHtml = subCount > 0 ? '<span class="subscriber-count">' + subCount + ' sub' + (subCount !== 1 ? 's' : '') + '</span>' : '';
 
+    // Post actions (edit/delete for own posts)
+    var postActionsHtml = '';
+    if (isOwnVideo || isAdmin) {
+      postActionsHtml = '<div class="post-actions">'
+        + '<button onclick="editPost(\'' + v.id + '\')">✏️ Edit</button>'
+        + '<button class="delete-btn" onclick="deletePost(\'' + v.id + '\')">🗑️ Delete</button>'
+        + '</div>';
+    }
+
     var commentCount = v.comments.length;
     var isExpanded = expandedComments[v.id];
     var commentsHtml = '<div class="comments-section">'
@@ -1731,10 +2114,19 @@
         commentsHtml += '<div style="color:#666;font-size:0.85rem;padding:8px 0;">No comments yet. Be the first!</div>';
       } else {
         v.comments.forEach(function(c) {
+          var isOwnComment = c.author === currentUser;
+          var commentActionsHtml = '';
+          if (isOwnComment || isAdmin) {
+            commentActionsHtml = '<div class="comment-actions">'
+              + '<button onclick="editComment(\'' + v.id + '\', \'' + c.id + '\')">edit</button>'
+              + '<button class="delete-btn" onclick="deleteComment(\'' + v.id + '\', \'' + c.id + '\')">delete</button>'
+              + '</div>';
+          }
           commentsHtml += '<div class="comment-item">'
             + '<span class="comment-author">' + escapeHtml(c.author) + ':</span>'
             + '<span class="comment-text">' + escapeHtml(c.text) + '</span>'
             + '<span class="comment-time">' + timeAgo(c.created) + '</span>'
+            + commentActionsHtml
             + '</div>';
         });
       }
@@ -1748,6 +2140,7 @@
 
     return {
       authorHtml: 'by ' + escapeHtml(v.author) + subBtn + subCountHtml,
+      postActionsHtml: postActionsHtml,
       statsHtml: '<span class="avg-rating">⭐ ' + avgRating + '/10</span>'
         + '<span class="vote-count">' + v.votes.length + ' vote' + (v.votes.length !== 1 ? 's' : '') + '</span>',
       scaleHtml: '<span class="cool-scale-label">COOL SCALE:</span>' + voteHtml,
@@ -1781,8 +2174,17 @@
       sorted.forEach(function(v, idx) {
         var card = existingCards[idx];
         var parts = buildCardParts(v, currentUser);
+        var titleEl = card.querySelector('.video-title');
+        if (titleEl) titleEl.textContent = v.title;
         var authorEl = card.querySelector('.video-author');
         if (authorEl) authorEl.innerHTML = parts.authorHtml;
+        var postActionsEl = card.querySelector('.post-actions');
+        if (postActionsEl) {
+          postActionsEl.outerHTML = parts.postActionsHtml;
+        } else if (parts.postActionsHtml) {
+          var headerEl = card.querySelector('.video-header');
+          if (headerEl) headerEl.insertAdjacentHTML('beforeend', parts.postActionsHtml);
+        }
         var statsEl = card.querySelector('.video-stats');
         if (statsEl) statsEl.innerHTML = parts.statsHtml;
         var scaleEl = card.querySelector('.cool-scale');
@@ -1800,6 +2202,7 @@
           + '<div class="video-header">'
           + '<div class="video-title">' + escapeHtml(v.title) + '</div>'
           + '<div class="video-author">' + parts.authorHtml + '</div>'
+          + parts.postActionsHtml
           + '</div>'
           + '<div class="video-embed">' + renderVideoEmbed(v) + '</div>'
           + '<div class="video-stats">' + parts.statsHtml + '</div>'
@@ -2221,6 +2624,10 @@
       return '<div class="video-card">'
         + '<div class="video-header">'
         + '<div class="video-title">' + escapeHtml(v.title) + '</div>'
+        + '<div class="post-actions">'
+        + '<button onclick="editPost(\'' + v.id + '\')">✏️ Edit</button>'
+        + '<button class="delete-btn" onclick="deletePost(\'' + v.id + '\')">🗑️ Delete</button>'
+        + '</div>'
         + '</div>'
         + '<div class="video-embed">' + renderVideoEmbed(v) + '</div>'
         + '<div class="video-stats">'
@@ -2229,6 +2636,395 @@
         + '</div>'
         + '</div>';
     }).join('');
+  }
+
+  // ===== ADMIN SYSTEM =====
+  let isAdmin = false;
+  let cachedUsers = {};
+  let cachedBanned = {};
+  let usersListener = null;
+  let bannedListener = null;
+  let adminsListener = null;
+  let currentAdminTab = 'users';
+
+  function checkAdminStatus() {
+    var currentUser = getCurrentUser();
+    if (!currentUser) {
+      isAdmin = false;
+      document.getElementById('nav-admin').classList.add('hidden');
+      return;
+    }
+    db.ref('admins/' + currentUser).once('value').then(function(snapshot) {
+      isAdmin = snapshot.exists() && snapshot.val() === true;
+      if (isAdmin) {
+        document.getElementById('nav-admin').classList.remove('hidden');
+        // Start listening to users and banned lists
+        if (!usersListener) {
+          usersListener = db.ref('users').on('value', function(snap) {
+            cachedUsers = snap.val() || {};
+            if (currentAdminTab === 'users') renderAdminTab();
+          });
+        }
+        if (!bannedListener) {
+          bannedListener = db.ref('banned').on('value', function(snap) {
+            cachedBanned = snap.val() || {};
+            if (currentAdminTab === 'users') renderAdminTab();
+          });
+        }
+      } else {
+        document.getElementById('nav-admin').classList.add('hidden');
+      }
+    });
+  }
+
+  function showAdminTab(tab) {
+    currentAdminTab = tab;
+    document.getElementById('admin-tab-users').classList.toggle('active', tab === 'users');
+    document.getElementById('admin-tab-posts').classList.toggle('active', tab === 'posts');
+    document.getElementById('admin-tab-comments').classList.toggle('active', tab === 'comments');
+    document.getElementById('adminSearch').value = '';
+    renderAdminTab();
+  }
+
+  function renderAdminTab() {
+    var container = document.getElementById('adminList');
+    var search = document.getElementById('adminSearch').value.toLowerCase();
+
+    if (currentAdminTab === 'users') {
+      var users = Object.keys(cachedUsers).filter(function(u) {
+        return u.toLowerCase().includes(search);
+      });
+      if (users.length === 0) {
+        container.innerHTML = '<div style="color:#888;text-align:center;padding:20px;">No users found</div>';
+        return;
+      }
+      container.innerHTML = users.map(function(username) {
+        var isBanned = cachedBanned[username];
+        var created = cachedUsers[username].created;
+        var dateStr = created ? new Date(created).toLocaleDateString() : 'Unknown';
+        return '<div class="admin-item' + (isBanned ? ' banned' : '') + '">'
+          + '<div class="admin-item-info">'
+          + '<div class="admin-item-title">' + escapeHtml(username) + (isBanned ? ' (BANNED)' : '') + '</div>'
+          + '<div class="admin-item-meta">Joined: ' + dateStr + '</div>'
+          + '</div>'
+          + '<div class="admin-item-actions">'
+          + '<button onclick="adminEditUsername(\'' + escapeHtml(username) + '\')">Edit</button>'
+          + '<button class="ban-btn" onclick="adminToggleBan(\'' + escapeHtml(username) + '\')">' + (isBanned ? 'Unban' : 'Ban') + '</button>'
+          + '</div>'
+          + '</div>';
+      }).join('');
+    } else if (currentAdminTab === 'posts') {
+      var posts = cachedVideos.filter(function(v) {
+        return v.title.toLowerCase().includes(search) || v.author.toLowerCase().includes(search);
+      });
+      if (posts.length === 0) {
+        container.innerHTML = '<div style="color:#888;text-align:center;padding:20px;">No posts found</div>';
+        return;
+      }
+      container.innerHTML = posts.map(function(v) {
+        return '<div class="admin-item">'
+          + '<div class="admin-item-info">'
+          + '<div class="admin-item-title">' + escapeHtml(v.title) + '</div>'
+          + '<div class="admin-item-meta">By ' + escapeHtml(v.author) + ' · ' + v.votes.length + ' votes · ' + v.comments.length + ' comments</div>'
+          + '</div>'
+          + '<div class="admin-item-actions">'
+          + '<button onclick="adminEditPost(\'' + v.id + '\')">Edit</button>'
+          + '<button class="ban-btn" onclick="adminDeletePost(\'' + v.id + '\')">Delete</button>'
+          + '</div>'
+          + '</div>';
+      }).join('');
+    } else if (currentAdminTab === 'comments') {
+      var comments = [];
+      cachedVideos.forEach(function(v) {
+        v.comments.forEach(function(c) {
+          comments.push({
+            videoId: v.id,
+            videoTitle: v.title,
+            commentId: c.id,
+            author: c.author,
+            text: c.text,
+            created: c.created
+          });
+        });
+      });
+      comments = comments.filter(function(c) {
+        return c.text.toLowerCase().includes(search) || c.author.toLowerCase().includes(search);
+      }).sort(function(a, b) { return b.created - a.created; });
+      if (comments.length === 0) {
+        container.innerHTML = '<div style="color:#888;text-align:center;padding:20px;">No comments found</div>';
+        return;
+      }
+      container.innerHTML = comments.slice(0, 100).map(function(c) {
+        return '<div class="admin-item">'
+          + '<div class="admin-item-info">'
+          + '<div class="admin-item-title">' + escapeHtml(c.text.substring(0, 50)) + (c.text.length > 50 ? '...' : '') + '</div>'
+          + '<div class="admin-item-meta">By ' + escapeHtml(c.author) + ' on "' + escapeHtml(c.videoTitle.substring(0, 20)) + '"</div>'
+          + '</div>'
+          + '<div class="admin-item-actions">'
+          + '<button onclick="adminEditComment(\'' + c.videoId + '\', \'' + c.commentId + '\')">Edit</button>'
+          + '<button class="ban-btn" onclick="adminDeleteComment(\'' + c.videoId + '\', \'' + c.commentId + '\')">Delete</button>'
+          + '</div>'
+          + '</div>';
+      }).join('');
+    }
+  }
+
+  function adminEditUsername(oldUsername) {
+    showEditModal('Edit Username', oldUsername, function(newUsername) {
+      if (!newUsername || newUsername === oldUsername) return;
+      newUsername = newUsername.trim().toLowerCase();
+      if (newUsername.length < 2) {
+        alert('Username too short!');
+        return;
+      }
+      // Check if new username exists
+      db.ref('users/' + newUsername).once('value').then(function(snap) {
+        if (snap.exists()) {
+          alert('That username is already taken!');
+          return;
+        }
+        migrateUsername(oldUsername, newUsername);
+      });
+    });
+  }
+
+  function adminToggleBan(username) {
+    var isBanned = cachedBanned[username];
+    if (isBanned) {
+      if (confirm('Unban user "' + username + '"?')) {
+        db.ref('banned/' + username).remove();
+      }
+    } else {
+      if (confirm('Ban user "' + username + '"? They will not be able to log in.')) {
+        db.ref('banned/' + username).set(true);
+      }
+    }
+  }
+
+  function adminEditPost(videoId) {
+    var video = cachedVideos.find(function(v) { return v.id === videoId; });
+    if (!video) return;
+    showEditModal('Edit Post Title', video.title, function(newTitle) {
+      if (!newTitle || newTitle === video.title) return;
+      db.ref('videos/' + videoId + '/title').set(newTitle.trim());
+      closeEditModal();
+    });
+  }
+
+  function adminDeletePost(videoId) {
+    var video = cachedVideos.find(function(v) { return v.id === videoId; });
+    if (!video) return;
+    if (confirm('Delete post "' + video.title + '"? This cannot be undone!')) {
+      db.ref('videos/' + videoId).remove();
+      // Also delete from storage if it's an uploaded file
+      if (video.type === 'image' || video.type === 'video') {
+        storage.ref('uploads/' + videoId).listAll().then(function(res) {
+          res.items.forEach(function(item) { item.delete(); });
+        }).catch(function() {});
+      }
+    }
+  }
+
+  function adminEditComment(videoId, commentId) {
+    var video = cachedVideos.find(function(v) { return v.id === videoId; });
+    if (!video) return;
+    var comment = video.comments.find(function(c) { return c.id === commentId; });
+    if (!comment) return;
+    showEditModal('Edit Comment', comment.text, function(newText) {
+      if (!newText || newText === comment.text) return;
+      db.ref('videos/' + videoId + '/comments/' + commentId + '/text').set(newText.trim());
+      closeEditModal();
+    });
+  }
+
+  function adminDeleteComment(videoId, commentId) {
+    if (confirm('Delete this comment? This cannot be undone!')) {
+      db.ref('videos/' + videoId + '/comments/' + commentId).remove();
+    }
+  }
+
+  // ===== EDIT MODAL =====
+  let editModalCallback = null;
+
+  function showEditModal(title, currentValue, callback) {
+    document.getElementById('editModalTitle').textContent = title;
+    document.getElementById('editModalInput').value = currentValue;
+    document.getElementById('editModal').classList.remove('hidden');
+    document.getElementById('editModalInput').focus();
+    editModalCallback = callback;
+  }
+
+  function closeEditModal() {
+    document.getElementById('editModal').classList.add('hidden');
+    editModalCallback = null;
+  }
+
+  function saveEditModal() {
+    var newValue = document.getElementById('editModalInput').value;
+    if (editModalCallback) {
+      editModalCallback(newValue);
+    }
+    closeEditModal();
+  }
+
+  // Enter key to save
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !document.getElementById('editModal').classList.contains('hidden')) {
+      saveEditModal();
+    }
+    if (e.key === 'Escape' && !document.getElementById('editModal').classList.contains('hidden')) {
+      closeEditModal();
+    }
+  });
+
+  // ===== SETTINGS MODAL =====
+  function showSettingsModal() {
+    document.getElementById('newUsernameInput').value = getCurrentUser();
+    document.getElementById('settingsModal').classList.remove('hidden');
+    document.getElementById('newUsernameInput').focus();
+  }
+
+  function closeSettingsModal() {
+    document.getElementById('settingsModal').classList.add('hidden');
+  }
+
+  async function changeUsername() {
+    var oldUsername = getCurrentUser();
+    var newUsername = document.getElementById('newUsernameInput').value.trim().toLowerCase();
+
+    if (!newUsername || newUsername === oldUsername) {
+      closeSettingsModal();
+      return;
+    }
+
+    if (newUsername.length < 2) {
+      alert('Username must be at least 2 characters!');
+      return;
+    }
+
+    // Check if new username exists
+    var snap = await db.ref('users/' + newUsername).once('value');
+    if (snap.exists()) {
+      alert('That username is already taken!');
+      return;
+    }
+
+    await migrateUsername(oldUsername, newUsername);
+    setCurrentUser(newUsername);
+    document.getElementById('navUsername').textContent = '😎 ' + newUsername;
+    closeSettingsModal();
+    renderProfile();
+    alert('Username changed to "' + newUsername + '"!');
+  }
+
+  async function migrateUsername(oldUsername, newUsername) {
+    // 1. Copy user data to new username
+    var userData = await db.ref('users/' + oldUsername).once('value');
+    await db.ref('users/' + newUsername).set(userData.val());
+
+    // 2. Update all posts author
+    var videosSnap = await db.ref('videos').once('value');
+    var videos = videosSnap.val() || {};
+    var updates = {};
+    Object.keys(videos).forEach(function(vid) {
+      if (videos[vid].author === oldUsername) {
+        updates['videos/' + vid + '/author'] = newUsername;
+      }
+      // Update comments
+      var comments = videos[vid].comments || {};
+      Object.keys(comments).forEach(function(cid) {
+        if (comments[cid].author === oldUsername) {
+          updates['videos/' + vid + '/comments/' + cid + '/author'] = newUsername;
+        }
+      });
+      // Update votes
+      var votes = videos[vid].votes || {};
+      if (votes[oldUsername] !== undefined) {
+        updates['videos/' + vid + '/votes/' + newUsername] = votes[oldUsername];
+        updates['videos/' + vid + '/votes/' + oldUsername] = null;
+      }
+    });
+
+    // 3. Update subscriptions
+    var subsSnap = await db.ref('subscriptions').once('value');
+    var subs = subsSnap.val() || {};
+    // Rename subscriber
+    if (subs[oldUsername]) {
+      updates['subscriptions/' + newUsername] = subs[oldUsername];
+      updates['subscriptions/' + oldUsername] = null;
+    }
+    // Rename subscribed-to
+    Object.keys(subs).forEach(function(user) {
+      if (subs[user] && subs[user][oldUsername]) {
+        updates['subscriptions/' + user + '/' + newUsername] = true;
+        updates['subscriptions/' + user + '/' + oldUsername] = null;
+      }
+    });
+
+    // 4. Update banned list if applicable
+    var bannedSnap = await db.ref('banned/' + oldUsername).once('value');
+    if (bannedSnap.exists()) {
+      updates['banned/' + newUsername] = true;
+      updates['banned/' + oldUsername] = null;
+    }
+
+    // 5. Update admin status if applicable
+    var adminSnap = await db.ref('admins/' + oldUsername).once('value');
+    if (adminSnap.exists()) {
+      updates['admins/' + newUsername] = true;
+      updates['admins/' + oldUsername] = null;
+    }
+
+    // Apply all updates
+    await db.ref().update(updates);
+
+    // 6. Delete old user
+    await db.ref('users/' + oldUsername).remove();
+  }
+
+  // ===== USER POST/COMMENT EDIT/DELETE =====
+  function editPost(videoId) {
+    var video = cachedVideos.find(function(v) { return v.id === videoId; });
+    if (!video || video.author !== getCurrentUser()) return;
+    showEditModal('Edit Post Title', video.title, function(newTitle) {
+      if (!newTitle || newTitle === video.title) return;
+      db.ref('videos/' + videoId + '/title').set(newTitle.trim());
+    });
+  }
+
+  function deletePost(videoId) {
+    var video = cachedVideos.find(function(v) { return v.id === videoId; });
+    if (!video || video.author !== getCurrentUser()) return;
+    if (confirm('Delete this post? This cannot be undone!')) {
+      db.ref('videos/' + videoId).remove();
+      // Also delete from storage if it's an uploaded file
+      if (video.type === 'image' || video.type === 'video') {
+        storage.ref('uploads/' + videoId).listAll().then(function(res) {
+          res.items.forEach(function(item) { item.delete(); });
+        }).catch(function() {});
+      }
+    }
+  }
+
+  function editComment(videoId, commentId) {
+    var video = cachedVideos.find(function(v) { return v.id === videoId; });
+    if (!video) return;
+    var comment = video.comments.find(function(c) { return c.id === commentId; });
+    if (!comment || comment.author !== getCurrentUser()) return;
+    showEditModal('Edit Comment', comment.text, function(newText) {
+      if (!newText || newText === comment.text) return;
+      db.ref('videos/' + videoId + '/comments/' + commentId + '/text').set(newText.trim());
+    });
+  }
+
+  function deleteComment(videoId, commentId) {
+    var video = cachedVideos.find(function(v) { return v.id === videoId; });
+    if (!video) return;
+    var comment = video.comments.find(function(c) { return c.id === commentId; });
+    if (!comment || comment.author !== getCurrentUser()) return;
+    if (confirm('Delete this comment?')) {
+      db.ref('videos/' + videoId + '/comments/' + commentId).remove();
+    }
   }
 
   // ===== INIT =====
