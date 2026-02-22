@@ -1974,8 +1974,9 @@
 
   // ===== NAVIGATION =====
   function hideAllPages() {
-    ['feedPage', 'postPage', 'leaderboardPage', 'rulesPage', 'profilePage', 'adminPage'].forEach(id => {
-      document.getElementById(id).classList.add('hidden');
+    ['feedPage', 'postPage', 'leaderboardPage', 'rulesPage', 'profilePage'].forEach(id => {
+      var el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
     });
     ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-rules', 'nav-profile'].forEach(id => {
       var el = document.getElementById(id);
