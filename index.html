@@ -2432,7 +2432,7 @@
     'delete this', 'take this down', 'remove this', 'shouldnt post',
     'why would you', 'why did you', 'what is wrong with',
     'get a life', 'have no life', 'no life', 'touch grass',
-    'ratio', 'ratioed', 'L', 'take the L', 'big L', 'huge L',
+    'ratio', 'ratioed', 'take the l', 'big l', 'huge l',
     'bozo', 'clown', 'joke', 'laughing at you', 'laugh at you',
     'making fun', 'make fun', 'mocking', 'mock you',
     // Exclusion/social bullying
@@ -2485,9 +2485,11 @@
 
     // Check for bad words
     for (const word of badWordsList) {
-      // Check for exact word match or word within text
-      const regex = new RegExp('\\b' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
-      if (regex.test(lowerText) || lowerText.includes(word.toLowerCase())) {
+      // Check for exact word match — only use includes() for phrases (2+ words)
+      const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp('\\b' + escaped + '\\b', 'i');
+      const isPhrase = word.includes(' ');
+      if (regex.test(lowerText) || (isPhrase && lowerText.includes(word.toLowerCase()))) {
         return {
           ok: false,
           reason: 'inappropriate language',
