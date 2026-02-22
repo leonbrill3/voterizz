@@ -2343,7 +2343,7 @@
       const img = new Image();
       img.onload = async function() {
         try {
-          const detections = await faceapi.detectAllFaces(img, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 }));
+          const detections = await faceapi.detectAllFaces(img, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.65 }));
           resolve(detections.length > 0);
         } catch (err) {
           console.error('Face detection error:', err);
@@ -2374,7 +2374,7 @@
             video.currentTime = Math.min(time, duration - 0.1);
             await new Promise(r => { video.onseeked = r; });
 
-            const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 }));
+            const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.65 }));
             if (detections.length > 0) {
               URL.revokeObjectURL(video.src);
               resolve(true);
@@ -2482,44 +2482,11 @@
 
     // Check for sneaky negative patterns (variations kids use)
     const sneakyPatterns = [
-      /\bu\s*r\s*(so\s+)?bad\b/i,           // "u r bad", "ur so bad"
-      /\bu\s*r\s*(so\s+)?(ugly|dumb|stupid)\b/i,
-      /\b(your|ur|you)\s*(so\s+)?(bad|trash|mid)\b/i,
-      /\bno\s*one\s*(likes|wants|cares)/i,  // "no one likes you"
-      /\beveryone\s*(hates|dislikes)/i,
-      /\b(go\s+)?(cry|crying)\s*(about\s+it)?\b/i, // "go cry about it"
-      /\bstay\s+mad\b/i,
-      /\bcope\b/i,
-      /\bseethe\b/i,
-      /\bskill\s+issue\b/i,
-      /\byou('re|r)?\s+(not|never)\s+(good|gonna)/i,
-      /\b(lol|lmao|haha)\s*(loser|trash|bad)\b/i,
-      /\bimagine\s+(being|thinking)/i,       // "imagine being this bad"
-      /\bcouldn'?t\s+be\s+me\b/i,
-      /\bthis\s+(ain'?t|isnt|is\s+not)\s+it\b/i,
-      /\bflop\b/i,
-      /\bdead\s+(content|video|channel)\b/i,
-      /\bno\s+views\b/i,
-      /\bwho\s+(even\s+)?(is\s+)?(this|u|you)\b/i,  // "who even is this"
-      /\bnobody\s+(knows|cares\s+about)\s+(u|you)\b/i,
-      /\b0\s*(out\s+of|\/)\s*10\b/i,         // "0/10", "0 out of 10"
-      /\bnegative\s+\d+\b/i,                 // "negative 5"
-      /\b-\d+\s*(out\s+of|\/)\s*10\b/i,      // "-5/10"
-      /\byou\s+(wish|thought)\b/i,
-      /\bin\s+your\s+dreams\b/i,
-      /\bkeep\s+(dreaming|wishing)\b/i,
-      /\bnot\s+even\s+close\b/i,
-      /\btry\s+again\b/i,
-      /\bnice\s+try\b/i,
-      /\b(sit|sitting)\s+down\b/i,
-      /\bhold\s+(this|the)\s+L\b/i,
+      /\bkill\s*(your|ur)\s*self\b/i,        // "kill yourself"
+      /\bno\s*one\s*(likes|wants)\s+(u|you)\b/i,  // "no one likes you"
+      /\beveryone\s*hates\s+(u|you)\b/i,
       /\bfatherless\b/i,
-      /\bmotherless\b/i,
-      /\borphan\b/i,
-      /\badopted\b/i,
-      /\bunwanted\b/i,
-      /\bmistake\b/i,
-      /\baccident\b/i
+      /\bmotherless\b/i
     ];
 
     for (const pattern of sneakyPatterns) {
