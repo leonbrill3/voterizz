@@ -1823,6 +1823,15 @@
     authBtn.textContent = 'HOLD ON...';
 
     if (isSignUp) {
+      // Check username for inappropriate content
+      var usernameCheck = checkContentModeration(username);
+      if (!usernameCheck.ok) {
+        errorEl.textContent = '🚫 That username isn\'t allowed! Pick something nicer.';
+        authBtn.disabled = false;
+        authBtn.textContent = "LET'S GOOO! 🎉";
+        return;
+      }
+
       db.ref('users/' + username).once('value').then(function(snapshot) {
         if (snapshot.exists()) {
           errorEl.textContent = 'That username is taken bro!! 😬';
@@ -2264,6 +2273,13 @@
     var text = input.value.trim();
     if (!text) return;
 
+    // Check comment for inappropriate content
+    var commentCheck = checkContentModeration(text);
+    if (!commentCheck.ok) {
+      alert(commentCheck.message);
+      return;
+    }
+
     var commentId = Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
     db.ref('videos/' + videoId + '/comments/' + commentId).set({
       author: getCurrentUser(),
@@ -2388,6 +2404,92 @@
     });
   }
 
+  // ===== CONTENT MODERATION =====
+  // Bad words list (covers swears, slurs, inappropriate content)
+  const badWordsList = [
+    // Swear words
+    'fuck', 'shit', 'ass', 'damn', 'hell', 'bitch', 'bastard', 'crap', 'piss',
+    'dick', 'cock', 'pussy', 'cunt', 'whore', 'slut', 'hoe', 'thot',
+    // Slurs (abbreviated/common variations)
+    'fag', 'faggot', 'retard', 'retarded', 'nigger', 'nigga', 'chink', 'spic', 'kike', 'gook',
+    'tranny', 'dyke', 'homo', 'queer',
+    // Mean/bullying words
+    'ugly', 'fat', 'stupid', 'idiot', 'dumb', 'loser', 'pathetic', 'worthless', 'trash',
+    'kill yourself', 'kys', 'die', 'hate you', 'nobody likes you', 'kill', 'murder',
+    // Inappropriate content
+    'sex', 'sexy', 'nude', 'naked', 'porn', 'boobs', 'tits', 'penis', 'vagina',
+    'hot', 'horny', 'turned on', 'hookup', 'hook up', 'dating', 'date me',
+    'boyfriend', 'girlfriend', 'crush', 'love you', 'marry me',
+    // Personal info requests
+    'phone number', 'address', 'where do you live', 'what school', 'snapchat', 'snap',
+    'instagram', 'insta', 'dm me', 'text me', 'call me', 'facetime',
+    // Common leetspeak/bypass attempts
+    'f*ck', 'sh*t', 'b*tch', 'a$$', 'd!ck', 'p*ssy', 'fck', 'sht', 'btch',
+    'f u c k', 's h i t', 'b i t c h', 'fuk', 'phuck', 'shiit', 'biatch',
+    // Additional mean phrases
+    'no one likes', 'everyone hates', 'go away', 'shut up', 'stfu', 'gtfo',
+    'youre ugly', 'ur ugly', 'you suck', 'u suck', 'cringe', 'ratio'
+  ];
+
+  // Patterns for detecting personal info
+  const personalInfoPatterns = [
+    /\b\d{3}[-.\s]?\d{3}[-.\s]?\d{4}\b/,  // Phone numbers
+    /\b\d{5}(-\d{4})?\b/,  // ZIP codes
+    /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/,  // Email addresses
+    /\b\d+\s+[A-Za-z]+\s+(street|st|avenue|ave|road|rd|drive|dr|lane|ln|court|ct|boulevard|blvd)\b/i  // Addresses
+  ];
+
+  function checkContentModeration(text) {
+    if (!text) return { ok: true };
+
+    const lowerText = text.toLowerCase().trim();
+
+    // Check for bad words
+    for (const word of badWordsList) {
+      // Check for exact word match or word within text
+      const regex = new RegExp('\\b' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+      if (regex.test(lowerText) || lowerText.includes(word.toLowerCase())) {
+        return {
+          ok: false,
+          reason: 'inappropriate language',
+          message: '🚫 That contains inappropriate content! Please keep it clean and kind.'
+        };
+      }
+    }
+
+    // Check for personal info patterns
+    for (const pattern of personalInfoPatterns) {
+      if (pattern.test(text)) {
+        return {
+          ok: false,
+          reason: 'personal information',
+          message: '🚫 Don\'t share personal info like phone numbers, emails, or addresses!'
+        };
+      }
+    }
+
+    // Check for excessive caps (yelling/aggressive)
+    const capsRatio = (text.match(/[A-Z]/g) || []).length / text.length;
+    if (text.length > 10 && capsRatio > 0.7) {
+      return {
+        ok: false,
+        reason: 'excessive caps',
+        message: '🚫 Please don\'t use ALL CAPS - it looks like yelling!'
+      };
+    }
+
+    // Check for spam (repeated characters)
+    if (/(.)\1{4,}/.test(text)) {
+      return {
+        ok: false,
+        reason: 'spam',
+        message: '🚫 Please don\'t spam repeated characters!'
+      };
+    }
+
+    return { ok: true };
+  }
+
   // ===== POST VIDEO =====
   async function postVideo() {
     var title = document.getElementById('postTitle').value.trim();
@@ -2400,6 +2502,14 @@
     if (!title) {
       successEl.style.color = '#ff4444';
       successEl.textContent = 'Give it a title bro!! 😤';
+      return;
+    }
+
+    // Check title for inappropriate content
+    var titleCheck = checkContentModeration(title);
+    if (!titleCheck.ok) {
+      successEl.style.color = '#ff4444';
+      successEl.textContent = titleCheck.message;
       return;
     }
 
@@ -2902,6 +3012,13 @@
       return;
     }
 
+    // Check username for inappropriate content
+    var usernameCheck = checkContentModeration(newUsername);
+    if (!usernameCheck.ok) {
+      alert('🚫 That username isn\'t allowed! Pick something nicer.');
+      return;
+    }
+
     // Check if new username exists
     var snap = await db.ref('users/' + newUsername).once('value');
     if (snap.exists()) {
@@ -2985,9 +3102,17 @@
   // ===== USER POST/COMMENT EDIT/DELETE =====
   function editPost(videoId) {
     var video = cachedVideos.find(function(v) { return v.id === videoId; });
-    if (!video || video.author !== getCurrentUser()) return;
+    if (!video || (video.author !== getCurrentUser() && !isAdmin)) return;
     showEditModal('Edit Post Title', video.title, function(newTitle) {
       if (!newTitle || newTitle === video.title) return;
+      // Check for inappropriate content (admins bypass this)
+      if (!isAdmin) {
+        var check = checkContentModeration(newTitle);
+        if (!check.ok) {
+          alert(check.message);
+          return;
+        }
+      }
       db.ref('videos/' + videoId + '/title').set(newTitle.trim());
     });
   }
@@ -3010,9 +3135,17 @@
     var video = cachedVideos.find(function(v) { return v.id === videoId; });
     if (!video) return;
     var comment = video.comments.find(function(c) { return c.id === commentId; });
-    if (!comment || comment.author !== getCurrentUser()) return;
+    if (!comment || (comment.author !== getCurrentUser() && !isAdmin)) return;
     showEditModal('Edit Comment', comment.text, function(newText) {
       if (!newText || newText === comment.text) return;
+      // Check for inappropriate content (admins bypass this)
+      if (!isAdmin) {
+        var check = checkContentModeration(newText);
+        if (!check.ok) {
+          alert(check.message);
+          return;
+        }
+      }
       db.ref('videos/' + videoId + '/comments/' + commentId + '/text').set(newText.trim());
     });
   }
