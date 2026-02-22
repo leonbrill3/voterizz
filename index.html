@@ -8,6 +8,7 @@
 <!-- Firebase SDK (v9 compat) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap');
@@ -464,6 +465,97 @@
     margin-top: -10px;
   }
 
+  .post-form .or-divider {
+    text-align: center;
+    color: #aaa;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 18px;
+    position: relative;
+  }
+
+  .post-form .or-divider::before,
+  .post-form .or-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 35%;
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+  }
+
+  .post-form .or-divider::before { left: 0; }
+  .post-form .or-divider::after { right: 0; }
+
+  .file-upload-wrapper {
+    position: relative;
+    margin-bottom: 18px;
+  }
+
+  .file-upload-btn {
+    width: 100%;
+    padding: 18px;
+    border: 3px dashed rgba(0,255,255,0.5);
+    border-radius: 15px;
+    background: rgba(0,255,255,0.05);
+    color: #0ff;
+    font-size: 1.1rem;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .file-upload-btn:hover {
+    border-color: #0ff;
+    background: rgba(0,255,255,0.1);
+    box-shadow: 0 0 20px rgba(0,255,255,0.3);
+  }
+
+  .file-upload-btn.has-file {
+    border-color: #0f0;
+    color: #0f0;
+    background: rgba(0,255,0,0.05);
+  }
+
+  .file-upload-wrapper input[type="file"] {
+    display: none;
+  }
+
+  .upload-progress {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.1);
+    margin-top: 10px;
+    overflow: hidden;
+    display: none;
+  }
+
+  .upload-progress .progress-bar {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #ff00ff, #0ff);
+    width: 0%;
+    transition: width 0.3s;
+  }
+
+  .video-card .video-embed img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  .video-card .video-embed video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+    background: #000;
+  }
+
   .post-success {
     color: #0f0;
     font-weight: 700;
@@ -759,9 +851,19 @@
   <div class="page-title" style="color: #ff0;">📹 POST A VIDEO 📹</div>
   <div class="post-form">
     <input type="text" id="postTitle" placeholder="Give it a fire title 🔥" maxlength="60">
-    <input type="text" id="postUrl" placeholder="Paste video link here">
-    <div class="hint">YouTube or TikTok links work best!</div>
-    <button class="btn-primary" onclick="postVideo()">POST IT! 🎬</button>
+    <div class="file-upload-wrapper">
+      <div class="file-upload-btn" id="fileUploadBtn" onclick="document.getElementById('postFile').click()">
+        📁 TAP TO UPLOAD A VIDEO OR PHOTO
+      </div>
+      <input type="file" id="postFile" accept="image/*,video/*" onchange="handleFileSelect(this)">
+      <div class="upload-progress" id="uploadProgress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </div>
+    <div class="or-divider">— OR —</div>
+    <input type="text" id="postUrl" placeholder="Paste a link (YouTube, TikTok, etc.)">
+    <div class="hint">Upload a file from your device or paste a link!</div>
+    <button class="btn-primary" id="postBtn" onclick="postVideo()">POST IT! 🎬</button>
     <div class="post-success" id="postSuccess"></div>
   </div>
 </div>
@@ -818,6 +920,7 @@
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
+  const storage = firebase.storage();
 
   // ===== LOCAL SESSION (just the username string) =====
   function getCurrentUser() {
@@ -847,6 +950,7 @@
         id: id,
         title: data.title,
         url: data.url,
+        type: data.type || 'link',
         author: data.author,
         created: data.created,
         votes: votesArray
@@ -1069,7 +1173,17 @@
     return null;
   }
 
-  function renderVideoEmbed(url) {
+  function renderVideoEmbed(video) {
+    var url = video.url || video;
+    var type = video.type || 'link';
+
+    if (type === 'image') {
+      return '<img src="' + escapeHtml(url) + '" alt="uploaded photo" loading="lazy">';
+    }
+    if (type === 'video') {
+      return '<video src="' + escapeHtml(url) + '" controls playsinline preload="metadata"></video>';
+    }
+    // type === 'link' — try to embed
     const embedUrl = getEmbedUrl(url);
     if (embedUrl) {
       return '<iframe src="' + embedUrl + '" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>';
@@ -1120,7 +1234,7 @@
         + '<div class="video-title">' + escapeHtml(v.title) + '</div>'
         + '<div class="video-author">by ' + escapeHtml(v.author) + '</div>'
         + '</div>'
-        + '<div class="video-embed">' + renderVideoEmbed(v.url) + '</div>'
+        + '<div class="video-embed">' + renderVideoEmbed(v) + '</div>'
         + '<div class="video-stats">'
         + '<span class="avg-rating">⭐ ' + avgRating + '/10</span>'
         + '<span class="vote-count">' + v.votes.length + ' vote' + (v.votes.length !== 1 ? 's' : '') + '</span>'
@@ -1139,42 +1253,134 @@
     db.ref('videos/' + videoId + '/votes/' + currentUser).set(rating);
   }
 
+  // ===== FILE SELECT =====
+  function handleFileSelect(input) {
+    var btn = document.getElementById('fileUploadBtn');
+    if (input.files && input.files[0]) {
+      var file = input.files[0];
+      var sizeMB = (file.size / 1024 / 1024).toFixed(1);
+      btn.textContent = '✅ ' + file.name + ' (' + sizeMB + ' MB)';
+      btn.classList.add('has-file');
+      // Clear URL input since they're uploading a file
+      document.getElementById('postUrl').value = '';
+    } else {
+      btn.textContent = '📁 TAP TO UPLOAD A VIDEO OR PHOTO';
+      btn.classList.remove('has-file');
+    }
+  }
+
   // ===== POST VIDEO =====
   function postVideo() {
-    const title = document.getElementById('postTitle').value.trim();
-    const url = document.getElementById('postUrl').value.trim();
-    const successEl = document.getElementById('postSuccess');
+    var title = document.getElementById('postTitle').value.trim();
+    var url = document.getElementById('postUrl').value.trim();
+    var fileInput = document.getElementById('postFile');
+    var file = fileInput.files && fileInput.files[0];
+    var successEl = document.getElementById('postSuccess');
+    var postBtn = document.getElementById('postBtn');
 
-    if (!title || !url) {
+    if (!title) {
       successEl.style.color = '#ff4444';
-      successEl.textContent = 'Fill in everything bro!! 😤';
+      successEl.textContent = 'Give it a title bro!! 😤';
       return;
     }
 
-    // Basic URL check
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    if (!file && !url) {
       successEl.style.color = '#ff4444';
-      successEl.textContent = 'That doesn\'t look like a link! 🤨';
+      successEl.textContent = 'Upload a file or paste a link!! 😤';
       return;
     }
 
-    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-    db.ref('videos/' + id).set({
-      title: title,
-      url: url,
-      author: getCurrentUser(),
-      created: Date.now()
-      // votes intentionally omitted — starts empty in Firebase
-    }).then(function() {
-      document.getElementById('postTitle').value = '';
-      document.getElementById('postUrl').value = '';
-      successEl.style.color = '#0f0';
-      successEl.textContent = 'VIDEO POSTED!! 🎉🔥 GO CHECK THE FEED!';
-    }).catch(function(err) {
-      successEl.style.color = '#ff4444';
-      successEl.textContent = 'Firebase error! Check console 😵';
-      console.error(err);
-    });
+    var id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+
+    if (file) {
+      // File upload path
+      var isImage = file.type.startsWith('image/');
+      var isVideo = file.type.startsWith('video/');
+      if (!isImage && !isVideo) {
+        successEl.style.color = '#ff4444';
+        successEl.textContent = 'Only photos and videos!! 🤨';
+        return;
+      }
+
+      // Max 50MB
+      if (file.size > 50 * 1024 * 1024) {
+        successEl.style.color = '#ff4444';
+        successEl.textContent = 'File too big! Max 50MB 😵';
+        return;
+      }
+
+      postBtn.disabled = true;
+      postBtn.textContent = 'UPLOADING... 0%';
+      var progressEl = document.getElementById('uploadProgress');
+      var progressBar = document.getElementById('progressBar');
+      progressEl.style.display = 'block';
+
+      var ref = storage.ref('uploads/' + id + '/' + file.name);
+      var uploadTask = ref.put(file);
+
+      uploadTask.on('state_changed',
+        function(snapshot) {
+          var pct = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          progressBar.style.width = pct + '%';
+          postBtn.textContent = 'UPLOADING... ' + pct + '%';
+        },
+        function(error) {
+          successEl.style.color = '#ff4444';
+          successEl.textContent = 'Upload failed! 😵';
+          console.error(error);
+          postBtn.disabled = false;
+          postBtn.textContent = 'POST IT! 🎬';
+          progressEl.style.display = 'none';
+        },
+        function() {
+          uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+            db.ref('videos/' + id).set({
+              title: title,
+              url: downloadURL,
+              type: isImage ? 'image' : 'video',
+              author: getCurrentUser(),
+              created: Date.now()
+            }).then(function() {
+              document.getElementById('postTitle').value = '';
+              document.getElementById('postUrl').value = '';
+              fileInput.value = '';
+              document.getElementById('fileUploadBtn').textContent = '📁 TAP TO UPLOAD A VIDEO OR PHOTO';
+              document.getElementById('fileUploadBtn').classList.remove('has-file');
+              progressEl.style.display = 'none';
+              progressBar.style.width = '0%';
+              postBtn.disabled = false;
+              postBtn.textContent = 'POST IT! 🎬';
+              successEl.style.color = '#0f0';
+              successEl.textContent = 'POSTED!! 🎉🔥 GO CHECK THE FEED!';
+            });
+          });
+        }
+      );
+    } else {
+      // URL path (existing behavior)
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        successEl.style.color = '#ff4444';
+        successEl.textContent = 'That doesn\'t look like a link! 🤨';
+        return;
+      }
+
+      db.ref('videos/' + id).set({
+        title: title,
+        url: url,
+        type: 'link',
+        author: getCurrentUser(),
+        created: Date.now()
+      }).then(function() {
+        document.getElementById('postTitle').value = '';
+        document.getElementById('postUrl').value = '';
+        successEl.style.color = '#0f0';
+        successEl.textContent = 'POSTED!! 🎉🔥 GO CHECK THE FEED!';
+      }).catch(function(err) {
+        successEl.style.color = '#ff4444';
+        successEl.textContent = 'Firebase error! Check console 😵';
+        console.error(err);
+      });
+    }
   }
 
   // ===== LEADERBOARD =====
@@ -1272,7 +1478,7 @@
         + '<div class="video-header">'
         + '<div class="video-title">' + escapeHtml(v.title) + '</div>'
         + '</div>'
-        + '<div class="video-embed">' + renderVideoEmbed(v.url) + '</div>'
+        + '<div class="video-embed">' + renderVideoEmbed(v) + '</div>'
         + '<div class="video-stats">'
         + '<span class="avg-rating">⭐ ' + avgRating + '/10</span>'
         + '<span class="vote-count">' + v.votes.length + ' vote' + (v.votes.length !== 1 ? 's' : '') + '</span>'
