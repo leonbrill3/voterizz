@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>vote.rizz - Admin Panel</title>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Comic Neue', cursive;
+    background: linear-gradient(135deg, #1a0a2e, #16213e, #0f0024);
+    color: #fff;
+    min-height: 100vh;
+  }
+
+  .navbar {
+    background: linear-gradient(90deg, #ff00ff, #8b00ff, #ff00ff);
+    background-size: 200% 100%;
+    animation: rainbowSlide 3s linear infinite;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 30px rgba(255,0,255,0.5);
+  }
+
+  @keyframes rainbowSlide {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  .navbar .logo {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    color: #fff;
+    text-shadow: 2px 2px 0 #000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .navbar .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .logout-btn {
+    background: rgba(255,0,0,0.7);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+  }
+
+  .logout-btn:hover {
+    background: red;
+  }
+
+  .back-btn {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    border: 2px solid #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    text-decoration: none;
+    margin-right: 10px;
+  }
+
+  .back-btn:hover {
+    background: rgba(255,255,255,0.3);
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px 20px;
+  }
+
+  /* Login Screen */
+  .login-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+  }
+
+  .login-screen .big-title {
+    font-family: 'Bangers', cursive;
+    font-size: 3.5rem;
+    color: #ff00ff;
+    text-shadow: 0 0 20px rgba(255,0,255,0.5);
+    margin-bottom: 10px;
+  }
+
+  .login-screen .subtitle {
+    color: #aaa;
+    margin-bottom: 30px;
+  }
+
+  .login-box {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,0,255,0.4);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .login-box input {
+    width: 100%;
+    padding: 14px 18px;
+    margin-bottom: 15px;
+    border: 2px solid rgba(255,0,255,0.4);
+    border-radius: 12px;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Comic Neue', cursive;
+    outline: none;
+  }
+
+  .login-box input:focus {
+    border-color: #ff00ff;
+    box-shadow: 0 0 15px rgba(255,0,255,0.3);
+  }
+
+  .login-box input::placeholder {
+    color: rgba(255,255,255,0.4);
+  }
+
+  .login-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(45deg, #ff00ff, #8b00ff);
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .login-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 25px rgba(255,0,255,0.5);
+  }
+
+  .login-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .login-error {
+    color: #ff4444;
+    margin-bottom: 15px;
+    font-weight: 700;
+    min-height: 1.2em;
+  }
+
+  /* Admin Panel */
+  .page-title {
+    font-family: 'Bangers', cursive;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #ff00ff;
+    text-shadow: 0 0 15px rgba(255,0,255,0.5);
+  }
+
+  .admin-panel {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,0,255,0.3);
+    border-radius: 20px;
+    padding: 25px;
+  }
+
+  .admin-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+    padding-bottom: 15px;
+    flex-wrap: wrap;
+  }
+
+  .admin-tabs button {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.2);
+    color: #aaa;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .admin-tabs button:hover {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+
+  .admin-tabs button.active {
+    background: linear-gradient(45deg, #ff00ff, #8b00ff);
+    border-color: transparent;
+    color: #fff;
+  }
+
+  .admin-search {
+    width: 100%;
+    padding: 12px 18px;
+    margin-bottom: 20px;
+    border: 2px solid rgba(255,0,255,0.3);
+    border-radius: 12px;
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Comic Neue', cursive;
+    outline: none;
+  }
+
+  .admin-search:focus {
+    border-color: #ff00ff;
+    box-shadow: 0 0 15px rgba(255,0,255,0.2);
+  }
+
+  .admin-list {
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  .admin-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    transition: all 0.2s;
+  }
+
+  .admin-item:hover {
+    border-color: rgba(255,0,255,0.4);
+    background: rgba(255,255,255,0.08);
+  }
+
+  .admin-item-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .admin-item-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 4px;
+    word-break: break-word;
+  }
+
+  .admin-item-meta {
+    color: #888;
+    font-size: 0.85rem;
+  }
+
+  .admin-item-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .admin-item-actions button {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #aaa;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .admin-item-actions button:hover {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+
+  .admin-item-actions .delete-btn:hover,
+  .admin-item-actions .ban-btn:hover {
+    background: rgba(255,0,0,0.3);
+    border-color: #ff4444;
+    color: #ff4444;
+  }
+
+  .admin-item-actions .unban-btn:hover {
+    background: rgba(0,255,0,0.3);
+    border-color: #44ff44;
+    color: #44ff44;
+  }
+
+  .admin-item.banned {
+    opacity: 0.6;
+    border-color: rgba(255,0,0,0.3);
+    background: rgba(255,0,0,0.05);
+  }
+
+  .admin-item.flagged {
+    border-color: rgba(255,165,0,0.5);
+    background: rgba(255,165,0,0.1);
+  }
+
+  .flag-badge {
+    background: #ff6600;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-left: 8px;
+  }
+
+  /* Edit Modal */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-box {
+    background: linear-gradient(135deg, #1a0a2e, #0f0024);
+    border: 2px solid #ff00ff;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 0 40px rgba(255,0,255,0.3);
+  }
+
+  .modal-box h3 {
+    font-family: 'Bangers', cursive;
+    font-size: 1.6rem;
+    color: #ff00ff;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .modal-box input {
+    width: 100%;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    border: 2px solid rgba(255,0,255,0.4);
+    border-radius: 12px;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Comic Neue', cursive;
+    outline: none;
+  }
+
+  .modal-box input:focus {
+    border-color: #ff00ff;
+  }
+
+  .modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .modal-buttons button {
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .modal-buttons .save-btn {
+    background: linear-gradient(45deg, #ff00ff, #8b00ff);
+    border: none;
+    color: #fff;
+  }
+
+  .modal-buttons .save-btn:hover {
+    transform: scale(1.05);
+  }
+
+  .modal-buttons .cancel-btn {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: #aaa;
+  }
+
+  .modal-buttons .cancel-btn:hover {
+    color: #fff;
+  }
+
+  .hidden { display: none !important; }
+
+  .stats-bar {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .stat-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 15px 20px;
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .stat-num {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    color: #ff00ff;
+  }
+
+  .stat-label {
+    color: #888;
+    font-size: 0.85rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+  }
+</style>
+</head>
+<body>
+
+<!-- Login Screen -->
+<div id="loginScreen">
+  <div class="container">
+    <div class="login-screen">
+      <div class="big-title">ADMIN PANEL</div>
+      <div class="subtitle">vote.rizz moderation</div>
+      <div class="login-box">
+        <div class="login-error" id="loginError"></div>
+        <input type="text" id="username" placeholder="Admin username" autocomplete="off">
+        <input type="password" id="password" placeholder="Password">
+        <button class="login-btn" id="loginBtn" onclick="login()">LOGIN</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Panel -->
+<div id="adminPanel" class="hidden">
+  <nav class="navbar">
+    <div class="logo">ADMIN PANEL</div>
+    <div class="user-info">
+      <a href="/" class="back-btn">Back to Site</a>
+      <span id="adminUsername"></span>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="stats-bar" id="statsBar"></div>
+
+    <div class="admin-panel">
+      <div class="admin-tabs">
+        <button class="active" onclick="showTab('users')" id="tab-users">Users</button>
+        <button onclick="showTab('posts')" id="tab-posts">Posts</button>
+        <button onclick="showTab('comments')" id="tab-comments">Comments</button>
+        <button onclick="showTab('flagged')" id="tab-flagged">Flagged</button>
+      </div>
+      <input type="text" class="admin-search" id="searchInput" placeholder="Search..." oninput="renderTab()">
+      <div class="admin-list" id="adminList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal hidden" id="editModal">
+  <div class="modal-box">
+    <h3 id="modalTitle">Edit</h3>
+    <input type="text" id="modalInput">
+    <div class="modal-buttons">
+      <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+      <button class="save-btn" onclick="saveModal()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyAZlg0vR2mp3Svsy78QM47XXLZFEt0FbH8",
+    authDomain: "voterizz.firebaseapp.com",
+    databaseURL: "https://voterizz-default-rtdb.firebaseio.com",
+    projectId: "voterizz",
+    storageBucket: "voterizz.firebasestorage.app",
+    messagingSenderId: "552652151540",
+    appId: "1:552652151540:web:8f88715ce1855c3f0edca1"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const storage = firebase.storage();
+
+  let currentUser = null;
+  let currentTab = 'users';
+  let cachedUsers = {};
+  let cachedVideos = {};
+  let cachedBanned = {};
+  let modalCallback = null;
+
+  // Bad words for flagging
+  const flagWords = [
+    'fuck', 'shit', 'bitch', 'ass', 'dick', 'pussy', 'cunt', 'fag', 'faggot',
+    'retard', 'nigger', 'nigga', 'whore', 'slut', 'kill', 'die', 'hate',
+    'sex', 'sexy', 'porn', 'nude', 'naked', 'hot', 'horny'
+  ];
+
+  function containsBadWords(text) {
+    if (!text) return false;
+    const lower = text.toLowerCase();
+    return flagWords.some(word => lower.includes(word));
+  }
+
+  // Login
+  function login() {
+    const username = document.getElementById('username').value.trim().toLowerCase();
+    const password = document.getElementById('password').value;
+    const errorEl = document.getElementById('loginError');
+    const btn = document.getElementById('loginBtn');
+
+    if (!username || !password) {
+      errorEl.textContent = 'Enter username and password';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'CHECKING...';
+
+    // Check if user exists and password matches
+    db.ref('users/' + username).once('value').then(snap => {
+      if (!snap.exists()) {
+        errorEl.textContent = 'User not found';
+        btn.disabled = false;
+        btn.textContent = 'LOGIN';
+        return;
+      }
+
+      if (snap.val().password !== password) {
+        errorEl.textContent = 'Wrong password';
+        btn.disabled = false;
+        btn.textContent = 'LOGIN';
+        return;
+      }
+
+      // Check if admin
+      db.ref('admins/' + username).once('value').then(adminSnap => {
+        if (!adminSnap.exists() || adminSnap.val() !== true) {
+          errorEl.textContent = 'You are not an admin';
+          btn.disabled = false;
+          btn.textContent = 'LOGIN';
+          return;
+        }
+
+        // Success - enter admin panel
+        currentUser = username;
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('adminPanel').classList.remove('hidden');
+        document.getElementById('adminUsername').textContent = username;
+        startListeners();
+      });
+    }).catch(err => {
+      errorEl.textContent = 'Error: ' + err.message;
+      btn.disabled = false;
+      btn.textContent = 'LOGIN';
+    });
+  }
+
+  function logout() {
+    currentUser = null;
+    document.getElementById('adminPanel').classList.add('hidden');
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('loginError').textContent = '';
+  }
+
+  // Enter key to login
+  document.getElementById('password').addEventListener('keydown', e => {
+    if (e.key === 'Enter') login();
+  });
+
+  // Start Firebase listeners
+  function startListeners() {
+    db.ref('users').on('value', snap => {
+      cachedUsers = snap.val() || {};
+      updateStats();
+      renderTab();
+    });
+
+    db.ref('videos').on('value', snap => {
+      cachedVideos = snap.val() || {};
+      updateStats();
+      renderTab();
+    });
+
+    db.ref('banned').on('value', snap => {
+      cachedBanned = snap.val() || {};
+      renderTab();
+    });
+  }
+
+  function updateStats() {
+    const userCount = Object.keys(cachedUsers).length;
+    const postCount = Object.keys(cachedVideos).length;
+    let commentCount = 0;
+    let flaggedCount = 0;
+
+    Object.values(cachedVideos).forEach(v => {
+      if (v.comments) commentCount += Object.keys(v.comments).length;
+      if (containsBadWords(v.title)) flaggedCount++;
+      if (v.comments) {
+        Object.values(v.comments).forEach(c => {
+          if (containsBadWords(c.text)) flaggedCount++;
+        });
+      }
+    });
+
+    Object.keys(cachedUsers).forEach(u => {
+      if (containsBadWords(u)) flaggedCount++;
+    });
+
+    document.getElementById('statsBar').innerHTML = `
+      <div class="stat-box"><div class="stat-num">${userCount}</div><div class="stat-label">Users</div></div>
+      <div class="stat-box"><div class="stat-num">${postCount}</div><div class="stat-label">Posts</div></div>
+      <div class="stat-box"><div class="stat-num">${commentCount}</div><div class="stat-label">Comments</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:${flaggedCount > 0 ? '#ff6600' : '#ff00ff'}">${flaggedCount}</div><div class="stat-label">Flagged</div></div>
+    `;
+  }
+
+  function showTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.admin-tabs button').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('searchInput').value = '';
+    renderTab();
+  }
+
+  function renderTab() {
+    const container = document.getElementById('adminList');
+    const search = document.getElementById('searchInput').value.toLowerCase();
+
+    if (currentTab === 'users') {
+      renderUsers(container, search);
+    } else if (currentTab === 'posts') {
+      renderPosts(container, search);
+    } else if (currentTab === 'comments') {
+      renderComments(container, search);
+    } else if (currentTab === 'flagged') {
+      renderFlagged(container, search);
+    }
+  }
+
+  function renderUsers(container, search) {
+    const users = Object.keys(cachedUsers).filter(u => u.includes(search));
+    if (users.length === 0) {
+      container.innerHTML = '<div class="empty-state">No users found</div>';
+      return;
+    }
+
+    container.innerHTML = users.map(username => {
+      const isBanned = cachedBanned[username];
+      const isFlagged = containsBadWords(username);
+      const created = cachedUsers[username].created;
+      const date = created ? new Date(created).toLocaleDateString() : 'Unknown';
+
+      return `<div class="admin-item ${isBanned ? 'banned' : ''} ${isFlagged ? 'flagged' : ''}">
+        <div class="admin-item-info">
+          <div class="admin-item-title">${escapeHtml(username)}${isBanned ? ' (BANNED)' : ''}${isFlagged ? '<span class="flag-badge">FLAGGED</span>' : ''}</div>
+          <div class="admin-item-meta">Joined: ${date}</div>
+        </div>
+        <div class="admin-item-actions">
+          <button onclick="editUsername('${escapeHtml(username)}')">Edit</button>
+          <button class="${isBanned ? 'unban-btn' : 'ban-btn'}" onclick="toggleBan('${escapeHtml(username)}')">${isBanned ? 'Unban' : 'Ban'}</button>
+          <button class="delete-btn" onclick="deleteUser('${escapeHtml(username)}')">Delete</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderPosts(container, search) {
+    const posts = Object.entries(cachedVideos).filter(([id, v]) =>
+      v.title.toLowerCase().includes(search) || v.author.toLowerCase().includes(search)
+    );
+
+    if (posts.length === 0) {
+      container.innerHTML = '<div class="empty-state">No posts found</div>';
+      return;
+    }
+
+    container.innerHTML = posts.map(([id, v]) => {
+      const isFlagged = containsBadWords(v.title);
+      const commentCount = v.comments ? Object.keys(v.comments).length : 0;
+      const voteCount = v.votes ? Object.keys(v.votes).length : 0;
+
+      return `<div class="admin-item ${isFlagged ? 'flagged' : ''}">
+        <div class="admin-item-info">
+          <div class="admin-item-title">${escapeHtml(v.title)}${isFlagged ? '<span class="flag-badge">FLAGGED</span>' : ''}</div>
+          <div class="admin-item-meta">By ${escapeHtml(v.author)} · ${voteCount} votes · ${commentCount} comments</div>
+        </div>
+        <div class="admin-item-actions">
+          <button onclick="editPost('${id}')">Edit</button>
+          <button class="delete-btn" onclick="deletePost('${id}')">Delete</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderComments(container, search) {
+    const comments = [];
+    Object.entries(cachedVideos).forEach(([vid, v]) => {
+      if (!v.comments) return;
+      Object.entries(v.comments).forEach(([cid, c]) => {
+        if (c.text.toLowerCase().includes(search) || c.author.toLowerCase().includes(search)) {
+          comments.push({
+            videoId: vid,
+            videoTitle: v.title,
+            commentId: cid,
+            ...c
+          });
+        }
+      });
+    });
+
+    comments.sort((a, b) => (b.created || 0) - (a.created || 0));
+
+    if (comments.length === 0) {
+      container.innerHTML = '<div class="empty-state">No comments found</div>';
+      return;
+    }
+
+    container.innerHTML = comments.slice(0, 100).map(c => {
+      const isFlagged = containsBadWords(c.text);
+      return `<div class="admin-item ${isFlagged ? 'flagged' : ''}">
+        <div class="admin-item-info">
+          <div class="admin-item-title">${escapeHtml(c.text)}${isFlagged ? '<span class="flag-badge">FLAGGED</span>' : ''}</div>
+          <div class="admin-item-meta">By ${escapeHtml(c.author)} on "${escapeHtml(c.videoTitle.substring(0, 30))}"</div>
+        </div>
+        <div class="admin-item-actions">
+          <button onclick="editComment('${c.videoId}', '${c.commentId}')">Edit</button>
+          <button class="delete-btn" onclick="deleteComment('${c.videoId}', '${c.commentId}')">Delete</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderFlagged(container, search) {
+    const flagged = [];
+
+    // Flagged usernames
+    Object.keys(cachedUsers).forEach(username => {
+      if (containsBadWords(username)) {
+        flagged.push({
+          type: 'user',
+          text: username,
+          meta: 'Username'
+        });
+      }
+    });
+
+    // Flagged posts
+    Object.entries(cachedVideos).forEach(([id, v]) => {
+      if (containsBadWords(v.title)) {
+        flagged.push({
+          type: 'post',
+          id: id,
+          text: v.title,
+          meta: 'Post by ' + v.author
+        });
+      }
+
+      // Flagged comments
+      if (v.comments) {
+        Object.entries(v.comments).forEach(([cid, c]) => {
+          if (containsBadWords(c.text)) {
+            flagged.push({
+              type: 'comment',
+              videoId: id,
+              commentId: cid,
+              text: c.text,
+              meta: 'Comment by ' + c.author
+            });
+          }
+        });
+      }
+    });
+
+    if (flagged.length === 0) {
+      container.innerHTML = '<div class="empty-state">No flagged content! Everything looks clean.</div>';
+      return;
+    }
+
+    container.innerHTML = flagged.map(f => {
+      let actions = '';
+      if (f.type === 'user') {
+        actions = `<button onclick="editUsername('${escapeHtml(f.text)}')">Edit</button>
+          <button class="ban-btn" onclick="toggleBan('${escapeHtml(f.text)}')">Ban</button>
+          <button class="delete-btn" onclick="deleteUser('${escapeHtml(f.text)}')">Delete</button>`;
+      } else if (f.type === 'post') {
+        actions = `<button onclick="editPost('${f.id}')">Edit</button>
+          <button class="delete-btn" onclick="deletePost('${f.id}')">Delete</button>`;
+      } else if (f.type === 'comment') {
+        actions = `<button onclick="editComment('${f.videoId}', '${f.commentId}')">Edit</button>
+          <button class="delete-btn" onclick="deleteComment('${f.videoId}', '${f.commentId}')">Delete</button>`;
+      }
+
+      return `<div class="admin-item flagged">
+        <div class="admin-item-info">
+          <div class="admin-item-title">${escapeHtml(f.text)}<span class="flag-badge">${f.type.toUpperCase()}</span></div>
+          <div class="admin-item-meta">${escapeHtml(f.meta)}</div>
+        </div>
+        <div class="admin-item-actions">${actions}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Actions
+  function editUsername(oldUsername) {
+    showModal('Edit Username', oldUsername, newUsername => {
+      if (!newUsername || newUsername === oldUsername) return;
+      newUsername = newUsername.trim().toLowerCase();
+
+      db.ref('users/' + newUsername).once('value').then(snap => {
+        if (snap.exists()) {
+          alert('Username already taken!');
+          return;
+        }
+        migrateUsername(oldUsername, newUsername);
+      });
+    });
+  }
+
+  async function migrateUsername(oldUsername, newUsername) {
+    const userData = await db.ref('users/' + oldUsername).once('value');
+    await db.ref('users/' + newUsername).set(userData.val());
+
+    const updates = {};
+
+    // Update posts and comments
+    Object.entries(cachedVideos).forEach(([vid, v]) => {
+      if (v.author === oldUsername) {
+        updates['videos/' + vid + '/author'] = newUsername;
+      }
+      if (v.comments) {
+        Object.entries(v.comments).forEach(([cid, c]) => {
+          if (c.author === oldUsername) {
+            updates['videos/' + vid + '/comments/' + cid + '/author'] = newUsername;
+          }
+        });
+      }
+      if (v.votes && v.votes[oldUsername] !== undefined) {
+        updates['videos/' + vid + '/votes/' + newUsername] = v.votes[oldUsername];
+        updates['videos/' + vid + '/votes/' + oldUsername] = null;
+      }
+    });
+
+    // Update banned status
+    if (cachedBanned[oldUsername]) {
+      updates['banned/' + newUsername] = true;
+      updates['banned/' + oldUsername] = null;
+    }
+
+    await db.ref().update(updates);
+    await db.ref('users/' + oldUsername).remove();
+    closeModal();
+  }
+
+  function toggleBan(username) {
+    const isBanned = cachedBanned[username];
+    if (isBanned) {
+      if (confirm('Unban "' + username + '"?')) {
+        db.ref('banned/' + username).remove();
+      }
+    } else {
+      if (confirm('Ban "' + username + '"? They won\'t be able to log in.')) {
+        db.ref('banned/' + username).set(true);
+      }
+    }
+  }
+
+  function deleteUser(username) {
+    if (confirm('DELETE user "' + username + '" and ALL their posts/comments? This cannot be undone!')) {
+      // Delete user
+      db.ref('users/' + username).remove();
+      db.ref('banned/' + username).remove();
+      db.ref('admins/' + username).remove();
+
+      // Delete their posts
+      Object.entries(cachedVideos).forEach(([vid, v]) => {
+        if (v.author === username) {
+          db.ref('videos/' + vid).remove();
+        }
+      });
+    }
+  }
+
+  function editPost(videoId) {
+    const video = cachedVideos[videoId];
+    if (!video) return;
+    showModal('Edit Post Title', video.title, newTitle => {
+      if (!newTitle) return;
+      db.ref('videos/' + videoId + '/title').set(newTitle.trim());
+      closeModal();
+    });
+  }
+
+  function deletePost(videoId) {
+    const video = cachedVideos[videoId];
+    if (!video) return;
+    if (confirm('Delete post "' + video.title + '"?')) {
+      db.ref('videos/' + videoId).remove();
+      if (video.type === 'image' || video.type === 'video') {
+        storage.ref('uploads/' + videoId).listAll().then(res => {
+          res.items.forEach(item => item.delete());
+        }).catch(() => {});
+      }
+    }
+  }
+
+  function editComment(videoId, commentId) {
+    const video = cachedVideos[videoId];
+    if (!video || !video.comments || !video.comments[commentId]) return;
+    const comment = video.comments[commentId];
+    showModal('Edit Comment', comment.text, newText => {
+      if (!newText) return;
+      db.ref('videos/' + videoId + '/comments/' + commentId + '/text').set(newText.trim());
+      closeModal();
+    });
+  }
+
+  function deleteComment(videoId, commentId) {
+    if (confirm('Delete this comment?')) {
+      db.ref('videos/' + videoId + '/comments/' + commentId).remove();
+    }
+  }
+
+  // Modal
+  function showModal(title, value, callback) {
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalInput').value = value;
+    document.getElementById('editModal').classList.remove('hidden');
+    document.getElementById('modalInput').focus();
+    modalCallback = callback;
+  }
+
+  function closeModal() {
+    document.getElementById('editModal').classList.add('hidden');
+    modalCallback = null;
+  }
+
+  function saveModal() {
+    if (modalCallback) {
+      modalCallback(document.getElementById('modalInput').value);
+    }
+    closeModal();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !document.getElementById('editModal').classList.contains('hidden')) {
+      saveModal();
+    }
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  });
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+</script>
+</body>
+</html>
