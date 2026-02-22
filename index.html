@@ -1302,10 +1302,10 @@
         return;
       }
 
-      // Max 50MB
-      if (file.size > 50 * 1024 * 1024) {
+      // Max 100MB
+      if (file.size > 100 * 1024 * 1024) {
         successEl.style.color = '#ff4444';
-        successEl.textContent = 'File too big! Max 50MB 😵';
+        successEl.textContent = 'File too big! Max 100MB 😵';
         return;
       }
 
