@@ -1418,7 +1418,7 @@
       <div class="auth-error" id="authError"></div>
       <input type="text" id="authUsername" placeholder="Username" autocomplete="off" maxlength="20">
       <input type="password" id="authPassword" placeholder="Password" maxlength="30">
-      <input type="number" id="authAge" placeholder="Your age" min="1" max="120" class="hidden" style="margin-bottom:15px;">
+      <input type="number" id="authBirthYear" placeholder="What year were you born?" min="2007" max="2021" class="hidden" style="margin-bottom:15px;">
       <div id="swearsNotice" class="hidden" style="color:#ff0;font-size:0.85rem;margin-bottom:12px;text-align:center;">⚠️ Swearing is allowed, but inappropriate behavior is NOT. Ages 5-18 only.</div>
       <button class="btn-primary" id="authBtn" onclick="handleAuth()">LET'S GO! 🚀</button>
       <div class="auth-toggle">
@@ -1791,9 +1791,9 @@
       ? 'Already have an account? Login!'
       : "Don't have an account? Sign Up!";
     document.getElementById('authError').textContent = '';
-    document.getElementById('authAge').classList.toggle('hidden', !isSignUp);
+    document.getElementById('authBirthYear').classList.toggle('hidden', !isSignUp);
     document.getElementById('swearsNotice').classList.toggle('hidden', !isSignUp);
-    if (!isSignUp) document.getElementById('authAge').value = '';
+    if (!isSignUp) document.getElementById('authBirthYear').value = '';
   }
 
   function handleAuth() {
@@ -1812,8 +1812,10 @@
     }
 
     if (isSignUp) {
-      var age = parseInt(document.getElementById('authAge').value);
-      if (!age || age < 5 || age > 18) {
+      var birthYear = parseInt(document.getElementById('authBirthYear').value);
+      var currentYear = new Date().getFullYear();
+      var age = currentYear - birthYear;
+      if (!birthYear || age < 5 || age > 18) {
         errorEl.textContent = 'You gotta be between 5 and 18 to sign up!! 🚫';
         return;
       }
