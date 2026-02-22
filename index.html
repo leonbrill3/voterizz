@@ -3067,25 +3067,19 @@
   }
 
   // ===== INIT =====
-  // If user was previously logged in, skip login screen and go straight in
+  // If user was previously logged in, verify they still exist in Firebase and re-enter
   (function() {
     const savedUser = getCurrentUser();
     if (savedUser) {
-      // Hide login, show loading while we verify
-      document.getElementById('authScreen').classList.add('hidden');
-      document.getElementById('loadingScreen').classList.remove('hidden');
       db.ref('users/' + savedUser).once('value').then(function(snapshot) {
         if (snapshot.exists()) {
           enterApp();
         } else {
           clearCurrentUser();
-          document.getElementById('loadingScreen').classList.add('hidden');
-          document.getElementById('authScreen').classList.remove('hidden');
         }
       }).catch(function() {
+        // Firebase not configured yet — just show login
         clearCurrentUser();
-        document.getElementById('loadingScreen').classList.add('hidden');
-        document.getElementById('authScreen').classList.remove('hidden');
       });
     }
   })();
