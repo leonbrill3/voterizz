@@ -926,6 +926,148 @@
     box-shadow: 0 0 10px rgba(0,255,255,0.4);
   }
 
+  /* ===== RULES MODAL ===== */
+  .rules-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .rules-box {
+    background: linear-gradient(135deg, #1a0033, #0f0024);
+    border: 3px solid #ff00ff;
+    border-radius: 25px;
+    padding: 30px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 0 50px rgba(255,0,255,0.4);
+  }
+
+  .rules-box h2 {
+    font-family: 'Bangers', cursive;
+    font-size: 2.2rem;
+    color: #ff0;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0 0 15px rgba(255,255,0,0.5);
+  }
+
+  .rules-section {
+    margin-bottom: 20px;
+  }
+
+  .rules-section h3 {
+    font-family: 'Bangers', cursive;
+    font-size: 1.3rem;
+    color: #0ff;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(0,255,255,0.4);
+  }
+
+  .rules-section ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .rules-section li {
+    padding: 6px 0;
+    color: #ddd;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .rules-section li::before {
+    content: '✓';
+    color: #0f0;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .rules-warning {
+    background: rgba(255,0,0,0.15);
+    border: 2px solid #ff4444;
+    border-radius: 15px;
+    padding: 15px;
+    margin-top: 15px;
+  }
+
+  .rules-warning h3 {
+    color: #ff4444 !important;
+    margin-bottom: 8px;
+  }
+
+  .rules-warning li::before {
+    content: '⚠';
+    color: #ff4444;
+  }
+
+  .rules-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+  }
+
+  .rules-checkbox input {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+  }
+
+  .rules-checkbox label {
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .rules-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 15px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    background: linear-gradient(45deg, #ff00ff, #ff0080);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255,0,255,0.4);
+    transition: all 0.3s;
+  }
+
+  .rules-btn:hover:not(:disabled) {
+    transform: scale(1.03);
+    box-shadow: 0 0 30px rgba(255,0,255,0.6);
+  }
+
+  .rules-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* ===== RULES PAGE ===== */
+  .rules-page-content {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,0,255,0.3);
+    border-radius: 25px;
+    padding: 30px;
+  }
+
   /* ===== PROFILE SUBS STATS ===== */
   .profile-sub-stats {
     display: flex;
@@ -958,6 +1100,7 @@
     <button onclick="showPage('feed')" id="nav-feed">Home</button>
     <button onclick="showPage('post')" id="nav-post">Post</button>
     <button onclick="showPage('leaderboard')" id="nav-leaderboard">Leaderboard</button>
+    <button onclick="showPage('rules')" id="nav-rules">Rules</button>
     <button onclick="showPage('profile')" id="nav-profile">Profile</button>
   </div>
   <div class="user-info">
@@ -1026,8 +1169,136 @@
   <ul class="leaderboard-list" id="leaderboardList"></ul>
 </div>
 
+<!-- ===== RULES PAGE ===== -->
+<div class="container hidden" id="rulesPage">
+  <div class="page-title" style="color: #ff0;">📜 COMMUNITY RULES 📜</div>
+  <div class="rules-page-content">
+    <div class="rules-section">
+      <h3>Be Kind</h3>
+      <ul>
+        <li>No mean comments or bullying</li>
+        <li>No making fun of people</li>
+        <li>No spreading rumors or drama</li>
+        <li>Treat everyone with respect</li>
+      </ul>
+    </div>
+    <div class="rules-section">
+      <h3>Keep It Clean</h3>
+      <ul>
+        <li>No swear words or inappropriate language</li>
+        <li>No slurs of any kind</li>
+        <li>No inappropriate pictures or videos</li>
+        <li>No violent content</li>
+      </ul>
+    </div>
+    <div class="rules-section">
+      <h3>Stay Safe</h3>
+      <ul>
+        <li>No pictures showing your face</li>
+        <li>No pictures showing your body</li>
+        <li>No sharing personal info (phone number, address, school name, last name)</li>
+        <li>No asking others for their personal info</li>
+        <li>Don't share your password with anyone</li>
+      </ul>
+    </div>
+    <div class="rules-section">
+      <h3>No Creepy Stuff</h3>
+      <ul>
+        <li>No flirting or "dating" posts</li>
+        <li>No calling people "hot" or commenting on their looks</li>
+        <li>No pretending to be someone else</li>
+        <li>No fake accounts to mess with people</li>
+      </ul>
+    </div>
+    <div class="rules-section">
+      <h3>Content Rules</h3>
+      <ul>
+        <li>Only post things you made or have permission to share</li>
+        <li>No spam or posting the same thing over and over</li>
+        <li>Keep post titles appropriate</li>
+      </ul>
+    </div>
+    <div class="rules-section rules-warning">
+      <h3>What Happens If You Break Rules</h3>
+      <ul>
+        <li>First time: Warning</li>
+        <li>Second time: Post deleted</li>
+        <li>Third time: Account banned</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RULES MODAL (for signup) ===== -->
+<div class="rules-modal hidden" id="rulesModal">
+  <div class="rules-box">
+    <h2>📜 COMMUNITY RULES 📜</h2>
+    <p style="text-align:center;color:#aaa;margin-bottom:20px;">Please read before joining!</p>
+
+    <div class="rules-section">
+      <h3>Be Kind</h3>
+      <ul>
+        <li>No mean comments or bullying</li>
+        <li>No making fun of people</li>
+        <li>No spreading rumors or drama</li>
+        <li>Treat everyone with respect</li>
+      </ul>
+    </div>
+    <div class="rules-section">
+      <h3>Keep It Clean</h3>
+      <ul>
+        <li>No swear words or inappropriate language</li>
+        <li>No slurs of any kind</li>
+        <li>No inappropriate pictures or videos</li>
+        <li>No violent content</li>
+      </ul>
+    </div>
+    <div class="rules-section">
+      <h3>Stay Safe</h3>
+      <ul>
+        <li>No pictures showing your face</li>
+        <li>No pictures showing your body</li>
+        <li>No sharing personal info (phone number, address, school name, last name)</li>
+        <li>No asking others for their personal info</li>
+        <li>Don't share your password with anyone</li>
+      </ul>
+    </div>
+    <div class="rules-section">
+      <h3>No Creepy Stuff</h3>
+      <ul>
+        <li>No flirting or "dating" posts</li>
+        <li>No calling people "hot" or commenting on their looks</li>
+        <li>No pretending to be someone else</li>
+        <li>No fake accounts to mess with people</li>
+      </ul>
+    </div>
+    <div class="rules-section">
+      <h3>Content Rules</h3>
+      <ul>
+        <li>Only post things you made or have permission to share</li>
+        <li>No spam or posting the same thing over and over</li>
+        <li>Keep post titles appropriate</li>
+      </ul>
+    </div>
+    <div class="rules-section rules-warning">
+      <h3>What Happens If You Break Rules</h3>
+      <ul>
+        <li>First time: Warning</li>
+        <li>Second time: Post deleted</li>
+        <li>Third time: Account banned</li>
+      </ul>
+    </div>
+
+    <div class="rules-checkbox">
+      <input type="checkbox" id="rulesAgree" onchange="updateRulesBtn()">
+      <label for="rulesAgree">I have read and agree to follow these rules</label>
+    </div>
+
+    <button class="rules-btn" id="rulesAcceptBtn" disabled onclick="acceptRules()">I AGREE - LET ME IN! 🚀</button>
+  </div>
+</div>
+
 <!-- ===== PROFILE PAGE ===== -->
-<div class="container hidden" id="profilePage">
   <div class="profile-header">
     <div class="profile-avatar">😎</div>
     <div class="profile-username" id="profileUsername"></div>
@@ -1155,6 +1426,29 @@
 
   // ===== AUTH =====
   let isSignUp = false;
+  let pendingSignup = null; // { username, password } for after rules accepted
+
+  function updateRulesBtn() {
+    var checkbox = document.getElementById('rulesAgree');
+    var btn = document.getElementById('rulesAcceptBtn');
+    btn.disabled = !checkbox.checked;
+  }
+
+  function acceptRules() {
+    if (!pendingSignup) return;
+    document.getElementById('rulesModal').classList.add('hidden');
+
+    db.ref('users/' + pendingSignup.username).set({
+      password: pendingSignup.password,
+      created: Date.now()
+    }).then(function() {
+      setCurrentUser(pendingSignup.username);
+      pendingSignup = null;
+      document.getElementById('rulesAgree').checked = false;
+      updateRulesBtn();
+      enterApp();
+    });
+  }
 
   function toggleAuthMode() {
     isSignUp = !isSignUp;
@@ -1193,14 +1487,11 @@
           authBtn.textContent = "LET'S GOOO! 🎉";
           return;
         }
-        db.ref('users/' + username).set({
-          password: password,
-          created: Date.now()
-        }).then(function() {
-          setCurrentUser(username);
-          authBtn.disabled = false;
-          enterApp();
-        });
+        // Show rules modal before creating account
+        pendingSignup = { username: username, password: password };
+        document.getElementById('rulesModal').classList.remove('hidden');
+        authBtn.disabled = false;
+        authBtn.textContent = "LET'S GOOO! 🎉";
       }).catch(function(err) {
         errorEl.textContent = 'Firebase error! Check your config 😵';
         authBtn.disabled = false;
@@ -1319,10 +1610,10 @@
 
   // ===== NAVIGATION =====
   function hideAllPages() {
-    ['feedPage', 'postPage', 'leaderboardPage', 'profilePage'].forEach(id => {
+    ['feedPage', 'postPage', 'leaderboardPage', 'rulesPage', 'profilePage'].forEach(id => {
       document.getElementById(id).classList.add('hidden');
     });
-    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-profile'].forEach(id => {
+    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-rules', 'nav-profile'].forEach(id => {
       document.getElementById(id).classList.remove('active');
     });
   }
@@ -1345,6 +1636,10 @@
         document.getElementById('leaderboardPage').classList.remove('hidden');
         document.getElementById('nav-leaderboard').classList.add('active');
         renderLeaderboard();
+        break;
+      case 'rules':
+        document.getElementById('rulesPage').classList.remove('hidden');
+        document.getElementById('nav-rules').classList.add('active');
         break;
       case 'profile':
         document.getElementById('profilePage').classList.remove('hidden');
