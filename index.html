@@ -1400,7 +1400,7 @@
     <button onclick="showPage('leaderboard')" id="nav-leaderboard">Leaderboard</button>
     <button onclick="showPage('rules')" id="nav-rules">Rules</button>
     <button onclick="showPage('profile')" id="nav-profile">Profile</button>
-    <button onclick="showPage('admin')" id="nav-admin" class="hidden" style="background:rgba(255,0,255,0.3);">Admin</button>
+    <!-- Admin panel moved to /admin.html -->
   </div>
   <div class="user-info">
     <span id="navUsername"></span>
@@ -1634,19 +1634,7 @@
   <div id="profileVideosList"></div>
 </div>
 
-<!-- ===== ADMIN PAGE ===== -->
-<div class="container hidden" id="adminPage">
-  <div class="page-title" style="color: #ff00ff;">🛡️ ADMIN PANEL 🛡️</div>
-  <div class="admin-panel">
-    <div class="admin-tabs">
-      <button class="active" onclick="showAdminTab('users')" id="admin-tab-users">Users</button>
-      <button onclick="showAdminTab('posts')" id="admin-tab-posts">Posts</button>
-      <button onclick="showAdminTab('comments')" id="admin-tab-comments">Comments</button>
-    </div>
-    <input type="text" class="admin-search" id="adminSearch" placeholder="Search..." oninput="renderAdminTab()">
-    <div class="admin-list" id="adminList"></div>
-  </div>
-</div>
+<!-- Admin panel is at /admin.html -->
 
 <!-- ===== EDIT MODAL ===== -->
 <div class="edit-modal hidden" id="editModal">
@@ -1989,8 +1977,9 @@
     ['feedPage', 'postPage', 'leaderboardPage', 'rulesPage', 'profilePage', 'adminPage'].forEach(id => {
       document.getElementById(id).classList.add('hidden');
     });
-    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-rules', 'nav-profile', 'nav-admin'].forEach(id => {
-      document.getElementById(id).classList.remove('active');
+    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-rules', 'nav-profile'].forEach(id => {
+      var el = document.getElementById(id);
+      if (el) el.classList.remove('active');
     });
   }
 
@@ -2022,16 +2011,7 @@
         document.getElementById('nav-profile').classList.add('active');
         renderProfile();
         break;
-      case 'admin':
-        if (!isAdmin) return;
-        document.getElementById('adminPage').classList.remove('hidden');
-        document.getElementById('nav-admin').classList.add('active');
-        currentAdminTab = 'users';
-        document.getElementById('admin-tab-users').classList.add('active');
-        document.getElementById('admin-tab-posts').classList.remove('active');
-        document.getElementById('admin-tab-comments').classList.remove('active');
-        renderAdminTab();
-        break;
+      // Admin panel is at /admin.html
     }
   }
 
@@ -2845,208 +2825,23 @@
   }
 
   // ===== ADMIN SYSTEM =====
+  // Admin panel is at /admin.html
+  // This just tracks if user is admin for showing edit/delete buttons on all posts
   let isAdmin = false;
-  let cachedUsers = {};
-  let cachedBanned = {};
-  let usersListener = null;
-  let bannedListener = null;
-  let adminsListener = null;
-  let currentAdminTab = 'users';
 
   function checkAdminStatus() {
     var currentUser = getCurrentUser();
     if (!currentUser) {
       isAdmin = false;
-      document.getElementById('nav-admin').classList.add('hidden');
       return;
     }
     db.ref('admins/' + currentUser).once('value').then(function(snapshot) {
       isAdmin = snapshot.exists() && snapshot.val() === true;
-      if (isAdmin) {
-        document.getElementById('nav-admin').classList.remove('hidden');
-        // Start listening to users and banned lists
-        if (!usersListener) {
-          usersListener = db.ref('users').on('value', function(snap) {
-            cachedUsers = snap.val() || {};
-            if (currentAdminTab === 'users') renderAdminTab();
-          });
-        }
-        if (!bannedListener) {
-          bannedListener = db.ref('banned').on('value', function(snap) {
-            cachedBanned = snap.val() || {};
-            if (currentAdminTab === 'users') renderAdminTab();
-          });
-        }
-      } else {
-        document.getElementById('nav-admin').classList.add('hidden');
+      // Re-render feed to show edit/delete buttons if admin
+      if (isAdmin && document.getElementById('feedPage') && !document.getElementById('feedPage').classList.contains('hidden')) {
+        renderFeed();
       }
     });
-  }
-
-  function showAdminTab(tab) {
-    currentAdminTab = tab;
-    document.getElementById('admin-tab-users').classList.toggle('active', tab === 'users');
-    document.getElementById('admin-tab-posts').classList.toggle('active', tab === 'posts');
-    document.getElementById('admin-tab-comments').classList.toggle('active', tab === 'comments');
-    document.getElementById('adminSearch').value = '';
-    renderAdminTab();
-  }
-
-  function renderAdminTab() {
-    var container = document.getElementById('adminList');
-    var search = document.getElementById('adminSearch').value.toLowerCase();
-
-    if (currentAdminTab === 'users') {
-      var users = Object.keys(cachedUsers).filter(function(u) {
-        return u.toLowerCase().includes(search);
-      });
-      if (users.length === 0) {
-        container.innerHTML = '<div style="color:#888;text-align:center;padding:20px;">No users found</div>';
-        return;
-      }
-      container.innerHTML = users.map(function(username) {
-        var isBanned = cachedBanned[username];
-        var created = cachedUsers[username].created;
-        var dateStr = created ? new Date(created).toLocaleDateString() : 'Unknown';
-        return '<div class="admin-item' + (isBanned ? ' banned' : '') + '">'
-          + '<div class="admin-item-info">'
-          + '<div class="admin-item-title">' + escapeHtml(username) + (isBanned ? ' (BANNED)' : '') + '</div>'
-          + '<div class="admin-item-meta">Joined: ' + dateStr + '</div>'
-          + '</div>'
-          + '<div class="admin-item-actions">'
-          + '<button onclick="adminEditUsername(\'' + escapeHtml(username) + '\')">Edit</button>'
-          + '<button class="ban-btn" onclick="adminToggleBan(\'' + escapeHtml(username) + '\')">' + (isBanned ? 'Unban' : 'Ban') + '</button>'
-          + '</div>'
-          + '</div>';
-      }).join('');
-    } else if (currentAdminTab === 'posts') {
-      var posts = cachedVideos.filter(function(v) {
-        return v.title.toLowerCase().includes(search) || v.author.toLowerCase().includes(search);
-      });
-      if (posts.length === 0) {
-        container.innerHTML = '<div style="color:#888;text-align:center;padding:20px;">No posts found</div>';
-        return;
-      }
-      container.innerHTML = posts.map(function(v) {
-        return '<div class="admin-item">'
-          + '<div class="admin-item-info">'
-          + '<div class="admin-item-title">' + escapeHtml(v.title) + '</div>'
-          + '<div class="admin-item-meta">By ' + escapeHtml(v.author) + ' · ' + v.votes.length + ' votes · ' + v.comments.length + ' comments</div>'
-          + '</div>'
-          + '<div class="admin-item-actions">'
-          + '<button onclick="adminEditPost(\'' + v.id + '\')">Edit</button>'
-          + '<button class="ban-btn" onclick="adminDeletePost(\'' + v.id + '\')">Delete</button>'
-          + '</div>'
-          + '</div>';
-      }).join('');
-    } else if (currentAdminTab === 'comments') {
-      var comments = [];
-      cachedVideos.forEach(function(v) {
-        v.comments.forEach(function(c) {
-          comments.push({
-            videoId: v.id,
-            videoTitle: v.title,
-            commentId: c.id,
-            author: c.author,
-            text: c.text,
-            created: c.created
-          });
-        });
-      });
-      comments = comments.filter(function(c) {
-        return c.text.toLowerCase().includes(search) || c.author.toLowerCase().includes(search);
-      }).sort(function(a, b) { return b.created - a.created; });
-      if (comments.length === 0) {
-        container.innerHTML = '<div style="color:#888;text-align:center;padding:20px;">No comments found</div>';
-        return;
-      }
-      container.innerHTML = comments.slice(0, 100).map(function(c) {
-        return '<div class="admin-item">'
-          + '<div class="admin-item-info">'
-          + '<div class="admin-item-title">' + escapeHtml(c.text.substring(0, 50)) + (c.text.length > 50 ? '...' : '') + '</div>'
-          + '<div class="admin-item-meta">By ' + escapeHtml(c.author) + ' on "' + escapeHtml(c.videoTitle.substring(0, 20)) + '"</div>'
-          + '</div>'
-          + '<div class="admin-item-actions">'
-          + '<button onclick="adminEditComment(\'' + c.videoId + '\', \'' + c.commentId + '\')">Edit</button>'
-          + '<button class="ban-btn" onclick="adminDeleteComment(\'' + c.videoId + '\', \'' + c.commentId + '\')">Delete</button>'
-          + '</div>'
-          + '</div>';
-      }).join('');
-    }
-  }
-
-  function adminEditUsername(oldUsername) {
-    showEditModal('Edit Username', oldUsername, function(newUsername) {
-      if (!newUsername || newUsername === oldUsername) return;
-      newUsername = newUsername.trim().toLowerCase();
-      if (newUsername.length < 2) {
-        alert('Username too short!');
-        return;
-      }
-      // Check if new username exists
-      db.ref('users/' + newUsername).once('value').then(function(snap) {
-        if (snap.exists()) {
-          alert('That username is already taken!');
-          return;
-        }
-        migrateUsername(oldUsername, newUsername);
-      });
-    });
-  }
-
-  function adminToggleBan(username) {
-    var isBanned = cachedBanned[username];
-    if (isBanned) {
-      if (confirm('Unban user "' + username + '"?')) {
-        db.ref('banned/' + username).remove();
-      }
-    } else {
-      if (confirm('Ban user "' + username + '"? They will not be able to log in.')) {
-        db.ref('banned/' + username).set(true);
-      }
-    }
-  }
-
-  function adminEditPost(videoId) {
-    var video = cachedVideos.find(function(v) { return v.id === videoId; });
-    if (!video) return;
-    showEditModal('Edit Post Title', video.title, function(newTitle) {
-      if (!newTitle || newTitle === video.title) return;
-      db.ref('videos/' + videoId + '/title').set(newTitle.trim());
-      closeEditModal();
-    });
-  }
-
-  function adminDeletePost(videoId) {
-    var video = cachedVideos.find(function(v) { return v.id === videoId; });
-    if (!video) return;
-    if (confirm('Delete post "' + video.title + '"? This cannot be undone!')) {
-      db.ref('videos/' + videoId).remove();
-      // Also delete from storage if it's an uploaded file
-      if (video.type === 'image' || video.type === 'video') {
-        storage.ref('uploads/' + videoId).listAll().then(function(res) {
-          res.items.forEach(function(item) { item.delete(); });
-        }).catch(function() {});
-      }
-    }
-  }
-
-  function adminEditComment(videoId, commentId) {
-    var video = cachedVideos.find(function(v) { return v.id === videoId; });
-    if (!video) return;
-    var comment = video.comments.find(function(c) { return c.id === commentId; });
-    if (!comment) return;
-    showEditModal('Edit Comment', comment.text, function(newText) {
-      if (!newText || newText === comment.text) return;
-      db.ref('videos/' + videoId + '/comments/' + commentId + '/text').set(newText.trim());
-      closeEditModal();
-    });
-  }
-
-  function adminDeleteComment(videoId, commentId) {
-    if (confirm('Delete this comment? This cannot be undone!')) {
-      db.ref('videos/' + videoId + '/comments/' + commentId).remove();
-    }
   }
 
   // ===== EDIT MODAL =====
