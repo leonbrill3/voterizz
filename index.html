@@ -1390,97 +1390,126 @@
   }
 
   // ===== FEED =====
+  // Build the HTML for a single video card's dynamic parts (everything except embed)
+  function buildCardParts(v, currentUser) {
+    var avgRating = v.votes.length > 0
+      ? (v.votes.reduce(function(sum, vote) { return sum + vote.rating; }, 0) / v.votes.length).toFixed(1)
+      : '-';
+    var userVote = v.votes.find(function(vote) { return vote.user === currentUser; });
+    var isOwnVideo = v.author === currentUser;
+
+    var voteHtml;
+    if (isOwnVideo) {
+      voteHtml = '<span class="already-voted">Your video!</span>';
+    } else if (userVote) {
+      voteHtml = '<span class="already-voted">You rated: ' + userVote.rating + '/10 ✅</span>';
+    } else {
+      voteHtml = '';
+      for (var i = 1; i <= 10; i++) {
+        voteHtml += '<button onclick="voteVideo(\'' + v.id + '\', ' + i + ')">' + i + '</button>';
+      }
+    }
+
+    var subBtn = '';
+    if (v.author !== currentUser) {
+      var isSub = cachedSubscriptions[currentUser] && cachedSubscriptions[currentUser][v.author];
+      subBtn = '<button class="subscribe-btn' + (isSub ? ' subscribed' : '') + '" onclick="toggleSubscribe(\'' + escapeHtml(v.author) + '\')">'
+        + (isSub ? 'Subscribed' : 'Subscribe')
+        + '</button>';
+    }
+    var subCount = getSubscriberCount(v.author);
+    var subCountHtml = subCount > 0 ? '<span class="subscriber-count">' + subCount + ' sub' + (subCount !== 1 ? 's' : '') + '</span>' : '';
+
+    var commentCount = v.comments.length;
+    var isExpanded = expandedComments[v.id];
+    var commentsHtml = '<div class="comments-section">'
+      + '<button class="comments-toggle" onclick="toggleComments(\'' + v.id + '\')">'
+      + '💬 ' + commentCount + ' comment' + (commentCount !== 1 ? 's' : '')
+      + (isExpanded ? ' ▲' : ' ▼')
+      + '</button>';
+    if (isExpanded) {
+      commentsHtml += '<div class="comments-list">';
+      if (v.comments.length === 0) {
+        commentsHtml += '<div style="color:#666;font-size:0.85rem;padding:8px 0;">No comments yet. Be the first!</div>';
+      } else {
+        v.comments.forEach(function(c) {
+          commentsHtml += '<div class="comment-item">'
+            + '<span class="comment-author">' + escapeHtml(c.author) + ':</span>'
+            + '<span class="comment-text">' + escapeHtml(c.text) + '</span>'
+            + '<span class="comment-time">' + timeAgo(c.created) + '</span>'
+            + '</div>';
+        });
+      }
+      commentsHtml += '</div>';
+      commentsHtml += '<div class="comment-form">'
+        + '<input type="text" id="comment-' + v.id + '" placeholder="Add a comment..." maxlength="200" onkeydown="if(event.key===\'Enter\')postComment(\'' + v.id + '\')">'
+        + '<button onclick="postComment(\'' + v.id + '\')">Post</button>'
+        + '</div>';
+    }
+    commentsHtml += '</div>';
+
+    return {
+      authorHtml: 'by ' + escapeHtml(v.author) + subBtn + subCountHtml,
+      statsHtml: '<span class="avg-rating">⭐ ' + avgRating + '/10</span>'
+        + '<span class="vote-count">' + v.votes.length + ' vote' + (v.votes.length !== 1 ? 's' : '') + '</span>',
+      scaleHtml: '<span class="cool-scale-label">COOL SCALE:</span>' + voteHtml,
+      commentsHtml: commentsHtml
+    };
+  }
+
   function renderFeed() {
-    const videos = cachedVideos;
-    const container = document.getElementById('feedList');
-    const currentUser = getCurrentUser();
+    var videos = cachedVideos;
+    var container = document.getElementById('feedList');
+    var currentUser = getCurrentUser();
 
     if (videos.length === 0) {
       container.innerHTML = '<div class="empty-feed"><div class="big-emoji">😴</div><p>No videos yet!! Be the first to post something cool!</p></div>';
       return;
     }
 
-    // Show newest first
-    const sorted = [...videos].sort((a, b) => b.created - a.created);
-    container.innerHTML = sorted.map(v => {
-      const avgRating = v.votes.length > 0
-        ? (v.votes.reduce((sum, vote) => sum + vote.rating, 0) / v.votes.length).toFixed(1)
-        : '-';
-      const userVote = v.votes.find(vote => vote.user === currentUser);
-      const isOwnVideo = v.author === currentUser;
+    var sorted = [].concat(videos).sort(function(a, b) { return b.created - a.created; });
 
-      let voteHtml;
-      if (isOwnVideo) {
-        voteHtml = '<span class="already-voted">Your video!</span>';
-      } else if (userVote) {
-        voteHtml = '<span class="already-voted">You rated: ' + userVote.rating + '/10 ✅</span>';
-      } else {
-        voteHtml = '';
-        for (let i = 1; i <= 10; i++) {
-          voteHtml += '<button onclick="voteVideo(\'' + v.id + '\', ' + i + ')">' + i + '</button>';
+    // Check if we can do a smart update (same video IDs in same order)
+    var existingCards = container.querySelectorAll('.video-card[data-vid]');
+    var existingIds = [];
+    for (var i = 0; i < existingCards.length; i++) {
+      existingIds.push(existingCards[i].getAttribute('data-vid'));
+    }
+    var newIds = sorted.map(function(v) { return v.id; });
+    var canPatch = existingIds.length === newIds.length && existingIds.every(function(id, idx) { return id === newIds[idx]; });
+
+    if (canPatch) {
+      // Smart update — only update dynamic parts, leave video embeds alone
+      sorted.forEach(function(v, idx) {
+        var card = existingCards[idx];
+        var parts = buildCardParts(v, currentUser);
+        var authorEl = card.querySelector('.video-author');
+        if (authorEl) authorEl.innerHTML = parts.authorHtml;
+        var statsEl = card.querySelector('.video-stats');
+        if (statsEl) statsEl.innerHTML = parts.statsHtml;
+        var scaleEl = card.querySelector('.cool-scale');
+        if (scaleEl) scaleEl.innerHTML = parts.scaleHtml;
+        var commentsEl = card.querySelector('.comments-section');
+        if (commentsEl) {
+          commentsEl.outerHTML = parts.commentsHtml;
         }
-      }
-
-      // Subscribe button
-      var subBtn = '';
-      if (v.author !== currentUser) {
-        var isSub = cachedSubscriptions[currentUser] && cachedSubscriptions[currentUser][v.author];
-        subBtn = '<button class="subscribe-btn' + (isSub ? ' subscribed' : '') + '" onclick="toggleSubscribe(\'' + escapeHtml(v.author) + '\')">'
-          + (isSub ? 'Subscribed' : 'Subscribe')
-          + '</button>';
-      }
-
-      // Subscriber count for this author
-      var subCount = getSubscriberCount(v.author);
-      var subCountHtml = subCount > 0 ? '<span class="subscriber-count">' + subCount + ' sub' + (subCount !== 1 ? 's' : '') + '</span>' : '';
-
-      // Comments section
-      var commentCount = v.comments.length;
-      var isExpanded = expandedComments[v.id];
-      var commentsHtml = '<div class="comments-section">'
-        + '<button class="comments-toggle" onclick="toggleComments(\'' + v.id + '\')">'
-        + '💬 ' + commentCount + ' comment' + (commentCount !== 1 ? 's' : '')
-        + (isExpanded ? ' ▲' : ' ▼')
-        + '</button>';
-
-      if (isExpanded) {
-        commentsHtml += '<div class="comments-list">';
-        if (v.comments.length === 0) {
-          commentsHtml += '<div style="color:#666;font-size:0.85rem;padding:8px 0;">No comments yet. Be the first!</div>';
-        } else {
-          v.comments.forEach(function(c) {
-            commentsHtml += '<div class="comment-item">'
-              + '<span class="comment-author">' + escapeHtml(c.author) + ':</span>'
-              + '<span class="comment-text">' + escapeHtml(c.text) + '</span>'
-              + '<span class="comment-time">' + timeAgo(c.created) + '</span>'
-              + '</div>';
-          });
-        }
-        commentsHtml += '</div>';
-        commentsHtml += '<div class="comment-form">'
-          + '<input type="text" id="comment-' + v.id + '" placeholder="Add a comment..." maxlength="200" onkeydown="if(event.key===\'Enter\')postComment(\'' + v.id + '\')">'
-          + '<button onclick="postComment(\'' + v.id + '\')">Post</button>'
+      });
+    } else {
+      // Full render — videos added/removed/reordered
+      container.innerHTML = sorted.map(function(v) {
+        var parts = buildCardParts(v, currentUser);
+        return '<div class="video-card" data-vid="' + v.id + '">'
+          + '<div class="video-header">'
+          + '<div class="video-title">' + escapeHtml(v.title) + '</div>'
+          + '<div class="video-author">' + parts.authorHtml + '</div>'
+          + '</div>'
+          + '<div class="video-embed">' + renderVideoEmbed(v) + '</div>'
+          + '<div class="video-stats">' + parts.statsHtml + '</div>'
+          + '<div class="cool-scale">' + parts.scaleHtml + '</div>'
+          + parts.commentsHtml
           + '</div>';
-      }
-      commentsHtml += '</div>';
-
-      return '<div class="video-card">'
-        + '<div class="video-header">'
-        + '<div class="video-title">' + escapeHtml(v.title) + '</div>'
-        + '<div class="video-author">by ' + escapeHtml(v.author) + subBtn + subCountHtml + '</div>'
-        + '</div>'
-        + '<div class="video-embed">' + renderVideoEmbed(v) + '</div>'
-        + '<div class="video-stats">'
-        + '<span class="avg-rating">⭐ ' + avgRating + '/10</span>'
-        + '<span class="vote-count">' + v.votes.length + ' vote' + (v.votes.length !== 1 ? 's' : '') + '</span>'
-        + '</div>'
-        + '<div class="cool-scale">'
-        + '<span class="cool-scale-label">COOL SCALE:</span>'
-        + voteHtml
-        + '</div>'
-        + commentsHtml
-        + '</div>';
-    }).join('');
+      }).join('');
+    }
   }
 
   function voteVideo(videoId, rating) {
