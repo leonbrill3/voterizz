@@ -2413,22 +2413,66 @@
     // Slurs (abbreviated/common variations)
     'fag', 'faggot', 'retard', 'retarded', 'nigger', 'nigga', 'chink', 'spic', 'kike', 'gook',
     'tranny', 'dyke', 'homo', 'queer',
-    // Mean/bullying words
+    // Mean/bullying words - single words
     'ugly', 'fat', 'stupid', 'idiot', 'dumb', 'loser', 'pathetic', 'worthless', 'trash',
+    'lame', 'boring', 'annoying', 'gross', 'disgusting', 'ew', 'eww', 'ewww',
+    'weirdo', 'freak', 'creep', 'creepy', 'psycho', 'crazy', 'insane',
+    'nerd', 'geek', 'dork', 'loner', 'reject', 'failure', 'noob', 'newb',
+    'suck', 'sucks', 'sucked', 'stink', 'stinks', 'terrible', 'horrible', 'awful',
+    'worst', 'bad', 'weak', 'lame', 'basic', 'mid', 'trash', 'garbage',
+    // Harmful phrases
     'kill yourself', 'kys', 'die', 'hate you', 'nobody likes you', 'kill', 'murder',
+    'go away', 'leave', 'get out', 'not wanted', 'not welcome',
+    // Mean phrases and bullying
+    'no one likes', 'nobody likes', 'everyone hates', 'we all hate',
+    'no friends', 'have no friends', 'friendless', 'lonely',
+    'try hard', 'tryhard', 'pick me', 'attention seeker', 'clout chaser',
+    'copycat', 'faker', 'fake', 'poser', 'wannabe', 'jealous',
+    'youre bad', 'ur bad', 'you bad', 'so bad', 'terrible at',
+    'cant do', 'can not do', 'never will', 'give up', 'just quit', 'stop trying',
+    'not good', 'not talented', 'no talent', 'untalented', 'no skill', 'unskilled',
+    'embarrassing', 'embarrassed', 'ashamed', 'shame on', 'should be ashamed',
+    'makes me sick', 'want to puke', 'gonna puke', 'throwing up',
+    'not funny', 'unfunny', 'cringe', 'cringy', 'cringey', 'so cringe',
+    'delete this', 'take this down', 'remove this', 'shouldnt post',
+    'why would you', 'why did you', 'what is wrong with',
+    'get a life', 'have no life', 'no life', 'touch grass',
+    'ratio', 'ratioed', 'L', 'take the L', 'big L', 'huge L',
+    'bozo', 'clown', 'joke', 'laughing at you', 'laugh at you',
+    'making fun', 'make fun', 'mocking', 'mock you',
+    // Exclusion/social bullying
+    'not invited', 'dont invite', 'leave them out', 'kick them out',
+    'ignore', 'ignoring', 'blocked', 'blocking', 'unfriend', 'unfollowed',
+    'not cool', 'uncool', 'unpopular', 'nobody knows you',
+    'irrelevant', 'doesnt matter', 'dont matter', 'who cares', 'who asked',
+    'didnt ask', 'nobody asked', 'no one asked', 'no one cares', 'nobody cares',
+    // Appearance/body shaming
+    'look like', 'looks like', 'looking like', 'face like',
+    'skinny', 'bony', 'chubby', 'overweight', 'obese',
+    'short', 'tall', 'tiny', 'giant', 'midget',
+    'pimple', 'acne', 'zit', 'braces', 'glasses',
+    'hair looks', 'bad hair', 'ugly hair', 'weird hair',
+    'dress like', 'outfit is', 'clothes are',
     // Inappropriate content
     'sex', 'sexy', 'nude', 'naked', 'porn', 'boobs', 'tits', 'penis', 'vagina',
     'hot', 'horny', 'turned on', 'hookup', 'hook up', 'dating', 'date me',
     'boyfriend', 'girlfriend', 'crush', 'love you', 'marry me',
+    'kiss', 'kissing', 'makeout', 'make out',
     // Personal info requests
     'phone number', 'address', 'where do you live', 'what school', 'snapchat', 'snap',
-    'instagram', 'insta', 'dm me', 'text me', 'call me', 'facetime',
+    'instagram', 'insta', 'dm me', 'text me', 'call me', 'facetime', 'discord',
+    'tiktok', 'whatsapp', 'telegram', 'kik',
     // Common leetspeak/bypass attempts
     'f*ck', 'sh*t', 'b*tch', 'a$$', 'd!ck', 'p*ssy', 'fck', 'sht', 'btch',
     'f u c k', 's h i t', 'b i t c h', 'fuk', 'phuck', 'shiit', 'biatch',
+    'st00pid', 'dum', 'dumm', 'stoopid', 'stpd',
     // Additional mean phrases
-    'no one likes', 'everyone hates', 'go away', 'shut up', 'stfu', 'gtfo',
-    'youre ugly', 'ur ugly', 'you suck', 'u suck', 'cringe', 'ratio'
+    'shut up', 'stfu', 'gtfo', 'kms', 'smh',
+    'youre ugly', 'ur ugly', 'you suck', 'u suck', 'they suck',
+    'hate this', 'hate it', 'hate them', 'hate him', 'hate her',
+    'worst ever', 'worst thing', 'worst person', 'worst video',
+    'downvote', 'dislike', 'thumbs down', 'report', 'reporting',
+    'get banned', 'hope banned', 'should be banned'
   ];
 
   // Patterns for detecting personal info
@@ -2485,6 +2529,58 @@
         reason: 'spam',
         message: '🚫 Please don\'t spam repeated characters!'
       };
+    }
+
+    // Check for sneaky negative patterns (variations kids use)
+    const sneakyPatterns = [
+      /\bu\s*r\s*(so\s+)?bad\b/i,           // "u r bad", "ur so bad"
+      /\bu\s*r\s*(so\s+)?(ugly|dumb|stupid)\b/i,
+      /\b(your|ur|you)\s*(so\s+)?(bad|trash|mid)\b/i,
+      /\bno\s*one\s*(likes|wants|cares)/i,  // "no one likes you"
+      /\beveryone\s*(hates|dislikes)/i,
+      /\b(go\s+)?(cry|crying)\s*(about\s+it)?\b/i, // "go cry about it"
+      /\bstay\s+mad\b/i,
+      /\bcope\b/i,
+      /\bseethe\b/i,
+      /\bskill\s+issue\b/i,
+      /\byou('re|r)?\s+(not|never)\s+(good|gonna)/i,
+      /\b(lol|lmao|haha)\s*(loser|trash|bad)\b/i,
+      /\bimagine\s+(being|thinking)/i,       // "imagine being this bad"
+      /\bcouldn'?t\s+be\s+me\b/i,
+      /\bthis\s+(ain'?t|isnt|is\s+not)\s+it\b/i,
+      /\bflop\b/i,
+      /\bdead\s+(content|video|channel)\b/i,
+      /\bno\s+views\b/i,
+      /\bwho\s+(even\s+)?(is\s+)?(this|u|you)\b/i,  // "who even is this"
+      /\bnobody\s+(knows|cares\s+about)\s+(u|you)\b/i,
+      /\b0\s*(out\s+of|\/)\s*10\b/i,         // "0/10", "0 out of 10"
+      /\bnegative\s+\d+\b/i,                 // "negative 5"
+      /\b-\d+\s*(out\s+of|\/)\s*10\b/i,      // "-5/10"
+      /\byou\s+(wish|thought)\b/i,
+      /\bin\s+your\s+dreams\b/i,
+      /\bkeep\s+(dreaming|wishing)\b/i,
+      /\bnot\s+even\s+close\b/i,
+      /\btry\s+again\b/i,
+      /\bnice\s+try\b/i,
+      /\b(sit|sitting)\s+down\b/i,
+      /\bhold\s+(this|the)\s+L\b/i,
+      /\bfatherless\b/i,
+      /\bmotherless\b/i,
+      /\borphan\b/i,
+      /\badopted\b/i,
+      /\bunwanted\b/i,
+      /\bmistake\b/i,
+      /\baccident\b/i
+    ];
+
+    for (const pattern of sneakyPatterns) {
+      if (pattern.test(lowerText)) {
+        return {
+          ok: false,
+          reason: 'mean content',
+          message: '🚫 Let\'s keep it positive! That message might hurt someone\'s feelings.'
+        };
+      }
     }
 
     return { ok: true };
