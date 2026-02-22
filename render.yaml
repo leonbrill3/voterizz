@@ -6,7 +6,3 @@ services:
     branch: main
     staticPublishPath: .
     buildCommand: ""
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
