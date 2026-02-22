@@ -1418,6 +1418,8 @@
       <div class="auth-error" id="authError"></div>
       <input type="text" id="authUsername" placeholder="Username" autocomplete="off" maxlength="20">
       <input type="password" id="authPassword" placeholder="Password" maxlength="30">
+      <input type="number" id="authAge" placeholder="Your age" min="1" max="120" class="hidden" style="margin-bottom:15px;">
+      <div id="swearsNotice" class="hidden" style="color:#ff0;font-size:0.85rem;margin-bottom:12px;text-align:center;">⚠️ Swearing is allowed! Ages 5-18 only.</div>
       <button class="btn-primary" id="authBtn" onclick="handleAuth()">LET'S GO! 🚀</button>
       <div class="auth-toggle">
         <span id="authToggle" onclick="toggleAuthMode()">Don't have an account? Sign Up!</span>
@@ -1789,6 +1791,9 @@
       ? 'Already have an account? Login!'
       : "Don't have an account? Sign Up!";
     document.getElementById('authError').textContent = '';
+    document.getElementById('authAge').classList.toggle('hidden', !isSignUp);
+    document.getElementById('swearsNotice').classList.toggle('hidden', !isSignUp);
+    if (!isSignUp) document.getElementById('authAge').value = '';
   }
 
   function handleAuth() {
@@ -1804,6 +1809,14 @@
     if (username.length < 2) {
       errorEl.textContent = 'Username too short fam! 🙄';
       return;
+    }
+
+    if (isSignUp) {
+      var age = parseInt(document.getElementById('authAge').value);
+      if (!age || age < 5 || age > 18) {
+        errorEl.textContent = 'You gotta be between 5 and 18 to sign up!! 🚫';
+        return;
+      }
     }
 
     // Disable button while checking Firebase
