@@ -3010,7 +3010,7 @@
 
   function deletePost(videoId) {
     var video = cachedVideos.find(function(v) { return v.id === videoId; });
-    if (!video || video.author !== getCurrentUser()) return;
+    if (!video || (video.author !== getCurrentUser() && !isAdmin)) return;
     if (confirm('Delete this post? This cannot be undone!')) {
       db.ref('videos/' + videoId).remove();
       // Also delete from storage if it's an uploaded file
@@ -3045,7 +3045,7 @@
     var video = cachedVideos.find(function(v) { return v.id === videoId; });
     if (!video) return;
     var comment = video.comments.find(function(c) { return c.id === commentId; });
-    if (!comment || comment.author !== getCurrentUser()) return;
+    if (!comment || (comment.author !== getCurrentUser() && !isAdmin)) return;
     if (confirm('Delete this comment?')) {
       db.ref('videos/' + videoId + '/comments/' + commentId).remove();
     }
