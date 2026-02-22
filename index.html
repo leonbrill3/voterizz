@@ -1374,6 +1374,295 @@
     border-color: rgba(255,0,0,0.3);
   }
 
+  /* ===== CLICKABLE USERNAME ===== */
+  .clickable-user {
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .clickable-user:hover {
+    text-decoration: underline;
+    filter: brightness(1.3);
+  }
+
+  /* ===== PROFILE BIO ===== */
+  .profile-bio {
+    color: #ccc;
+    font-size: 1.05rem;
+    margin-top: 8px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    word-break: break-word;
+  }
+
+  /* ===== EDIT PROFILE BUTTON ===== */
+  .edit-profile-btn {
+    background: linear-gradient(45deg, #ff00ff, #0ff);
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 12px;
+  }
+
+  .edit-profile-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0,255,255,0.5);
+  }
+
+  /* ===== BACK BUTTON (other user profile) ===== */
+  .back-btn {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: #aaa;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 15px;
+  }
+
+  .back-btn:hover {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+
+  /* ===== PROFILE PHOTO ===== */
+  .profile-avatar-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #ff00ff;
+    box-shadow: 0 0 20px rgba(255,0,255,0.4);
+    margin-bottom: 10px;
+  }
+
+  /* ===== EDIT PROFILE MODAL ===== */
+  .edit-profile-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .edit-profile-box {
+    background: linear-gradient(135deg, #1a0033, #0f0024);
+    border: 3px solid #0ff;
+    border-radius: 20px;
+    padding: 25px;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 0 40px rgba(0,255,255,0.3);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .edit-profile-box h3 {
+    font-family: 'Bangers', cursive;
+    font-size: 1.8rem;
+    color: #0ff;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+
+  .edit-profile-section {
+    margin-bottom: 18px;
+  }
+
+  .edit-profile-section label {
+    display: block;
+    font-weight: 700;
+    color: #ff0;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+  }
+
+  /* Emoji picker grid */
+  .emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 6px;
+  }
+
+  .emoji-grid button {
+    font-size: 1.5rem;
+    background: rgba(255,255,255,0.08);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .emoji-grid button:hover {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.15);
+  }
+
+  .emoji-grid button.selected {
+    border-color: #0ff;
+    background: rgba(0,255,255,0.2);
+    box-shadow: 0 0 10px rgba(0,255,255,0.4);
+  }
+
+  /* Profile photo upload */
+  .profile-photo-upload {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .profile-photo-preview {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ff00ff;
+  }
+
+  .profile-photo-btn {
+    background: rgba(255,255,255,0.1);
+    border: 2px dashed rgba(0,255,255,0.5);
+    color: #0ff;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .profile-photo-btn:hover {
+    background: rgba(0,255,255,0.1);
+    border-color: #0ff;
+  }
+
+  /* Bio input */
+  .bio-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #ff00ff;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Comic Neue', cursive;
+    outline: none;
+    resize: none;
+    min-height: 60px;
+  }
+
+  .bio-input:focus {
+    border-color: #0ff;
+    box-shadow: 0 0 15px rgba(0,255,255,0.3);
+  }
+
+  .bio-char-count {
+    text-align: right;
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 4px;
+  }
+
+  /* Color picker swatches */
+  .color-swatches {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .color-swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .color-swatch:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px currentColor;
+  }
+
+  .color-swatch.selected {
+    border-color: #fff;
+    transform: scale(1.15);
+    box-shadow: 0 0 15px currentColor;
+  }
+
+  .edit-profile-save {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 15px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.3rem;
+    cursor: pointer;
+    background: linear-gradient(45deg, #ff00ff, #0ff);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0,255,255,0.4);
+    transition: all 0.2s;
+    margin-top: 10px;
+  }
+
+  .edit-profile-save:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 30px rgba(0,255,255,0.6);
+  }
+
+  .edit-profile-cancel {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 15px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    cursor: pointer;
+    background: rgba(255,255,255,0.1);
+    color: #aaa;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+
+  .edit-profile-cancel:hover {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+
+  /* Small avatar next to usernames */
+  .inline-avatar {
+    display: inline-block;
+    margin-right: 3px;
+    vertical-align: middle;
+  }
+
+  .inline-avatar-img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: middle;
+    margin-right: 3px;
+  }
+
   /* ===== RESPONSIVE ===== */
   @media (max-width: 600px) {
     .auth-screen .big-title { font-size: 3rem; }
@@ -1383,6 +1672,656 @@
     .page-title { font-size: 2.2rem; }
     .cool-scale button { width: 34px; height: 34px; font-size: 0.85rem; }
     .leaderboard-item { padding: 14px; }
+    .emoji-grid { grid-template-columns: repeat(6, 1fr); }
+    .edit-profile-box { padding: 18px; }
+    .wheel-wrapper { width: 260px; height: 260px; }
+    .wheel-canvas { width: 260px; height: 260px; }
+  }
+
+  /* ===== SEARCH BAR ===== */
+  .search-container {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 14px 20px 14px 45px;
+    border: 3px solid rgba(255,0,255,0.4);
+    border-radius: 25px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 1.1rem;
+    font-family: 'Comic Neue', cursive;
+    outline: none;
+    transition: all 0.3s;
+  }
+
+  .search-input:focus {
+    border-color: #0ff;
+    box-shadow: 0 0 25px rgba(0,255,255,0.3);
+  }
+
+  .search-input::placeholder {
+    color: rgba(255,255,255,0.4);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    pointer-events: none;
+  }
+
+  .search-results {
+    margin-bottom: 20px;
+  }
+
+  .search-results-section {
+    margin-bottom: 15px;
+  }
+
+  .search-results-section h3 {
+    font-family: 'Bangers', cursive;
+    font-size: 1.3rem;
+    color: #0ff;
+    margin-bottom: 10px;
+  }
+
+  .search-user-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .search-user-item:hover {
+    border-color: #ff00ff;
+    background: rgba(255,255,255,0.1);
+    transform: translateX(5px);
+  }
+
+  .search-no-results {
+    text-align: center;
+    color: #888;
+    padding: 30px;
+    font-size: 1.1rem;
+  }
+
+  /* ===== MESSAGES ===== */
+  .messages-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .new-msg-btn {
+    background: linear-gradient(45deg, #ff00ff, #ff0080);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .new-msg-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255,0,255,0.5);
+  }
+
+  .conversation-list {
+    list-style: none;
+  }
+
+  .conversation-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .conversation-item:hover {
+    border-color: #ff00ff;
+    background: rgba(255,255,255,0.1);
+    transform: translateX(5px);
+  }
+
+  .conversation-item.unread {
+    border-color: rgba(255,0,255,0.5);
+    background: rgba(255,0,255,0.08);
+  }
+
+  .convo-avatar {
+    font-size: 2rem;
+    min-width: 40px;
+    text-align: center;
+  }
+
+  .convo-avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .convo-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .convo-username {
+    font-weight: 700;
+    color: #0ff;
+    font-size: 1.05rem;
+  }
+
+  .convo-preview {
+    color: #888;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .convo-time {
+    color: #666;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .convo-unread-dot {
+    width: 10px;
+    height: 10px;
+    background: #ff00ff;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px #ff00ff;
+  }
+
+  .msg-thread-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+  }
+
+  .msg-back-btn {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: #aaa;
+    padding: 6px 14px;
+    border-radius: 15px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .msg-back-btn:hover {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+
+  .msg-thread-user {
+    font-family: 'Bangers', cursive;
+    font-size: 1.5rem;
+    color: #0ff;
+  }
+
+  .msg-thread-messages {
+    max-height: 50vh;
+    overflow-y: auto;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .msg-bubble {
+    max-width: 75%;
+    padding: 10px 16px;
+    border-radius: 18px;
+    font-size: 0.95rem;
+    word-break: break-word;
+    line-height: 1.4;
+  }
+
+  .msg-bubble.sent {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #ff00ff, #ff0080);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+
+  .msg-bubble.received {
+    align-self: flex-start;
+    background: rgba(255,255,255,0.12);
+    color: #eee;
+    border-bottom-left-radius: 4px;
+  }
+
+  .msg-bubble .msg-time {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.5);
+    margin-top: 4px;
+    display: block;
+  }
+
+  .msg-input-area {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid rgba(255,255,255,0.1);
+  }
+
+  .msg-input-area input {
+    flex: 1;
+    padding: 12px 18px;
+    border: 2px solid rgba(255,0,255,0.4);
+    border-radius: 25px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Comic Neue', cursive;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .msg-input-area input:focus {
+    border-color: #0ff;
+    box-shadow: 0 0 15px rgba(0,255,255,0.3);
+  }
+
+  .msg-input-area button {
+    background: linear-gradient(45deg, #ff00ff, #0ff);
+    border: none;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .msg-input-area button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0,255,255,0.4);
+  }
+
+  .no-conversations {
+    text-align: center;
+    color: #888;
+    padding: 40px 20px;
+    font-size: 1.1rem;
+  }
+
+  .nav-unread-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #ff0;
+    border-radius: 50%;
+    margin-left: 4px;
+    box-shadow: 0 0 6px #ff0;
+    vertical-align: middle;
+  }
+
+  .new-msg-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .new-msg-box {
+    background: linear-gradient(135deg, #1a0033, #0f0024);
+    border: 3px solid #ff00ff;
+    border-radius: 20px;
+    padding: 25px;
+    max-width: 450px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 0 40px rgba(255,0,255,0.3);
+  }
+
+  .new-msg-box h3 {
+    font-family: 'Bangers', cursive;
+    font-size: 1.8rem;
+    color: #ff00ff;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .user-picker-search {
+    width: 100%;
+    padding: 10px 16px;
+    border: 2px solid rgba(0,255,255,0.4);
+    border-radius: 15px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Comic Neue', cursive;
+    outline: none;
+    margin-bottom: 12px;
+  }
+
+  .user-picker-search:focus {
+    border-color: #0ff;
+  }
+
+  .user-picker-list {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .user-picker-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .user-picker-item:hover {
+    background: rgba(255,0,255,0.15);
+  }
+
+  .dm-profile-btn {
+    background: linear-gradient(45deg, #ff00ff, #ff0080);
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+    margin-left: 8px;
+  }
+
+  .dm-profile-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255,0,255,0.5);
+  }
+
+  /* ===== PRIZE WHEEL ===== */
+  .wheel-container {
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .wheel-locked {
+    background: rgba(255,255,255,0.06);
+    border: 3px solid rgba(255,255,255,0.15);
+    border-radius: 25px;
+    padding: 40px 30px;
+    text-align: center;
+  }
+
+  .wheel-locked .lock-icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+  }
+
+  .wheel-locked h3 {
+    font-family: 'Bangers', cursive;
+    font-size: 1.8rem;
+    color: #888;
+    margin-bottom: 10px;
+  }
+
+  .wheel-locked p {
+    color: #aaa;
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+
+  .streak-display {
+    font-family: 'Bangers', cursive;
+    font-size: 2.5rem;
+    color: #ff00ff;
+    text-shadow: 0 0 15px rgba(255,0,255,0.5);
+    margin: 15px 0;
+  }
+
+  .streak-bar {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 15px 0;
+  }
+
+  .streak-day {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #666;
+  }
+
+  .streak-day.filled {
+    background: linear-gradient(135deg, #ff00ff, #ff0080);
+    border-color: #ff00ff;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255,0,255,0.4);
+  }
+
+  .wheel-wrapper {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 20px auto;
+  }
+
+  .wheel-canvas {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 5px solid gold;
+    box-shadow: 0 0 30px rgba(255,215,0,0.4), inset 0 0 20px rgba(0,0,0,0.3);
+  }
+
+  .wheel-pointer {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    z-index: 2;
+  }
+
+  .spin-btn {
+    background: linear-gradient(45deg, gold, #ff8c00);
+    color: #0f0024;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 25px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 20px;
+    box-shadow: 0 0 20px rgba(255,215,0,0.4);
+    letter-spacing: 2px;
+  }
+
+  .spin-btn:hover:not(:disabled) {
+    transform: scale(1.08);
+    box-shadow: 0 0 40px rgba(255,215,0,0.6);
+  }
+
+  .spin-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .wheel-result {
+    font-family: 'Bangers', cursive;
+    font-size: 1.8rem;
+    color: gold;
+    text-shadow: 0 0 15px rgba(255,215,0,0.5);
+    margin-top: 20px;
+    min-height: 2em;
+  }
+
+  .wheel-cooldown {
+    color: #888;
+    font-size: 0.95rem;
+    margin-top: 10px;
+  }
+
+  .prize-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    margin-left: 3px;
+    vertical-align: middle;
+    animation: badgeGlow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes badgeGlow {
+    0% { filter: brightness(0.9); }
+    100% { filter: brightness(1.3); }
+  }
+
+  .prize-rainbow-name {
+    background: linear-gradient(90deg, #ff0000, #ff8800, #ffff00, #00ff00, #0088ff, #8800ff, #ff0000);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: rainbowText 2s linear infinite;
+  }
+
+  @keyframes rainbowText {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  .prize-neon-glow {
+    text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff !important;
+  }
+
+  /* ===== FEATURE TILES ===== */
+  .feature-tiles {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .feature-tile {
+    flex: 1;
+    min-width: 140px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .feature-tile:hover {
+    transform: translateY(-3px);
+  }
+
+  .feature-tile .tile-icon {
+    font-size: 1.8rem;
+  }
+
+  .feature-tile .tile-text {
+    font-family: 'Bangers', cursive;
+    font-size: 1.15rem;
+    letter-spacing: 1px;
+  }
+
+  .feature-tile .tile-sub {
+    font-family: 'Comic Neue', cursive;
+    font-size: 0.75rem;
+    font-weight: 400;
+    opacity: 0.8;
+  }
+
+  .tile-messages {
+    background: linear-gradient(135deg, rgba(255,0,255,0.2), rgba(255,0,128,0.15));
+    border: 2px solid rgba(255,0,255,0.4);
+  }
+
+  .tile-messages:hover {
+    border-color: #ff00ff;
+    box-shadow: 0 0 20px rgba(255,0,255,0.3);
+  }
+
+  .tile-wheel {
+    background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,140,0,0.12));
+    border: 2px solid rgba(255,215,0,0.4);
+  }
+
+  .tile-wheel:hover {
+    border-color: gold;
+    box-shadow: 0 0 20px rgba(255,215,0,0.3);
+  }
+
+  .tile-wheel.tile-locked {
+    opacity: 0.7;
+  }
+
+  .tile-wheel .tile-streak {
+    font-family: 'Bangers', cursive;
+    font-size: 0.85rem;
+    color: gold;
+  }
+
+  .section-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.4rem;
+    color: #0ff;
+    margin-bottom: 8px;
+    text-shadow: 0 0 10px rgba(0,255,255,0.3);
+    letter-spacing: 1px;
   }
 </style>
 </head>
@@ -1399,7 +2338,9 @@
     <button onclick="showPage('post')" id="nav-post">Post</button>
     <button onclick="showPage('leaderboard')" id="nav-leaderboard">Leaderboard</button>
     <button onclick="showPage('rules')" id="nav-rules">Rules</button>
-    <button onclick="showPage('profile')" id="nav-profile">Profile</button>
+    <button onclick="showPage('messages')" id="nav-messages">Messages</button>
+    <button onclick="showPage('wheel')" id="nav-wheel">Prize Wheel</button>
+    <button onclick="viewingUser=null;showPage('profile')" id="nav-profile">Profile</button>
     <!-- Admin panel moved to /admin.html -->
   </div>
   <div class="user-info">
@@ -1439,6 +2380,32 @@
 <!-- ===== FEED PAGE ===== -->
 <div class="container hidden" id="feedPage">
   <div class="page-title" style="color: #0ff;">🔥 THE FEED 🔥</div>
+
+  <!-- Feature Tiles -->
+  <div class="feature-tiles">
+    <div class="feature-tile tile-messages" onclick="showPage('messages')">
+      <div class="tile-icon">💬</div>
+      <div>
+        <div class="tile-text">Messages</div>
+        <div class="tile-sub" id="tileMsgSub">Chat with friends</div>
+      </div>
+    </div>
+    <div class="feature-tile tile-wheel" id="tileWheel" onclick="showPage('wheel')">
+      <div class="tile-icon">🎡</div>
+      <div>
+        <div class="tile-text">Rizz Wheel</div>
+        <div class="tile-sub tile-streak" id="tileWheelSub">🔒 Locked</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="section-title">🔍 SEARCH</div>
+  <div class="search-container">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="feedSearchInput" placeholder="Search users or posts..." oninput="handleFeedSearch()" maxlength="50">
+  </div>
+  <div id="searchResults" class="search-results hidden"></div>
   <div id="feedList"></div>
 </div>
 
@@ -1631,9 +2598,47 @@
     </div>
   </div>
   <button class="settings-btn" onclick="showSettingsModal()">⚙️ Settings</button>
-  </div>
   <div class="profile-videos-title">Your Videos</div>
   <div id="profileVideosList"></div>
+</div>
+
+<!-- ===== MESSAGES PAGE ===== -->
+<div class="container hidden" id="messagesPage">
+  <div class="page-title" style="color: #ff00ff;">💬 MESSAGES 💬</div>
+  <div id="messagesContent">
+    <div class="messages-header">
+      <span></span>
+      <button class="new-msg-btn" onclick="openNewMessageModal()">+ New Message</button>
+    </div>
+    <div id="conversationList" class="conversation-list"></div>
+  </div>
+  <div id="messageThread" class="hidden">
+    <div class="msg-thread-header">
+      <button class="msg-back-btn" onclick="backToConversations()">← Back</button>
+      <div class="msg-thread-user" id="threadUsername"></div>
+    </div>
+    <div class="msg-thread-messages" id="threadMessages"></div>
+    <div class="msg-input-area">
+      <input type="text" id="msgInput" placeholder="Type a message..." maxlength="500" onkeydown="if(event.key==='Enter')sendMessage()">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PRIZE WHEEL PAGE ===== -->
+<div class="container hidden" id="wheelPage">
+  <div class="page-title" style="color: gold;">🎡 PRIZE WHEEL 🎡</div>
+  <div class="wheel-container" id="wheelContent"></div>
+</div>
+
+<!-- ===== NEW MESSAGE MODAL ===== -->
+<div class="new-msg-modal hidden" id="newMsgModal">
+  <div class="new-msg-box">
+    <h3>New Message</h3>
+    <input type="text" class="user-picker-search" id="userPickerSearch" placeholder="Search for a user..." oninput="filterUserPicker()">
+    <div class="user-picker-list" id="userPickerList"></div>
+    <button class="edit-profile-cancel" onclick="closeNewMessageModal()" style="margin-top:12px;">Cancel</button>
+  </div>
 </div>
 
 <!-- Admin panel is at /admin.html -->
@@ -1647,6 +2652,43 @@
       <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
       <button class="save-btn" onclick="saveEditModal()">Save</button>
     </div>
+  </div>
+</div>
+
+<!-- ===== EDIT PROFILE MODAL ===== -->
+<div class="edit-profile-modal hidden" id="editProfileModal">
+  <div class="edit-profile-box">
+    <h3>Edit Profile</h3>
+
+    <div class="edit-profile-section">
+      <label>Profile Photo</label>
+      <div class="profile-photo-upload">
+        <img id="editProfilePhotoPreview" class="profile-photo-preview" src="" style="display:none;">
+        <span id="editProfileEmojiPreview" style="font-size:2.5rem;">😎</span>
+        <button class="profile-photo-btn" onclick="document.getElementById('profilePhotoFile').click()">Upload Photo</button>
+        <button class="profile-photo-btn" onclick="clearProfilePhoto()" style="border-color:rgba(255,0,0,0.4);color:#ff6666;">Remove</button>
+        <input type="file" id="profilePhotoFile" accept="image/*" style="display:none;" onchange="handleProfilePhotoSelect(this)">
+      </div>
+    </div>
+
+    <div class="edit-profile-section">
+      <label>Emoji Avatar (used if no photo)</label>
+      <div class="emoji-grid" id="emojiGrid"></div>
+    </div>
+
+    <div class="edit-profile-section">
+      <label>Bio</label>
+      <textarea class="bio-input" id="editBioInput" placeholder="Tell people about yourself..." maxlength="100" oninput="updateBioCount()"></textarea>
+      <div class="bio-char-count"><span id="bioCharCount">0</span>/100</div>
+    </div>
+
+    <div class="edit-profile-section">
+      <label>Profile Color</label>
+      <div class="color-swatches" id="colorSwatches"></div>
+    </div>
+
+    <button class="edit-profile-save" onclick="saveProfile()">SAVE PROFILE</button>
+    <button class="edit-profile-cancel" onclick="closeEditProfileModal()">Cancel</button>
   </div>
 </div>
 
@@ -1711,6 +2753,56 @@
   // Track which comment sections are expanded
   let expandedComments = {};
 
+  // Users + banned caches (referenced in logout)
+  let cachedUsers = {};
+  let usersListener = null;
+  let cachedBanned = {};
+  let bannedListener = null;
+
+  // ===== PROFILE CUSTOMIZATION STATE =====
+  let viewingUser = null; // null = viewing own profile; string = viewing another user
+  let avatarCache = {};   // { username: { avatar: '😎', profilePhoto: 'url', profileColor: '#ff00ff' } }
+  let pendingProfilePhoto = null; // File object for new profile photo upload
+
+  // ===== MESSAGING STATE =====
+  let cachedConversations = {};
+  let conversationsListener = null;
+  let currentThreadConvoId = null;
+  let currentThreadUser = null;
+  let threadMessagesListener = null;
+  let unreadCount = 0;
+
+  // ===== PRIZE WHEEL STATE =====
+  let rizzKingHistory = {};
+  let rizzKingListener = null;
+  let userPrizes = {};
+  let userPrizesListener = null;
+  let wheelSpinning = false;
+
+  const WHEEL_PRIZES = [
+    { name: 'Golden Border', icon: '✨', key: 'golden-border' },
+    { name: 'Rainbow Name', icon: '🌈', key: 'rainbow-name' },
+    { name: 'Neon Glow', icon: '💫', key: 'neon-glow' },
+    { name: 'Diamond Badge', icon: '💎', key: 'diamond-badge' },
+    { name: 'Fire Border', icon: '🔥', key: 'fire-border' },
+    { name: 'Lightning Badge', icon: '⚡', key: 'lightning-badge' },
+    { name: 'Star Badge', icon: '⭐', key: 'star-badge' },
+    { name: 'Crown Upgrade', icon: '👑', key: 'crown-upgrade' }
+  ];
+
+  const PROFILE_EMOJIS = [
+    '😎','🔥','👑','💎','⚡','🎯','🏆','🤩',
+    '🐱','🐶','🐼','🦊','🐸','🦁','🐯','🐻',
+    '🌟','🌈','🎨','🎮','🎵','🏀','⚽','🎪',
+    '🦄','🐲','🦋','🌸','🍕','🍩','🧁','🎂',
+    '🚀','🛸','🌙','☀️','🌊','🍀','💜','❤️'
+  ];
+
+  const PROFILE_COLORS = [
+    '#00ffff', '#ff00ff', '#ff0080', '#ff8800',
+    '#ffff00', '#00ff88', '#8844ff', '#ff4444'
+  ];
+
   // Convert Firebase videos object { id: {…}, id2: {…} } → array
   function firebaseVideosToArray(fbVideos) {
     if (!fbVideos) return [];
@@ -1773,7 +2865,11 @@
 
     db.ref('users/' + pendingSignup.username).set({
       password: pendingSignup.password,
-      created: Date.now()
+      created: Date.now(),
+      avatar: '😎',
+      bio: '',
+      profileColor: '#00ffff',
+      profilePhoto: ''
     }).then(function() {
       setCurrentUser(pendingSignup.username);
       pendingSignup = null;
@@ -1914,6 +3010,22 @@
       db.ref('banned').off('value', bannedListener);
       bannedListener = null;
     }
+    if (conversationsListener) {
+      db.ref('conversations').off('value', conversationsListener);
+      conversationsListener = null;
+    }
+    if (threadMessagesListener) {
+      db.ref('messages/' + currentThreadConvoId).off('value', threadMessagesListener);
+      threadMessagesListener = null;
+    }
+    if (rizzKingListener) {
+      db.ref('rizzKingHistory').off('value', rizzKingListener);
+      rizzKingListener = null;
+    }
+    if (userPrizesListener) {
+      db.ref('userPrizes').off('value', userPrizesListener);
+      userPrizesListener = null;
+    }
     videosLoaded = false;
     cachedVideos = [];
     cachedSubscriptions = {};
@@ -1921,6 +3033,16 @@
     cachedBanned = {};
     expandedComments = {};
     isAdmin = false;
+    avatarCache = {};
+    viewingUser = null;
+    pendingProfilePhoto = null;
+    cachedConversations = {};
+    currentThreadConvoId = null;
+    currentThreadUser = null;
+    unreadCount = 0;
+    rizzKingHistory = {};
+    userPrizes = {};
+    wheelSpinning = false;
 
     clearCurrentUser();
     document.getElementById('authScreen').classList.remove('hidden');
@@ -1935,10 +3057,21 @@
   function enterApp() {
     document.getElementById('authScreen').classList.add('hidden');
     document.getElementById('navbar').classList.remove('hidden');
-    document.getElementById('navUsername').textContent = '😎 ' + getCurrentUser();
+    // Load own avatar and set nav
+    loadUserProfile(getCurrentUser()).then(function() {
+      document.getElementById('navUsername').innerHTML = getAvatarHtml(getCurrentUser()) + ' ' + escapeHtml(getCurrentUser());
+    });
+    document.getElementById('navUsername').textContent = getCurrentUser();
 
     // Check if user is admin
     checkAdminStatus();
+
+    // Load users cache for search
+    if (!usersListener) {
+      usersListener = db.ref('users').on('value', function(snapshot) {
+        cachedUsers = snapshot.val() || {};
+      });
+    }
 
     // Show loading screen while we wait for the first Firebase snapshot
     if (!videosLoaded) {
@@ -1973,6 +3106,27 @@
     } else {
       showPage('feed');
     }
+
+    // Attach conversations listener for messaging
+    startConversationsListener();
+
+    // Attach rizz king history listener
+    if (!rizzKingListener) {
+      rizzKingListener = db.ref('rizzKingHistory').on('value', function(snapshot) {
+        rizzKingHistory = snapshot.val() || {};
+      });
+    }
+
+    // Attach user prizes listener
+    if (!userPrizesListener) {
+      userPrizesListener = db.ref('userPrizes').on('value', function(snapshot) {
+        userPrizes = snapshot.val() || {};
+        rerenderCurrentPage();
+      });
+    }
+
+    // Record today's rizz king
+    recordDailyRizzKing();
   }
 
   // Figure out which page is showing and re-render it
@@ -1983,16 +3137,18 @@
       renderLeaderboard();
     } else if (!document.getElementById('profilePage').classList.contains('hidden')) {
       renderProfile();
+    } else if (!document.getElementById('wheelPage').classList.contains('hidden')) {
+      renderWheel();
     }
   }
 
   // ===== NAVIGATION =====
   function hideAllPages() {
-    ['feedPage', 'postPage', 'leaderboardPage', 'rulesPage', 'profilePage'].forEach(id => {
+    ['feedPage', 'postPage', 'leaderboardPage', 'rulesPage', 'profilePage', 'messagesPage', 'wheelPage'].forEach(id => {
       var el = document.getElementById(id);
       if (el) el.classList.add('hidden');
     });
-    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-rules', 'nav-profile'].forEach(id => {
+    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-rules', 'nav-profile', 'nav-messages', 'nav-wheel'].forEach(id => {
       var el = document.getElementById(id);
       if (el) el.classList.remove('active');
     });
@@ -2005,6 +3161,13 @@
       case 'feed':
         document.getElementById('feedPage').classList.remove('hidden');
         document.getElementById('nav-feed').classList.add('active');
+        // Clear search when navigating to feed
+        var searchInput = document.getElementById('feedSearchInput');
+        if (searchInput) searchInput.value = '';
+        var searchResults = document.getElementById('searchResults');
+        if (searchResults) { searchResults.classList.add('hidden'); searchResults.innerHTML = ''; }
+        var feedListEl = document.getElementById('feedList');
+        if (feedListEl) feedListEl.style.display = '';
         renderFeed();
         break;
       case 'post':
@@ -2024,9 +3187,20 @@
       case 'profile':
         document.getElementById('profilePage').classList.remove('hidden');
         document.getElementById('nav-profile').classList.add('active');
+        // If coming from nav button (not viewUserProfile), show own profile
+        if (!viewingUser) viewingUser = null;
         renderProfile();
         break;
-      // Admin panel is at /admin.html
+      case 'messages':
+        document.getElementById('messagesPage').classList.remove('hidden');
+        document.getElementById('nav-messages').classList.add('active');
+        showConversationList();
+        break;
+      case 'wheel':
+        document.getElementById('wheelPage').classList.remove('hidden');
+        document.getElementById('nav-wheel').classList.add('active');
+        renderWheel();
+        break;
     }
   }
 
@@ -2127,7 +3301,7 @@
               + '</div>';
           }
           commentsHtml += '<div class="comment-item">'
-            + '<span class="comment-author">' + escapeHtml(c.author) + ':</span>'
+            + '<span class="comment-author">' + getClickableUsername(c.author) + ':</span>'
             + '<span class="comment-text">' + escapeHtml(c.text) + '</span>'
             + '<span class="comment-time">' + timeAgo(c.created) + '</span>'
             + commentActionsHtml
@@ -2143,7 +3317,7 @@
     commentsHtml += '</div>';
 
     return {
-      authorHtml: 'by ' + escapeHtml(v.author) + subBtn + subCountHtml,
+      authorHtml: 'by ' + getClickableUsername(v.author) + subBtn + subCountHtml,
       postActionsHtml: postActionsHtml,
       statsHtml: '<span class="avg-rating">⭐ ' + avgRating + '/10</span>'
         + '<span class="vote-count">' + v.votes.length + ' vote' + (v.votes.length !== 1 ? 's' : '') + '</span>',
@@ -2157,6 +3331,9 @@
     var container = document.getElementById('feedList');
     var currentUser = getCurrentUser();
 
+    // Update feature tiles
+    updateFeatureTiles();
+
     if (videos.length === 0) {
       container.innerHTML = '<div class="empty-feed"><div class="big-emoji">😴</div><p>No videos yet!! Be the first to post something cool!</p></div>';
       return;
@@ -2164,6 +3341,23 @@
 
     var sorted = [].concat(videos).sort(function(a, b) { return b.created - a.created; });
 
+    // Gather all usernames (authors + commenters) for avatar preloading
+    var allUsers = {};
+    sorted.forEach(function(v) {
+      allUsers[v.author] = true;
+      (v.comments || []).forEach(function(c) { allUsers[c.author] = true; });
+    });
+    var userList = Object.keys(allUsers);
+
+    // Preload avatars then render
+    preloadAvatars(userList).then(function() {
+      doRenderFeed(sorted, container, currentUser);
+    });
+    // Also render immediately with whatever we have cached
+    doRenderFeed(sorted, container, currentUser);
+  }
+
+  function doRenderFeed(sorted, container, currentUser) {
     // Check if we can do a smart update (same video IDs in same order)
     var existingCards = container.querySelectorAll('.video-card[data-vid]');
     var existingIds = [];
@@ -2684,80 +3878,429 @@
       return;
     }
 
-    container.innerHTML = ranked.map((entry, i) => {
-      const rank = i + 1;
-      const rankClass = rank <= 3 ? ' rank-' + rank : '';
-      const medal = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank;
-      const isKing = rank === 1;
+    // Preload avatars for leaderboard users then render
+    var leaderboardUsers = ranked.map(function(e) { return e.user; });
+    preloadAvatars(leaderboardUsers).then(function() {
+      container.innerHTML = ranked.map((entry, i) => {
+        const rank = i + 1;
+        const rankClass = rank <= 3 ? ' rank-' + rank : '';
+        const medal = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank;
+        const isKing = rank === 1;
 
-      return '<li class="leaderboard-item' + rankClass + '">'
-        + '<div class="leaderboard-rank">' + medal + '</div>'
-        + '<div class="leaderboard-info">'
-        + '<div class="leaderboard-username">'
-        + escapeHtml(entry.user)
-        + (isKing ? ' <span class="rizz-king-badge">👑</span>' : '')
-        + '</div>'
-        + (isKing ? '<div class="rizz-king-label">✨ RIZZ KING ✨</div>' : '')
-        + '<div class="leaderboard-details">'
-        + entry.videoCount + ' video' + (entry.videoCount !== 1 ? 's' : '')
-        + ' · ' + entry.totalVotes + ' vote' + (entry.totalVotes !== 1 ? 's' : '')
-        + '</div>'
-        + '</div>'
-        + '<div class="leaderboard-score">' + entry.avg.toFixed(1) + '</div>'
-        + '</li>';
-    }).join('');
+        return '<li class="leaderboard-item' + rankClass + '">'
+          + '<div class="leaderboard-rank">' + medal + '</div>'
+          + '<div class="leaderboard-info">'
+          + '<div class="leaderboard-username">'
+          + getClickableUsername(entry.user)
+          + (isKing ? ' <span class="rizz-king-badge">👑</span>' : '')
+          + '</div>'
+          + (isKing ? '<div class="rizz-king-label">✨ RIZZ KING ✨</div>' : '')
+          + '<div class="leaderboard-details">'
+          + entry.videoCount + ' video' + (entry.videoCount !== 1 ? 's' : '')
+          + ' · ' + entry.totalVotes + ' vote' + (entry.totalVotes !== 1 ? 's' : '')
+          + '</div>'
+          + '</div>'
+          + '<div class="leaderboard-score">' + entry.avg.toFixed(1) + '</div>'
+          + '</li>';
+      }).join('');
+    });
   }
 
   // ===== PROFILE =====
   function renderProfile() {
     const currentUser = getCurrentUser();
+    const targetUser = viewingUser || currentUser;
+    const isOwnProfile = !viewingUser;
     const videos = cachedVideos;
-    const myVideos = videos.filter(v => v.author === currentUser);
+    const userVideos = videos.filter(v => v.author === targetUser);
 
-    document.getElementById('profileUsername').textContent = currentUser;
-    document.getElementById('profileVideos').textContent = myVideos.length;
+    // Load profile data from cache or Firebase
+    loadUserProfile(targetUser).then(function(profile) {
+      var profileColor = profile.profileColor || '#00ffff';
 
-    let totalRating = 0, totalVotes = 0;
-    myVideos.forEach(v => {
-      v.votes.forEach(vote => {
-        totalRating += vote.rating;
-        totalVotes++;
+      // Page title
+      var titleEl = document.querySelector('#profilePage .page-title');
+      if (titleEl) {
+        titleEl.style.color = profileColor;
+        titleEl.innerHTML = isOwnProfile ? '😎 YOUR PROFILE 😎' : '👤 ' + escapeHtml(targetUser) + '\'s PROFILE 👤';
+      }
+
+      // Avatar display
+      var avatarEl = document.querySelector('#profilePage .profile-avatar');
+      if (avatarEl) {
+        if (profile.profilePhoto) {
+          avatarEl.innerHTML = '<img class="profile-avatar-img" src="' + escapeHtml(profile.profilePhoto) + '" alt="">';
+        } else {
+          avatarEl.textContent = profile.avatar || '😎';
+          avatarEl.style.cssText = '';
+        }
+      }
+
+      // Username
+      var usernameEl = document.getElementById('profileUsername');
+      usernameEl.textContent = targetUser;
+      usernameEl.style.color = profileColor;
+
+      // Bio
+      var bioEl = document.getElementById('profileBio');
+      if (!bioEl) {
+        bioEl = document.createElement('div');
+        bioEl.id = 'profileBio';
+        bioEl.className = 'profile-bio';
+        usernameEl.parentNode.insertBefore(bioEl, usernameEl.nextSibling);
+      }
+      bioEl.textContent = profile.bio || '';
+      bioEl.style.display = profile.bio ? '' : 'none';
+
+      // Stats
+      document.getElementById('profileVideos').textContent = userVideos.length;
+      let totalRating = 0, totalVotes = 0;
+      userVideos.forEach(v => {
+        v.votes.forEach(vote => {
+          totalRating += vote.rating;
+          totalVotes++;
+        });
       });
+      document.getElementById('profileTotalVotes').textContent = totalVotes;
+      document.getElementById('profileAvgRating').textContent = totalVotes > 0
+        ? (totalRating / totalVotes).toFixed(1)
+        : '-';
+      document.getElementById('profileSubscribers').textContent = getSubscriberCount(targetUser);
+      document.getElementById('profileSubscriptions').textContent = getSubscriptionCount(targetUser);
+
+      // Action buttons area
+      var settingsBtnEl = document.querySelector('#profilePage .settings-btn');
+      var editProfileBtnEl = document.getElementById('profileEditBtn');
+      var subscribeBtnEl = document.getElementById('profileSubscribeBtn');
+      var backBtnEl = document.getElementById('profileBackBtn');
+
+      var dmBtnEl = document.getElementById('profileDmBtn');
+
+      // Remove old dynamic buttons
+      if (editProfileBtnEl) editProfileBtnEl.remove();
+      if (subscribeBtnEl) subscribeBtnEl.remove();
+      if (backBtnEl) backBtnEl.remove();
+      if (dmBtnEl) dmBtnEl.remove();
+
+      var headerEl = document.querySelector('#profilePage .profile-header');
+
+      if (isOwnProfile) {
+        // Show settings + Edit Profile button
+        if (settingsBtnEl) settingsBtnEl.style.display = '';
+        var editBtn = document.createElement('button');
+        editBtn.id = 'profileEditBtn';
+        editBtn.className = 'edit-profile-btn';
+        editBtn.textContent = 'Edit Profile';
+        editBtn.onclick = openEditProfileModal;
+        headerEl.appendChild(editBtn);
+      } else {
+        // Hide settings, show subscribe + back
+        if (settingsBtnEl) settingsBtnEl.style.display = 'none';
+
+        // Back button at top of page
+        var backBtn = document.createElement('button');
+        backBtn.id = 'profileBackBtn';
+        backBtn.className = 'back-btn';
+        backBtn.textContent = '← Back';
+        backBtn.onclick = function() { viewingUser = null; showPage('feed'); };
+        var container = document.getElementById('profilePage');
+        container.insertBefore(backBtn, container.firstChild);
+
+        // Subscribe button
+        var isSub = cachedSubscriptions[currentUser] && cachedSubscriptions[currentUser][targetUser];
+        var subBtn = document.createElement('button');
+        subBtn.id = 'profileSubscribeBtn';
+        subBtn.className = 'subscribe-btn' + (isSub ? ' subscribed' : '');
+        subBtn.style.cssText = 'margin-top:12px;font-size:1rem;padding:8px 24px;';
+        subBtn.textContent = isSub ? 'Subscribed' : 'Subscribe';
+        subBtn.onclick = function() { toggleSubscribe(targetUser); renderProfile(); };
+        headerEl.appendChild(subBtn);
+
+        // DM button
+        var dmBtnEl = document.getElementById('profileDmBtn');
+        if (dmBtnEl) dmBtnEl.remove();
+        var dmBtn = document.createElement('button');
+        dmBtn.id = 'profileDmBtn';
+        dmBtn.className = 'dm-profile-btn';
+        dmBtn.textContent = '💬 Message';
+        dmBtn.onclick = function() { openDMFromProfile(targetUser); };
+        headerEl.appendChild(dmBtn);
+      }
+
+      // Videos title
+      var vidTitle = document.querySelector('#profilePage .profile-videos-title');
+      vidTitle.textContent = isOwnProfile ? 'Your Videos' : targetUser + '\'s Videos';
+
+      // Videos list
+      const listEl = document.getElementById('profileVideosList');
+      if (userVideos.length === 0) {
+        listEl.innerHTML = '<div class="no-videos">' + (isOwnProfile ? 'You haven\'t posted any videos yet! 🎬' : 'No videos yet!') + '</div>';
+        return;
+      }
+
+      listEl.innerHTML = [...userVideos].sort((a, b) => b.created - a.created).map(v => {
+        const avgRating = v.votes.length > 0
+          ? (v.votes.reduce((sum, vote) => sum + vote.rating, 0) / v.votes.length).toFixed(1)
+          : '-';
+        var postActions = '';
+        if (v.author === currentUser || isAdmin) {
+          postActions = '<div class="post-actions">'
+            + '<button onclick="editPost(\'' + v.id + '\')">✏️ Edit</button>'
+            + '<button class="delete-btn" onclick="deletePost(\'' + v.id + '\')">🗑️ Delete</button>'
+            + '</div>';
+        }
+
+        return '<div class="video-card">'
+          + '<div class="video-header">'
+          + '<div class="video-title">' + escapeHtml(v.title) + '</div>'
+          + postActions
+          + '</div>'
+          + '<div class="video-embed">' + renderVideoEmbed(v) + '</div>'
+          + '<div class="video-stats">'
+          + '<span class="avg-rating">⭐ ' + avgRating + '/10</span>'
+          + '<span class="vote-count">' + v.votes.length + ' vote' + (v.votes.length !== 1 ? 's' : '') + '</span>'
+          + '</div>'
+          + '</div>';
+      }).join('');
     });
+  }
 
-    document.getElementById('profileTotalVotes').textContent = totalVotes;
-    document.getElementById('profileAvgRating').textContent = totalVotes > 0
-      ? (totalRating / totalVotes).toFixed(1)
-      : '-';
-    document.getElementById('profileSubscribers').textContent = getSubscriberCount(currentUser);
-    document.getElementById('profileSubscriptions').textContent = getSubscriptionCount(currentUser);
+  // ===== AVATAR / PROFILE HELPERS =====
+  function loadUserProfile(username) {
+    if (avatarCache[username]) return Promise.resolve(avatarCache[username]);
+    return db.ref('users/' + username).once('value').then(function(snap) {
+      var data = snap.val() || {};
+      var profile = {
+        avatar: data.avatar || '😎',
+        bio: data.bio || '',
+        profileColor: data.profileColor || '#00ffff',
+        profilePhoto: data.profilePhoto || ''
+      };
+      avatarCache[username] = profile;
+      return profile;
+    });
+  }
 
-    const listEl = document.getElementById('profileVideosList');
-    if (myVideos.length === 0) {
-      listEl.innerHTML = '<div class="no-videos">You haven\'t posted any videos yet! 🎬</div>';
-      return;
+  function getAvatarHtml(username) {
+    var cached = avatarCache[username];
+    if (cached && cached.profilePhoto) {
+      return '<img class="inline-avatar-img" src="' + escapeHtml(cached.profilePhoto) + '" alt="">';
+    }
+    var emoji = (cached && cached.avatar) ? cached.avatar : '😎';
+    return '<span class="inline-avatar">' + emoji + '</span>';
+  }
+
+  function getClickableUsername(username) {
+    var badges = getPrizeBadges(username);
+    var nameClass = '';
+    if (userPrizes[username]) {
+      if (userPrizes[username]['rainbow-name']) nameClass = ' prize-rainbow-name';
+      else if (userPrizes[username]['neon-glow']) nameClass = ' prize-neon-glow';
+    }
+    return '<span class="clickable-user' + nameClass + '" onclick="viewUserProfile(\'' + escapeHtml(username) + '\')">' + getAvatarHtml(username) + ' ' + escapeHtml(username) + badges + '</span>';
+  }
+
+  function getPrizeBadges(username) {
+    var prizes = userPrizes[username];
+    if (!prizes) return '';
+    var badges = '';
+    if (prizes['diamond-badge']) badges += '<span class="prize-badge">💎</span>';
+    if (prizes['lightning-badge']) badges += '<span class="prize-badge">⚡</span>';
+    if (prizes['star-badge']) badges += '<span class="prize-badge">⭐</span>';
+    if (prizes['crown-upgrade']) badges += '<span class="prize-badge">👑</span>';
+    return badges;
+  }
+
+  function preloadAvatars(usernames) {
+    var toLoad = usernames.filter(function(u) { return !avatarCache[u]; });
+    if (toLoad.length === 0) return Promise.resolve();
+    var promises = toLoad.map(function(u) { return loadUserProfile(u); });
+    return Promise.all(promises);
+  }
+
+  // ===== VIEW OTHER USER'S PROFILE =====
+  function viewUserProfile(username) {
+    viewingUser = username === getCurrentUser() ? null : username;
+    showPage('profile');
+  }
+
+  // ===== EDIT PROFILE MODAL =====
+  function openEditProfileModal() {
+    var currentUser = getCurrentUser();
+    var cached = avatarCache[currentUser] || {};
+    var currentAvatar = cached.avatar || '😎';
+    var currentBio = cached.bio || '';
+    var currentColor = cached.profileColor || '#00ffff';
+    var currentPhoto = cached.profilePhoto || '';
+
+    pendingProfilePhoto = null;
+
+    // Set photo preview
+    var photoPreview = document.getElementById('editProfilePhotoPreview');
+    var emojiPreview = document.getElementById('editProfileEmojiPreview');
+    if (currentPhoto) {
+      photoPreview.src = currentPhoto;
+      photoPreview.style.display = 'block';
+      emojiPreview.style.display = 'none';
+    } else {
+      photoPreview.style.display = 'none';
+      emojiPreview.style.display = '';
+      emojiPreview.textContent = currentAvatar;
     }
 
-    listEl.innerHTML = [...myVideos].sort((a, b) => b.created - a.created).map(v => {
-      const avgRating = v.votes.length > 0
-        ? (v.votes.reduce((sum, vote) => sum + vote.rating, 0) / v.votes.length).toFixed(1)
-        : '-';
-
-      return '<div class="video-card">'
-        + '<div class="video-header">'
-        + '<div class="video-title">' + escapeHtml(v.title) + '</div>'
-        + '<div class="post-actions">'
-        + '<button onclick="editPost(\'' + v.id + '\')">✏️ Edit</button>'
-        + '<button class="delete-btn" onclick="deletePost(\'' + v.id + '\')">🗑️ Delete</button>'
-        + '</div>'
-        + '</div>'
-        + '<div class="video-embed">' + renderVideoEmbed(v) + '</div>'
-        + '<div class="video-stats">'
-        + '<span class="avg-rating">⭐ ' + avgRating + '/10</span>'
-        + '<span class="vote-count">' + v.votes.length + ' vote' + (v.votes.length !== 1 ? 's' : '') + '</span>'
-        + '</div>'
-        + '</div>';
+    // Build emoji grid
+    var grid = document.getElementById('emojiGrid');
+    grid.innerHTML = PROFILE_EMOJIS.map(function(e) {
+      return '<button type="button" onclick="selectProfileEmoji(this, \'' + e + '\')"'
+        + (e === currentAvatar ? ' class="selected"' : '')
+        + '>' + e + '</button>';
     }).join('');
+
+    // Bio
+    document.getElementById('editBioInput').value = currentBio;
+    updateBioCount();
+
+    // Color swatches
+    var swatches = document.getElementById('colorSwatches');
+    swatches.innerHTML = PROFILE_COLORS.map(function(c) {
+      return '<div class="color-swatch' + (c === currentColor ? ' selected' : '') + '"'
+        + ' style="background:' + c + ';"'
+        + ' onclick="selectProfileColor(this, \'' + c + '\')"></div>';
+    }).join('');
+
+    document.getElementById('editProfileModal').classList.remove('hidden');
+  }
+
+  function closeEditProfileModal() {
+    document.getElementById('editProfileModal').classList.add('hidden');
+    pendingProfilePhoto = null;
+  }
+
+  function selectProfileEmoji(btn, emoji) {
+    document.querySelectorAll('#emojiGrid button').forEach(function(b) { b.classList.remove('selected'); });
+    btn.classList.add('selected');
+    var emojiPreview = document.getElementById('editProfileEmojiPreview');
+    emojiPreview.textContent = emoji;
+    // If no photo, show emoji preview
+    if (document.getElementById('editProfilePhotoPreview').style.display === 'none') {
+      emojiPreview.style.display = '';
+    }
+  }
+
+  function selectProfileColor(swatch, color) {
+    document.querySelectorAll('.color-swatch').forEach(function(s) { s.classList.remove('selected'); });
+    swatch.classList.add('selected');
+  }
+
+  function handleProfilePhotoSelect(input) {
+    if (input.files && input.files[0]) {
+      var file = input.files[0];
+      if (!file.type.startsWith('image/')) {
+        alert('Only images allowed!');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Photo must be under 5MB!');
+        return;
+      }
+      pendingProfilePhoto = file;
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('editProfilePhotoPreview').src = e.target.result;
+        document.getElementById('editProfilePhotoPreview').style.display = 'block';
+        document.getElementById('editProfileEmojiPreview').style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function clearProfilePhoto() {
+    pendingProfilePhoto = null;
+    document.getElementById('editProfilePhotoPreview').style.display = 'none';
+    document.getElementById('editProfileEmojiPreview').style.display = '';
+    document.getElementById('profilePhotoFile').value = '';
+  }
+
+  function updateBioCount() {
+    var bio = document.getElementById('editBioInput').value;
+    document.getElementById('bioCharCount').textContent = bio.length;
+  }
+
+  async function saveProfile() {
+    var currentUser = getCurrentUser();
+    var selectedEmoji = '😎';
+    var emojiBtn = document.querySelector('#emojiGrid button.selected');
+    if (emojiBtn) selectedEmoji = emojiBtn.textContent;
+
+    var bio = document.getElementById('editBioInput').value.trim();
+    if (bio) {
+      var bioCheck = checkContentModeration(bio);
+      if (!bioCheck.ok) {
+        alert(bioCheck.message);
+        return;
+      }
+    }
+
+    var selectedColor = '#00ffff';
+    var colorSwatch = document.querySelector('.color-swatch.selected');
+    if (colorSwatch) selectedColor = colorSwatch.style.background || colorSwatch.style.backgroundColor;
+
+    var updates = {
+      avatar: selectedEmoji,
+      bio: bio,
+      profileColor: selectedColor
+    };
+
+    // Upload profile photo if one was selected
+    if (pendingProfilePhoto) {
+      var saveBtn = document.querySelector('.edit-profile-save');
+      saveBtn.textContent = 'UPLOADING PHOTO...';
+      saveBtn.disabled = true;
+
+      try {
+        // Check for faces
+        var modelLoaded = await loadFaceApi();
+        if (modelLoaded) {
+          var hasFace = await detectFaceInImage(pendingProfilePhoto);
+          if (hasFace) {
+            alert('Face detected! For safety, no face pics allowed. Try a different photo!');
+            saveBtn.textContent = 'SAVE PROFILE';
+            saveBtn.disabled = false;
+            return;
+          }
+        }
+
+        var ref = storage.ref('profile-photos/' + currentUser + '/' + Date.now());
+        await ref.put(pendingProfilePhoto);
+        var downloadURL = await ref.getDownloadURL();
+        updates.profilePhoto = downloadURL;
+
+        saveBtn.textContent = 'SAVE PROFILE';
+        saveBtn.disabled = false;
+      } catch (err) {
+        console.error('Profile photo upload failed:', err);
+        alert('Photo upload failed! Try again.');
+        saveBtn.textContent = 'SAVE PROFILE';
+        saveBtn.disabled = false;
+        return;
+      }
+    } else if (document.getElementById('editProfilePhotoPreview').style.display === 'none') {
+      // Photo was cleared
+      updates.profilePhoto = '';
+    }
+
+    await db.ref('users/' + currentUser).update(updates);
+    avatarCache[currentUser] = {
+      avatar: updates.avatar,
+      bio: updates.bio,
+      profileColor: updates.profileColor,
+      profilePhoto: updates.profilePhoto !== undefined ? updates.profilePhoto : ((avatarCache[currentUser] || {}).profilePhoto || '')
+    };
+
+    closeEditProfileModal();
+    renderProfile();
+    // Update nav avatar
+    document.getElementById('navUsername').innerHTML = getAvatarHtml(currentUser) + ' ' + escapeHtml(currentUser);
   }
 
   // ===== ADMIN SYSTEM =====
@@ -2812,6 +4355,12 @@
     if (e.key === 'Escape' && !document.getElementById('editModal').classList.contains('hidden')) {
       closeEditModal();
     }
+    if (e.key === 'Escape' && !document.getElementById('editProfileModal').classList.contains('hidden')) {
+      closeEditProfileModal();
+    }
+    if (e.key === 'Escape' && !document.getElementById('newMsgModal').classList.contains('hidden')) {
+      closeNewMessageModal();
+    }
   });
 
   // ===== SETTINGS MODAL =====
@@ -2855,7 +4404,12 @@
 
     await migrateUsername(oldUsername, newUsername);
     setCurrentUser(newUsername);
-    document.getElementById('navUsername').textContent = '😎 ' + newUsername;
+    // Move avatar cache to new username
+    if (avatarCache[oldUsername]) {
+      avatarCache[newUsername] = avatarCache[oldUsername];
+      delete avatarCache[oldUsername];
+    }
+    document.getElementById('navUsername').innerHTML = getAvatarHtml(newUsername) + ' ' + escapeHtml(newUsername);
     closeSettingsModal();
     renderProfile();
     alert('Username changed to "' + newUsername + '"!');
@@ -2985,6 +4539,629 @@
     if (confirm('Delete this comment?')) {
       db.ref('videos/' + videoId + '/comments/' + commentId).remove();
     }
+  }
+
+  // ===== FEATURE TILES UPDATE =====
+  function updateFeatureTiles() {
+    var currentUser = getCurrentUser();
+    if (!currentUser) return;
+
+    // Update messages tile
+    var msgSub = document.getElementById('tileMsgSub');
+    if (msgSub) {
+      if (unreadCount > 0) {
+        msgSub.textContent = unreadCount + ' unread message' + (unreadCount !== 1 ? 's' : '') + '!';
+        msgSub.style.color = '#ff00ff';
+      } else {
+        msgSub.textContent = 'Chat with friends';
+        msgSub.style.color = '';
+      }
+    }
+
+    // Update wheel tile
+    var wheelSub = document.getElementById('tileWheelSub');
+    var wheelTile = document.getElementById('tileWheel');
+    if (wheelSub && wheelTile) {
+      var streak = getConsecutiveKingDays(currentUser);
+      if (streak >= 7) {
+        wheelSub.textContent = '🔓 Unlocked! Spin now!';
+        wheelTile.classList.remove('tile-locked');
+      } else {
+        wheelSub.textContent = '🔒 ' + streak + '/7 days as King';
+        wheelTile.classList.add('tile-locked');
+      }
+    }
+  }
+
+  // ===== SEARCH =====
+  function handleFeedSearch() {
+    var query = document.getElementById('feedSearchInput').value.trim().toLowerCase();
+    var resultsEl = document.getElementById('searchResults');
+    var feedListEl = document.getElementById('feedList');
+
+    if (!query) {
+      resultsEl.classList.add('hidden');
+      resultsEl.innerHTML = '';
+      feedListEl.style.display = '';
+      return;
+    }
+
+    feedListEl.style.display = 'none';
+    resultsEl.classList.remove('hidden');
+
+    // Search users
+    var allUsernames = Object.keys(cachedUsers);
+    // Also include users from videos
+    cachedVideos.forEach(function(v) {
+      if (allUsernames.indexOf(v.author) === -1) allUsernames.push(v.author);
+    });
+    var matchingUsers = allUsernames.filter(function(u) {
+      return u.toLowerCase().includes(query);
+    });
+
+    // Search posts by title
+    var matchingPosts = cachedVideos.filter(function(v) {
+      return v.title.toLowerCase().includes(query);
+    });
+
+    var html = '';
+
+    if (matchingUsers.length > 0) {
+      html += '<div class="search-results-section"><h3>Users</h3>';
+      // Preload avatars
+      preloadAvatars(matchingUsers).then(function() {
+        var usersContainer = document.getElementById('searchUsersContainer');
+        if (usersContainer) {
+          usersContainer.innerHTML = matchingUsers.slice(0, 10).map(function(u) {
+            return '<div class="search-user-item" onclick="viewUserProfile(\'' + escapeHtml(u) + '\')">'
+              + getAvatarHtml(u) + ' ' + escapeHtml(u)
+              + '</div>';
+          }).join('');
+        }
+      });
+      html += '<div id="searchUsersContainer">';
+      html += matchingUsers.slice(0, 10).map(function(u) {
+        return '<div class="search-user-item" onclick="viewUserProfile(\'' + escapeHtml(u) + '\')">'
+          + getAvatarHtml(u) + ' ' + escapeHtml(u)
+          + '</div>';
+      }).join('');
+      html += '</div></div>';
+    }
+
+    if (matchingPosts.length > 0) {
+      html += '<div class="search-results-section"><h3>Posts</h3>';
+      var currentUser = getCurrentUser();
+      html += matchingPosts.slice(0, 10).map(function(v) {
+        var avgRating = v.votes.length > 0
+          ? (v.votes.reduce(function(sum, vote) { return sum + vote.rating; }, 0) / v.votes.length).toFixed(1)
+          : '-';
+        return '<div class="video-card" style="cursor:default;">'
+          + '<div class="video-header">'
+          + '<div class="video-title">' + escapeHtml(v.title) + '</div>'
+          + '<div class="video-author">by ' + getClickableUsername(v.author) + '</div>'
+          + '</div>'
+          + '<div class="video-embed">' + renderVideoEmbed(v) + '</div>'
+          + '<div class="video-stats">'
+          + '<span class="avg-rating">⭐ ' + avgRating + '/10</span>'
+          + '<span class="vote-count">' + v.votes.length + ' vote' + (v.votes.length !== 1 ? 's' : '') + '</span>'
+          + '</div>'
+          + '</div>';
+      }).join('');
+      html += '</div>';
+    }
+
+    if (matchingUsers.length === 0 && matchingPosts.length === 0) {
+      html = '<div class="search-no-results">No results found for "' + escapeHtml(query) + '"</div>';
+    }
+
+    resultsEl.innerHTML = html;
+  }
+
+  // ===== MESSAGING SYSTEM =====
+  function getConvoId(user1, user2) {
+    return [user1, user2].sort().join('_');
+  }
+
+  function startConversationsListener() {
+    var currentUser = getCurrentUser();
+    if (!currentUser || conversationsListener) return;
+
+    conversationsListener = db.ref('conversations').on('value', function(snapshot) {
+      cachedConversations = snapshot.val() || {};
+      updateUnreadCount();
+      // Re-render conversations list if on messages page
+      if (!document.getElementById('messagesPage').classList.contains('hidden')) {
+        var threadEl = document.getElementById('messageThread');
+        if (threadEl.classList.contains('hidden')) {
+          renderConversationList();
+        }
+      }
+    });
+  }
+
+  function updateUnreadCount() {
+    var currentUser = getCurrentUser();
+    if (!currentUser) return;
+    var count = 0;
+    Object.keys(cachedConversations).forEach(function(convoId) {
+      var convo = cachedConversations[convoId];
+      if (convo.participants && convo.participants[currentUser]) {
+        var lastRead = (convo.lastRead && convo.lastRead[currentUser]) || 0;
+        if (convo.lastMessageTime > lastRead) count++;
+      }
+    });
+    unreadCount = count;
+    updateFeatureTiles();
+    var navBtn = document.getElementById('nav-messages');
+    if (navBtn) {
+      var dot = navBtn.querySelector('.nav-unread-dot');
+      if (unreadCount > 0) {
+        if (!dot) {
+          navBtn.insertAdjacentHTML('beforeend', '<span class="nav-unread-dot"></span>');
+        }
+      } else {
+        if (dot) dot.remove();
+      }
+    }
+  }
+
+  function showConversationList() {
+    document.getElementById('messagesContent').classList.remove('hidden');
+    document.getElementById('messageThread').classList.add('hidden');
+    if (threadMessagesListener && currentThreadConvoId) {
+      db.ref('messages/' + currentThreadConvoId).off('value', threadMessagesListener);
+      threadMessagesListener = null;
+    }
+    currentThreadConvoId = null;
+    currentThreadUser = null;
+    renderConversationList();
+  }
+
+  function renderConversationList() {
+    var currentUser = getCurrentUser();
+    var container = document.getElementById('conversationList');
+
+    // Get conversations this user is part of
+    var myConvos = [];
+    Object.keys(cachedConversations).forEach(function(convoId) {
+      var convo = cachedConversations[convoId];
+      if (convo.participants && convo.participants[currentUser]) {
+        var otherUser = Object.keys(convo.participants).find(function(u) { return u !== currentUser; });
+        if (otherUser) {
+          var lastRead = (convo.lastRead && convo.lastRead[currentUser]) || 0;
+          myConvos.push({
+            id: convoId,
+            otherUser: otherUser,
+            lastMessage: convo.lastMessage || '',
+            lastMessageTime: convo.lastMessageTime || 0,
+            unread: convo.lastMessageTime > lastRead
+          });
+        }
+      }
+    });
+
+    myConvos.sort(function(a, b) { return b.lastMessageTime - a.lastMessageTime; });
+
+    if (myConvos.length === 0) {
+      container.innerHTML = '<div class="no-conversations">No messages yet! Start a conversation with the + New Message button</div>';
+      return;
+    }
+
+    var users = myConvos.map(function(c) { return c.otherUser; });
+    preloadAvatars(users).then(function() {
+      container.innerHTML = myConvos.map(function(c) {
+        return '<div class="conversation-item' + (c.unread ? ' unread' : '') + '" onclick="openThread(\'' + escapeHtml(c.otherUser) + '\')">'
+          + '<div class="convo-avatar">' + getAvatarHtml(c.otherUser) + '</div>'
+          + '<div class="convo-info">'
+          + '<div class="convo-username">' + escapeHtml(c.otherUser) + getPrizeBadges(c.otherUser) + '</div>'
+          + '<div class="convo-preview">' + escapeHtml(c.lastMessage) + '</div>'
+          + '</div>'
+          + '<div class="convo-time">' + (c.lastMessageTime ? timeAgo(c.lastMessageTime) : '') + '</div>'
+          + (c.unread ? '<div class="convo-unread-dot"></div>' : '')
+          + '</div>';
+      }).join('');
+    });
+    // Render immediately with cached data
+    container.innerHTML = myConvos.map(function(c) {
+      return '<div class="conversation-item' + (c.unread ? ' unread' : '') + '" onclick="openThread(\'' + escapeHtml(c.otherUser) + '\')">'
+        + '<div class="convo-avatar">' + getAvatarHtml(c.otherUser) + '</div>'
+        + '<div class="convo-info">'
+        + '<div class="convo-username">' + escapeHtml(c.otherUser) + '</div>'
+        + '<div class="convo-preview">' + escapeHtml(c.lastMessage) + '</div>'
+        + '</div>'
+        + '<div class="convo-time">' + (c.lastMessageTime ? timeAgo(c.lastMessageTime) : '') + '</div>'
+        + (c.unread ? '<div class="convo-unread-dot"></div>' : '')
+        + '</div>';
+    }).join('');
+  }
+
+  function openThread(otherUser) {
+    var currentUser = getCurrentUser();
+    currentThreadUser = otherUser;
+    currentThreadConvoId = getConvoId(currentUser, otherUser);
+
+    document.getElementById('messagesContent').classList.add('hidden');
+    document.getElementById('messageThread').classList.remove('hidden');
+
+    loadUserProfile(otherUser).then(function() {
+      document.getElementById('threadUsername').innerHTML = getAvatarHtml(otherUser) + ' ' + escapeHtml(otherUser);
+    });
+    document.getElementById('threadUsername').textContent = otherUser;
+    document.getElementById('threadMessages').innerHTML = '<div style="text-align:center;color:#666;padding:20px;">Loading messages...</div>';
+
+    // Mark as read
+    db.ref('conversations/' + currentThreadConvoId + '/lastRead/' + currentUser).set(Date.now());
+
+    // Listen for messages in this thread
+    if (threadMessagesListener) {
+      db.ref('messages/' + currentThreadConvoId).off('value', threadMessagesListener);
+    }
+    threadMessagesListener = db.ref('messages/' + currentThreadConvoId).orderByChild('created').on('value', function(snapshot) {
+      var msgs = [];
+      snapshot.forEach(function(child) {
+        msgs.push({ id: child.key, ...child.val() });
+      });
+      renderThreadMessages(msgs);
+      // Mark as read
+      db.ref('conversations/' + currentThreadConvoId + '/lastRead/' + currentUser).set(Date.now());
+      updateUnreadCount();
+    });
+
+    document.getElementById('msgInput').focus();
+  }
+
+  function renderThreadMessages(msgs) {
+    var currentUser = getCurrentUser();
+    var container = document.getElementById('threadMessages');
+
+    if (msgs.length === 0) {
+      container.innerHTML = '<div style="text-align:center;color:#666;padding:30px;">No messages yet. Say hi!</div>';
+      return;
+    }
+
+    container.innerHTML = msgs.map(function(m) {
+      var isSent = m.sender === currentUser;
+      return '<div class="msg-bubble ' + (isSent ? 'sent' : 'received') + '">'
+        + escapeHtml(m.text)
+        + '<span class="msg-time">' + timeAgo(m.created) + '</span>'
+        + '</div>';
+    }).join('');
+
+    // Scroll to bottom
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function sendMessage() {
+    var input = document.getElementById('msgInput');
+    var text = input.value.trim();
+    if (!text || !currentThreadConvoId || !currentThreadUser) return;
+
+    if (text.length > 500) {
+      alert('Message too long! Max 500 characters.');
+      return;
+    }
+
+    // Content moderation
+    var check = checkContentModeration(text);
+    if (!check.ok) {
+      alert(check.message);
+      return;
+    }
+
+    var currentUser = getCurrentUser();
+    var convoId = currentThreadConvoId;
+
+    // Send message
+    var msgRef = db.ref('messages/' + convoId).push();
+    msgRef.set({
+      sender: currentUser,
+      text: text,
+      created: Date.now()
+    });
+
+    // Update conversation metadata
+    db.ref('conversations/' + convoId).update({
+      lastMessage: text.substring(0, 50),
+      lastMessageTime: Date.now(),
+      ['participants/' + currentUser]: true,
+      ['participants/' + currentThreadUser]: true,
+      ['lastRead/' + currentUser]: Date.now()
+    });
+
+    input.value = '';
+    input.focus();
+  }
+
+  function backToConversations() {
+    showConversationList();
+  }
+
+  function openNewMessageModal() {
+    document.getElementById('newMsgModal').classList.remove('hidden');
+    document.getElementById('userPickerSearch').value = '';
+
+    // Load all users
+    db.ref('users').once('value').then(function(snap) {
+      cachedUsers = snap.val() || {};
+      filterUserPicker();
+    });
+  }
+
+  function closeNewMessageModal() {
+    document.getElementById('newMsgModal').classList.add('hidden');
+  }
+
+  function filterUserPicker() {
+    var query = document.getElementById('userPickerSearch').value.trim().toLowerCase();
+    var currentUser = getCurrentUser();
+    var container = document.getElementById('userPickerList');
+
+    var users = Object.keys(cachedUsers).filter(function(u) {
+      return u !== currentUser && (!query || u.toLowerCase().includes(query));
+    });
+
+    preloadAvatars(users.slice(0, 20)).then(function() {
+      var listEl = document.getElementById('userPickerList');
+      if (!listEl) return;
+      listEl.innerHTML = users.slice(0, 20).map(function(u) {
+        return '<div class="user-picker-item" onclick="startConversationWith(\'' + escapeHtml(u) + '\')">'
+          + getAvatarHtml(u) + ' ' + escapeHtml(u)
+          + '</div>';
+      }).join('');
+    });
+
+    container.innerHTML = users.slice(0, 20).map(function(u) {
+      return '<div class="user-picker-item" onclick="startConversationWith(\'' + escapeHtml(u) + '\')">'
+        + getAvatarHtml(u) + ' ' + escapeHtml(u)
+        + '</div>';
+    }).join('');
+
+    if (users.length === 0) {
+      container.innerHTML = '<div style="color:#888;text-align:center;padding:20px;">No users found</div>';
+    }
+  }
+
+  function startConversationWith(otherUser) {
+    closeNewMessageModal();
+    openThread(otherUser);
+  }
+
+  function openDMFromProfile(username) {
+    showPage('messages');
+    setTimeout(function() { openThread(username); }, 100);
+  }
+
+  // ===== PRIZE WHEEL =====
+  function getTodayString() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function recordDailyRizzKing() {
+    var today = getTodayString();
+    // Check if already recorded today
+    if (rizzKingHistory[today]) return;
+
+    // Calculate current #1
+    var userStats = {};
+    cachedVideos.forEach(function(v) {
+      if (!userStats[v.author]) userStats[v.author] = { totalRating: 0, totalVotes: 0 };
+      v.votes.forEach(function(vote) {
+        userStats[v.author].totalRating += vote.rating;
+        userStats[v.author].totalVotes++;
+      });
+    });
+
+    var ranked = Object.entries(userStats)
+      .map(function(e) { return { user: e[0], avg: e[1].totalVotes > 0 ? e[1].totalRating / e[1].totalVotes : 0, totalVotes: e[1].totalVotes }; })
+      .filter(function(u) { return u.totalVotes > 0; })
+      .sort(function(a, b) { return b.avg - a.avg; });
+
+    if (ranked.length > 0) {
+      db.ref('rizzKingHistory/' + today).set(ranked[0].user);
+    }
+  }
+
+  function getConsecutiveKingDays(username) {
+    var today = new Date();
+    var streak = 0;
+    for (var i = 0; i < 30; i++) {
+      var d = new Date(today);
+      d.setDate(d.getDate() - i);
+      var dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      if (rizzKingHistory[dateStr] === username) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
+
+  function renderWheel() {
+    var currentUser = getCurrentUser();
+    var container = document.getElementById('wheelContent');
+    var streak = getConsecutiveKingDays(currentUser);
+    var qualified = streak >= 7;
+
+    // Check if user already spun today
+    var today = getTodayString();
+    var spunToday = false;
+    var myPrizes = userPrizes[currentUser] || {};
+
+    db.ref('wheelSpins/' + currentUser + '/' + today).once('value').then(function(snap) {
+      spunToday = snap.exists();
+      doRenderWheel(container, currentUser, streak, qualified, spunToday, myPrizes);
+    });
+  }
+
+  function doRenderWheel(container, currentUser, streak, qualified, spunToday, myPrizes) {
+    var html = '';
+
+    // Show current prizes
+    var prizeKeys = Object.keys(myPrizes).filter(function(k) { return myPrizes[k]; });
+    if (prizeKeys.length > 0) {
+      html += '<div style="margin-bottom:20px;"><span style="color:#aaa;">Your prizes: </span>';
+      prizeKeys.forEach(function(k) {
+        var prize = WHEEL_PRIZES.find(function(p) { return p.key === k; });
+        if (prize) html += '<span class="prize-badge" style="font-size:1.3rem;margin:0 4px;" title="' + prize.name + '">' + prize.icon + '</span>';
+      });
+      html += '</div>';
+    }
+
+    if (!qualified) {
+      // Locked state
+      html += '<div class="wheel-locked">'
+        + '<div class="lock-icon">🔒</div>'
+        + '<h3>PRIZE WHEEL LOCKED</h3>'
+        + '<p>Be the #1 Rizz King for 7 consecutive days to unlock!</p>'
+        + '<div class="streak-display">' + streak + '/7 Days</div>'
+        + '<div class="streak-bar">';
+      for (var i = 0; i < 7; i++) {
+        html += '<div class="streak-day' + (i < streak ? ' filled' : '') + '">' + (i < streak ? '✓' : (i + 1)) + '</div>';
+      }
+      html += '</div>'
+        + '<p style="color:#666;font-size:0.85rem;margin-top:10px;">Keep grinding! The top spot is yours! 💪</p>'
+        + '</div>';
+    } else {
+      // Unlocked - show wheel
+      html += '<div style="margin-bottom:10px;color:#0f0;font-weight:700;font-size:1.1rem;">🎉 WHEEL UNLOCKED! 7+ day streak! 🎉</div>';
+      html += '<div class="wheel-wrapper">'
+        + '<div class="wheel-pointer">▼</div>'
+        + '<canvas class="wheel-canvas" id="wheelCanvas" width="300" height="300"></canvas>'
+        + '</div>';
+
+      if (spunToday) {
+        html += '<div class="wheel-cooldown">You already spun today! Come back tomorrow for another spin.</div>';
+      } else {
+        html += '<button class="spin-btn" id="spinBtn" onclick="spinWheel()">🎰 SPIN THE WHEEL!</button>';
+      }
+
+      html += '<div class="wheel-result" id="wheelResult"></div>';
+    }
+
+    container.innerHTML = html;
+
+    // Draw the wheel if it exists
+    if (qualified) {
+      drawWheel(0);
+    }
+  }
+
+  function drawWheel(rotation) {
+    var canvas = document.getElementById('wheelCanvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var cx = 150, cy = 150, r = 140;
+    var sliceAngle = (2 * Math.PI) / WHEEL_PRIZES.length;
+
+    var colors = ['#ff00ff', '#00ffff', '#ff0080', '#ffff00', '#00ff88', '#8844ff', '#ff4444', '#ff8800'];
+
+    ctx.clearRect(0, 0, 300, 300);
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(rotation);
+    ctx.translate(-cx, -cy);
+
+    WHEEL_PRIZES.forEach(function(prize, i) {
+      var startAngle = i * sliceAngle - Math.PI / 2;
+      var endAngle = startAngle + sliceAngle;
+
+      // Draw slice
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, startAngle, endAngle);
+      ctx.closePath();
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Draw text
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(startAngle + sliceAngle / 2);
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 13px Comic Neue, Comic Sans MS, cursive';
+      ctx.shadowColor = 'rgba(0,0,0,0.5)';
+      ctx.shadowBlur = 3;
+      ctx.fillText(prize.icon, r * 0.65, 5);
+      ctx.font = 'bold 10px Comic Neue, Comic Sans MS, cursive';
+      ctx.fillText(prize.name, r * 0.65, 18);
+      ctx.restore();
+    });
+
+    ctx.restore();
+
+    // Center circle
+    ctx.beginPath();
+    ctx.arc(cx, cy, 20, 0, 2 * Math.PI);
+    ctx.fillStyle = '#1a0033';
+    ctx.fill();
+    ctx.strokeStyle = 'gold';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  }
+
+  function spinWheel() {
+    if (wheelSpinning) return;
+    wheelSpinning = true;
+
+    var btn = document.getElementById('spinBtn');
+    if (btn) btn.disabled = true;
+
+    var currentUser = getCurrentUser();
+    var today = getTodayString();
+
+    // Pick a random prize
+    var prizeIndex = Math.floor(Math.random() * WHEEL_PRIZES.length);
+    var prize = WHEEL_PRIZES[prizeIndex];
+
+    // Calculate rotation
+    var sliceAngle = 360 / WHEEL_PRIZES.length;
+    // We want the pointer (at top) to land on prizeIndex
+    // The wheel starts with slice 0 at the top
+    var targetAngle = 360 - (prizeIndex * sliceAngle + sliceAngle / 2);
+    var totalRotation = 360 * 5 + targetAngle; // 5 full rotations + target
+
+    var startTime = Date.now();
+    var duration = 4000; // 4 seconds
+    var startRotation = 0;
+
+    function animate() {
+      var elapsed = Date.now() - startTime;
+      var progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var currentRotation = (startRotation + totalRotation * eased) * Math.PI / 180;
+
+      drawWheel(currentRotation);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        // Spin complete!
+        wheelSpinning = false;
+
+        // Record the spin and prize
+        db.ref('wheelSpins/' + currentUser + '/' + today).set(prize.key);
+        db.ref('userPrizes/' + currentUser + '/' + prize.key).set(true);
+
+        var resultEl = document.getElementById('wheelResult');
+        if (resultEl) {
+          resultEl.innerHTML = '🎉 You won: ' + prize.icon + ' ' + prize.name + '! 🎉';
+        }
+
+        if (btn) {
+          btn.textContent = 'SPUN TODAY!';
+          btn.disabled = true;
+        }
+      }
+    }
+
+    requestAnimationFrame(animate);
   }
 
   // ===== INIT =====
