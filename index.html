@@ -10,6 +10,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 
+<!-- Face Detection -->
+<script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/dist/face-api.min.js"></script>
+
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap');
 
@@ -1894,8 +1897,96 @@
     }
   }
 
+  // ===== FACE DETECTION =====
+  let faceApiLoaded = false;
+  let faceApiLoading = false;
+
+  async function loadFaceApi() {
+    if (faceApiLoaded) return true;
+    if (faceApiLoading) {
+      // Wait for it to finish loading
+      while (faceApiLoading) {
+        await new Promise(r => setTimeout(r, 100));
+      }
+      return faceApiLoaded;
+    }
+
+    faceApiLoading = true;
+    try {
+      // Load the tiny face detector model from CDN
+      await faceapi.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model');
+      faceApiLoaded = true;
+    } catch (err) {
+      console.error('Failed to load face detection:', err);
+      faceApiLoaded = false;
+    }
+    faceApiLoading = false;
+    return faceApiLoaded;
+  }
+
+  async function detectFaceInImage(file) {
+    return new Promise(async (resolve) => {
+      const img = new Image();
+      img.onload = async function() {
+        try {
+          const detections = await faceapi.detectAllFaces(img, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 }));
+          resolve(detections.length > 0);
+        } catch (err) {
+          console.error('Face detection error:', err);
+          resolve(false); // If detection fails, allow upload
+        }
+      };
+      img.onerror = function() {
+        resolve(false); // If image fails to load, allow upload
+      };
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
+  async function detectFaceInVideo(file) {
+    return new Promise(async (resolve) => {
+      const video = document.createElement('video');
+      video.muted = true;
+      video.playsInline = true;
+
+      video.onloadeddata = async function() {
+        try {
+          // Check multiple frames (start, 25%, 50%, 75%)
+          const duration = video.duration || 10;
+          const times = [0.1, duration * 0.25, duration * 0.5, duration * 0.75];
+
+          for (let time of times) {
+            if (time >= duration) continue;
+            video.currentTime = Math.min(time, duration - 0.1);
+            await new Promise(r => { video.onseeked = r; });
+
+            const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 }));
+            if (detections.length > 0) {
+              URL.revokeObjectURL(video.src);
+              resolve(true);
+              return;
+            }
+          }
+          URL.revokeObjectURL(video.src);
+          resolve(false);
+        } catch (err) {
+          console.error('Video face detection error:', err);
+          URL.revokeObjectURL(video.src);
+          resolve(false); // If detection fails, allow upload
+        }
+      };
+
+      video.onerror = function() {
+        resolve(false); // If video fails to load, allow upload
+      };
+
+      video.src = URL.createObjectURL(file);
+      video.load();
+    });
+  }
+
   // ===== POST VIDEO =====
-  function postVideo() {
+  async function postVideo() {
     var title = document.getElementById('postTitle').value.trim();
     var url = document.getElementById('postUrl').value.trim();
     var fileInput = document.getElementById('postFile');
@@ -1935,7 +2026,33 @@
       }
 
       postBtn.disabled = true;
+      postBtn.textContent = 'CHECKING FOR FACES... 🔍';
+      successEl.style.color = '#0ff';
+      successEl.textContent = 'Scanning for faces (this keeps everyone safe!)';
+
+      // Load face detection if needed
+      var modelLoaded = await loadFaceApi();
+
+      if (modelLoaded) {
+        var hasFace = false;
+        if (isImage) {
+          hasFace = await detectFaceInImage(file);
+        } else {
+          hasFace = await detectFaceInVideo(file);
+        }
+
+        if (hasFace) {
+          successEl.style.color = '#ff4444';
+          successEl.textContent = '🚫 FACE DETECTED! For safety, no face pics allowed. Try a different photo/video!';
+          postBtn.disabled = false;
+          postBtn.textContent = 'POST IT! 🎬';
+          return;
+        }
+      }
+
+      // No face detected - proceed with upload
       postBtn.textContent = 'UPLOADING... 0%';
+      successEl.textContent = '';
       var progressEl = document.getElementById('uploadProgress');
       var progressBar = document.getElementById('progressBar');
       progressEl.style.display = 'block';
