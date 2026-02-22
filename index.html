@@ -782,6 +782,158 @@
     font-size: 1.2rem;
   }
 
+  /* ===== SUBSCRIBE BUTTON ===== */
+  .subscribe-btn {
+    background: linear-gradient(45deg, #ff0080, #ff00ff);
+    color: #fff;
+    border: none;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 8px;
+  }
+
+  .subscribe-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255,0,255,0.6);
+  }
+
+  .subscribe-btn.subscribed {
+    background: rgba(255,255,255,0.15);
+    border: 2px solid #0ff;
+    color: #0ff;
+  }
+
+  .subscribe-btn.subscribed:hover {
+    background: rgba(255,0,0,0.3);
+    border-color: #ff4444;
+    color: #ff4444;
+  }
+
+  .subscriber-count {
+    color: #aaa;
+    font-size: 0.8rem;
+    margin-left: 6px;
+  }
+
+  /* ===== COMMENTS ===== */
+  .comments-section {
+    margin-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 10px;
+  }
+
+  .comments-toggle {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 4px 0;
+    transition: color 0.2s;
+  }
+
+  .comments-toggle:hover {
+    color: #0ff;
+  }
+
+  .comments-list {
+    margin-top: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .comment-item {
+    display: flex;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .comment-item:last-child {
+    border-bottom: none;
+  }
+
+  .comment-author {
+    color: #0ff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .comment-text {
+    color: #ddd;
+    font-size: 0.9rem;
+    word-break: break-word;
+  }
+
+  .comment-time {
+    color: #666;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    margin-left: auto;
+  }
+
+  .comment-form {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .comment-form input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 2px solid rgba(255,0,255,0.3);
+    border-radius: 20px;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    font-size: 0.9rem;
+    font-family: 'Comic Neue', cursive;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .comment-form input:focus {
+    border-color: #0ff;
+  }
+
+  .comment-form input::placeholder {
+    color: rgba(255,255,255,0.3);
+  }
+
+  .comment-form button {
+    background: linear-gradient(45deg, #ff00ff, #0ff);
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .comment-form button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0,255,255,0.4);
+  }
+
+  /* ===== PROFILE SUBS STATS ===== */
+  .profile-sub-stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 10px;
+  }
+
   /* ===== RESPONSIVE ===== */
   @media (max-width: 600px) {
     .auth-screen .big-title { font-size: 3rem; }
@@ -893,6 +1045,16 @@
         <div class="stat-label">Total Votes</div>
       </div>
     </div>
+    <div class="profile-sub-stats">
+      <div class="profile-stat">
+        <div class="stat-num" id="profileSubscribers">0</div>
+        <div class="stat-label">Subscribers</div>
+      </div>
+      <div class="profile-stat">
+        <div class="stat-num" id="profileSubscriptions">0</div>
+        <div class="stat-label">Subscribed To</div>
+      </div>
+    </div>
   </div>
   <div class="profile-videos-title">Your Videos</div>
   <div id="profileVideosList"></div>
@@ -939,6 +1101,12 @@
   let videosLoaded = false;
   let videosListener = null;
 
+  // Subscriptions: { username: { targetUser: true, ... } }
+  let cachedSubscriptions = {};
+  let subsListener = null;
+  // Track which comment sections are expanded
+  let expandedComments = {};
+
   // Convert Firebase videos object { id: {…}, id2: {…} } → array
   function firebaseVideosToArray(fbVideos) {
     if (!fbVideos) return [];
@@ -946,6 +1114,15 @@
       // Convert votes from { username: rating } map to [{ user, rating }] array
       const votesMap = data.votes || {};
       const votesArray = Object.entries(votesMap).map(([user, rating]) => ({ user, rating }));
+      // Convert comments from { commentId: {…} } map to array
+      const commentsMap = data.comments || {};
+      const commentsArray = Object.entries(commentsMap).map(([cid, c]) => ({
+        id: cid,
+        author: c.author,
+        text: c.text,
+        created: c.created
+      })).sort((a, b) => a.created - b.created);
+
       return {
         id: id,
         title: data.title,
@@ -953,7 +1130,8 @@
         type: data.type || 'link',
         author: data.author,
         created: data.created,
-        votes: votesArray
+        votes: votesArray,
+        comments: commentsArray
       };
     });
   }
@@ -1064,13 +1242,19 @@
   });
 
   function logout() {
-    // Detach real-time listener
+    // Detach real-time listeners
     if (videosListener) {
       db.ref('videos').off('value', videosListener);
       videosListener = null;
     }
+    if (subsListener) {
+      db.ref('subscriptions').off('value', subsListener);
+      subsListener = null;
+    }
     videosLoaded = false;
     cachedVideos = [];
+    cachedSubscriptions = {};
+    expandedComments = {};
 
     clearCurrentUser();
     document.getElementById('authScreen').classList.remove('hidden');
@@ -1091,6 +1275,14 @@
     if (!videosLoaded) {
       hideAllPages();
       document.getElementById('loadingScreen').classList.remove('hidden');
+    }
+
+    // Attach real-time listener for subscriptions
+    if (!subsListener) {
+      subsListener = db.ref('subscriptions').on('value', function(snapshot) {
+        cachedSubscriptions = snapshot.val() || {};
+        rerenderCurrentPage();
+      });
     }
 
     // Attach real-time listener for videos
@@ -1229,10 +1421,53 @@
         }
       }
 
+      // Subscribe button
+      var subBtn = '';
+      if (v.author !== currentUser) {
+        var isSub = cachedSubscriptions[currentUser] && cachedSubscriptions[currentUser][v.author];
+        subBtn = '<button class="subscribe-btn' + (isSub ? ' subscribed' : '') + '" onclick="toggleSubscribe(\'' + escapeHtml(v.author) + '\')">'
+          + (isSub ? 'Subscribed' : 'Subscribe')
+          + '</button>';
+      }
+
+      // Subscriber count for this author
+      var subCount = getSubscriberCount(v.author);
+      var subCountHtml = subCount > 0 ? '<span class="subscriber-count">' + subCount + ' sub' + (subCount !== 1 ? 's' : '') + '</span>' : '';
+
+      // Comments section
+      var commentCount = v.comments.length;
+      var isExpanded = expandedComments[v.id];
+      var commentsHtml = '<div class="comments-section">'
+        + '<button class="comments-toggle" onclick="toggleComments(\'' + v.id + '\')">'
+        + '💬 ' + commentCount + ' comment' + (commentCount !== 1 ? 's' : '')
+        + (isExpanded ? ' ▲' : ' ▼')
+        + '</button>';
+
+      if (isExpanded) {
+        commentsHtml += '<div class="comments-list">';
+        if (v.comments.length === 0) {
+          commentsHtml += '<div style="color:#666;font-size:0.85rem;padding:8px 0;">No comments yet. Be the first!</div>';
+        } else {
+          v.comments.forEach(function(c) {
+            commentsHtml += '<div class="comment-item">'
+              + '<span class="comment-author">' + escapeHtml(c.author) + ':</span>'
+              + '<span class="comment-text">' + escapeHtml(c.text) + '</span>'
+              + '<span class="comment-time">' + timeAgo(c.created) + '</span>'
+              + '</div>';
+          });
+        }
+        commentsHtml += '</div>';
+        commentsHtml += '<div class="comment-form">'
+          + '<input type="text" id="comment-' + v.id + '" placeholder="Add a comment..." maxlength="200" onkeydown="if(event.key===\'Enter\')postComment(\'' + v.id + '\')">'
+          + '<button onclick="postComment(\'' + v.id + '\')">Post</button>'
+          + '</div>';
+      }
+      commentsHtml += '</div>';
+
       return '<div class="video-card">'
         + '<div class="video-header">'
         + '<div class="video-title">' + escapeHtml(v.title) + '</div>'
-        + '<div class="video-author">by ' + escapeHtml(v.author) + '</div>'
+        + '<div class="video-author">by ' + escapeHtml(v.author) + subBtn + subCountHtml + '</div>'
         + '</div>'
         + '<div class="video-embed">' + renderVideoEmbed(v) + '</div>'
         + '<div class="video-stats">'
@@ -1243,6 +1478,7 @@
         + '<span class="cool-scale-label">COOL SCALE:</span>'
         + voteHtml
         + '</div>'
+        + commentsHtml
         + '</div>';
     }).join('');
   }
@@ -1251,6 +1487,71 @@
     const currentUser = getCurrentUser();
     // Write directly to Firebase — the real-time listener will update the UI
     db.ref('videos/' + videoId + '/votes/' + currentUser).set(rating);
+  }
+
+  // ===== SUBSCRIBE =====
+  function toggleSubscribe(targetUser) {
+    var currentUser = getCurrentUser();
+    if (!currentUser || currentUser === targetUser) return;
+    var ref = db.ref('subscriptions/' + currentUser + '/' + targetUser);
+    var isSub = cachedSubscriptions[currentUser] && cachedSubscriptions[currentUser][targetUser];
+    if (isSub) {
+      ref.remove();
+    } else {
+      ref.set(true);
+    }
+  }
+
+  function getSubscriberCount(username) {
+    var count = 0;
+    Object.keys(cachedSubscriptions).forEach(function(user) {
+      if (cachedSubscriptions[user] && cachedSubscriptions[user][username]) {
+        count++;
+      }
+    });
+    return count;
+  }
+
+  function getSubscriptionCount(username) {
+    if (!cachedSubscriptions[username]) return 0;
+    return Object.keys(cachedSubscriptions[username]).length;
+  }
+
+  // ===== COMMENTS =====
+  function toggleComments(videoId) {
+    expandedComments[videoId] = !expandedComments[videoId];
+    renderFeed();
+    // If we just expanded, focus the input
+    if (expandedComments[videoId]) {
+      var input = document.getElementById('comment-' + videoId);
+      if (input) input.focus();
+    }
+  }
+
+  function postComment(videoId) {
+    var input = document.getElementById('comment-' + videoId);
+    if (!input) return;
+    var text = input.value.trim();
+    if (!text) return;
+
+    var commentId = Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+    db.ref('videos/' + videoId + '/comments/' + commentId).set({
+      author: getCurrentUser(),
+      text: text,
+      created: Date.now()
+    });
+    input.value = '';
+  }
+
+  function timeAgo(timestamp) {
+    var diff = Date.now() - timestamp;
+    var mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'now';
+    if (mins < 60) return mins + 'm';
+    var hrs = Math.floor(mins / 60);
+    if (hrs < 24) return hrs + 'h';
+    var days = Math.floor(hrs / 24);
+    return days + 'd';
   }
 
   // ===== FILE SELECT =====
@@ -1462,6 +1763,8 @@
     document.getElementById('profileAvgRating').textContent = totalVotes > 0
       ? (totalRating / totalVotes).toFixed(1)
       : '-';
+    document.getElementById('profileSubscribers').textContent = getSubscriberCount(currentUser);
+    document.getElementById('profileSubscriptions').textContent = getSubscriptionCount(currentUser);
 
     const listEl = document.getElementById('profileVideosList');
     if (myVideos.length === 0) {
