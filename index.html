@@ -2323,6 +2323,103 @@
     text-shadow: 0 0 10px rgba(0,255,255,0.3);
     letter-spacing: 1px;
   }
+
+  /* ===== REWARD POPUP ===== */
+  .reward-popup {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: rewardFadeIn 0.4s ease;
+  }
+
+  @keyframes rewardFadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  .reward-box {
+    background: linear-gradient(135deg, #1a0033, #0f0024);
+    border: 4px solid gold;
+    border-radius: 25px;
+    padding: 35px 30px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 60px rgba(255,215,0,0.5), 0 0 120px rgba(255,215,0,0.2);
+    animation: rewardPop 0.5s ease;
+  }
+
+  @keyframes rewardPop {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .reward-box .reward-icon {
+    font-size: 4rem;
+    margin-bottom: 10px;
+    animation: bounce 1s ease infinite;
+  }
+
+  .reward-box h2 {
+    font-family: 'Bangers', cursive;
+    font-size: 2.2rem;
+    color: gold;
+    text-shadow: 0 0 20px rgba(255,215,0,0.6);
+    margin-bottom: 10px;
+  }
+
+  .reward-box p {
+    color: #ddd;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+
+  .reward-box .reward-prize {
+    font-family: 'Bangers', cursive;
+    font-size: 1.8rem;
+    color: #0ff;
+    text-shadow: 0 0 15px rgba(0,255,255,0.5);
+    margin: 15px 0;
+  }
+
+  .reward-claim-btn {
+    background: linear-gradient(45deg, gold, #ff8c00);
+    color: #0f0024;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 25px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 10px;
+    box-shadow: 0 0 20px rgba(255,215,0,0.4);
+    letter-spacing: 2px;
+  }
+
+  .reward-claim-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 40px rgba(255,215,0,0.6);
+  }
+
+  .free-spins-badge {
+    display: inline-block;
+    background: linear-gradient(45deg, gold, #ff8c00);
+    color: #0f0024;
+    font-family: 'Bangers', cursive;
+    font-size: 0.95rem;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-left: 8px;
+    vertical-align: middle;
+    box-shadow: 0 0 8px rgba(255,215,0,0.4);
+  }
 </style>
 </head>
 <body>
@@ -2778,6 +2875,11 @@
   let userPrizes = {};
   let userPrizesListener = null;
   let wheelSpinning = false;
+  let cachedFreeSpins = {}; // { username: numberOfFreeSpins }
+  let freeSpinsListener = null;
+  let subRewardClaimed = {}; // { username: true } - tracks who already claimed the 5-sub reward
+  let subRewardListener = null;
+  let rewardPopupShown = false; // prevent showing popup multiple times per session
 
   const WHEEL_PRIZES = [
     { name: 'Golden Border', icon: '✨', key: 'golden-border' },
@@ -3040,9 +3142,20 @@
     currentThreadConvoId = null;
     currentThreadUser = null;
     unreadCount = 0;
+    if (freeSpinsListener) {
+      db.ref('freeSpins').off('value', freeSpinsListener);
+      freeSpinsListener = null;
+    }
+    if (subRewardListener) {
+      db.ref('subRewardClaimed').off('value', subRewardListener);
+      subRewardListener = null;
+    }
     rizzKingHistory = {};
     userPrizes = {};
     wheelSpinning = false;
+    cachedFreeSpins = {};
+    subRewardClaimed = {};
+    rewardPopupShown = false;
 
     clearCurrentUser();
     document.getElementById('authScreen').classList.remove('hidden');
@@ -3124,6 +3237,22 @@
         rerenderCurrentPage();
       });
     }
+
+    // Attach free spins listener
+    if (!freeSpinsListener) {
+      freeSpinsListener = db.ref('freeSpins').on('value', function(snapshot) {
+        cachedFreeSpins = snapshot.val() || {};
+      });
+    }
+
+    // Attach sub reward listener
+    if (!subRewardListener) {
+      subRewardListener = db.ref('subRewardClaimed').on('value', function(snapshot) {
+        subRewardClaimed = snapshot.val() || {};
+      });
+    }
+
+    rewardPopupShown = false;
 
     // Record today's rizz king
     recordDailyRizzKing();
@@ -3848,6 +3977,9 @@
   function renderLeaderboard() {
     const videos = cachedVideos;
     const container = document.getElementById('leaderboardList');
+
+    // Check if user earned the 5-subscriber reward
+    checkSubReward();
 
     // Aggregate per user
     const userStats = {};
@@ -4983,6 +5115,7 @@
     var container = document.getElementById('wheelContent');
     var streak = getConsecutiveKingDays(currentUser);
     var qualified = streak >= 7;
+    var freeSpinsCount = cachedFreeSpins[currentUser] || 0;
 
     // Check if user already spun today
     var today = getTodayString();
@@ -4991,12 +5124,13 @@
 
     db.ref('wheelSpins/' + currentUser + '/' + today).once('value').then(function(snap) {
       spunToday = snap.exists();
-      doRenderWheel(container, currentUser, streak, qualified, spunToday, myPrizes);
+      doRenderWheel(container, currentUser, streak, qualified, spunToday, myPrizes, freeSpinsCount);
     });
   }
 
-  function doRenderWheel(container, currentUser, streak, qualified, spunToday, myPrizes) {
+  function doRenderWheel(container, currentUser, streak, qualified, spunToday, myPrizes, freeSpinsCount) {
     var html = '';
+    var canUseFree = freeSpinsCount > 0;
 
     // Show current prizes
     var prizeKeys = Object.keys(myPrizes).filter(function(k) { return myPrizes[k]; });
@@ -5009,12 +5143,18 @@
       html += '</div>';
     }
 
-    if (!qualified) {
-      // Locked state
+    // Show free spins count if they have any
+    if (canUseFree) {
+      html += '<div style="margin-bottom:15px;"><span class="free-spins-badge">🎡 ' + freeSpinsCount + ' FREE SPIN' + (freeSpinsCount !== 1 ? 'S' : '') + '</span></div>';
+    }
+
+    if (!qualified && !canUseFree) {
+      // Locked state - no free spins either
       html += '<div class="wheel-locked">'
         + '<div class="lock-icon">🔒</div>'
         + '<h3>PRIZE WHEEL LOCKED</h3>'
         + '<p>Be the #1 Rizz King for 7 consecutive days to unlock!</p>'
+        + '<p style="color:#aaa;font-size:0.9rem;">Or get 5 subscribers for 4 free spins!</p>'
         + '<div class="streak-display">' + streak + '/7 Days</div>'
         + '<div class="streak-bar">';
       for (var i = 0; i < 7; i++) {
@@ -5024,17 +5164,25 @@
         + '<p style="color:#666;font-size:0.85rem;margin-top:10px;">Keep grinding! The top spot is yours! 💪</p>'
         + '</div>';
     } else {
-      // Unlocked - show wheel
-      html += '<div style="margin-bottom:10px;color:#0f0;font-weight:700;font-size:1.1rem;">🎉 WHEEL UNLOCKED! 7+ day streak! 🎉</div>';
+      // Unlocked via streak OR has free spins - show wheel
+      if (qualified) {
+        html += '<div style="margin-bottom:10px;color:#0f0;font-weight:700;font-size:1.1rem;">🎉 WHEEL UNLOCKED! 7+ day streak! 🎉</div>';
+      } else {
+        html += '<div style="margin-bottom:10px;color:gold;font-weight:700;font-size:1.1rem;">🎡 Use your free spins! 🎡</div>';
+      }
+
       html += '<div class="wheel-wrapper">'
         + '<div class="wheel-pointer">▼</div>'
         + '<canvas class="wheel-canvas" id="wheelCanvas" width="300" height="300"></canvas>'
         + '</div>';
 
-      if (spunToday) {
+      if (canUseFree) {
+        // Free spins always available
+        html += '<button class="spin-btn" id="spinBtn" onclick="spinWheel(true)">🎰 USE FREE SPIN (' + freeSpinsCount + ' left)</button>';
+      } else if (spunToday) {
         html += '<div class="wheel-cooldown">You already spun today! Come back tomorrow for another spin.</div>';
       } else {
-        html += '<button class="spin-btn" id="spinBtn" onclick="spinWheel()">🎰 SPIN THE WHEEL!</button>';
+        html += '<button class="spin-btn" id="spinBtn" onclick="spinWheel(false)">🎰 SPIN THE WHEEL!</button>';
       }
 
       html += '<div class="wheel-result" id="wheelResult"></div>';
@@ -5043,7 +5191,7 @@
     container.innerHTML = html;
 
     // Draw the wheel if it exists
-    if (qualified) {
+    if (qualified || canUseFree) {
       drawWheel(0);
     }
   }
@@ -5105,7 +5253,7 @@
     ctx.stroke();
   }
 
-  function spinWheel() {
+  function spinWheel(useFree) {
     if (wheelSpinning) return;
     wheelSpinning = true;
 
@@ -5121,19 +5269,16 @@
 
     // Calculate rotation
     var sliceAngle = 360 / WHEEL_PRIZES.length;
-    // We want the pointer (at top) to land on prizeIndex
-    // The wheel starts with slice 0 at the top
     var targetAngle = 360 - (prizeIndex * sliceAngle + sliceAngle / 2);
-    var totalRotation = 360 * 5 + targetAngle; // 5 full rotations + target
+    var totalRotation = 360 * 5 + targetAngle;
 
     var startTime = Date.now();
-    var duration = 4000; // 4 seconds
+    var duration = 4000;
     var startRotation = 0;
 
     function animate() {
       var elapsed = Date.now() - startTime;
       var progress = Math.min(elapsed / duration, 1);
-      // Ease out cubic
       var eased = 1 - Math.pow(1 - progress, 3);
       var currentRotation = (startRotation + totalRotation * eased) * Math.PI / 180;
 
@@ -5145,23 +5290,78 @@
         // Spin complete!
         wheelSpinning = false;
 
-        // Record the spin and prize
-        db.ref('wheelSpins/' + currentUser + '/' + today).set(prize.key);
+        // Record prize
         db.ref('userPrizes/' + currentUser + '/' + prize.key).set(true);
+
+        if (useFree) {
+          // Deduct a free spin
+          var remaining = (cachedFreeSpins[currentUser] || 1) - 1;
+          db.ref('freeSpins/' + currentUser).set(Math.max(0, remaining));
+        } else {
+          // Record as today's spin
+          db.ref('wheelSpins/' + currentUser + '/' + today).set(prize.key);
+        }
 
         var resultEl = document.getElementById('wheelResult');
         if (resultEl) {
           resultEl.innerHTML = '🎉 You won: ' + prize.icon + ' ' + prize.name + '! 🎉';
         }
 
-        if (btn) {
-          btn.textContent = 'SPUN TODAY!';
-          btn.disabled = true;
-        }
+        // Re-render wheel after a moment to update free spins count / button state
+        setTimeout(function() { renderWheel(); }, 1500);
       }
     }
 
     requestAnimationFrame(animate);
+  }
+
+  // ===== 5-SUBSCRIBER REWARD =====
+  function checkSubReward() {
+    var currentUser = getCurrentUser();
+    if (!currentUser || rewardPopupShown) return;
+    // Already claimed?
+    if (subRewardClaimed[currentUser]) return;
+    // Check subscriber count
+    var subCount = getSubscriberCount(currentUser);
+    if (subCount >= 5) {
+      rewardPopupShown = true;
+      showRewardPopup();
+    }
+  }
+
+  function showRewardPopup() {
+    // Remove any existing popup
+    var existing = document.getElementById('rewardPopup');
+    if (existing) existing.remove();
+
+    var popup = document.createElement('div');
+    popup.id = 'rewardPopup';
+    popup.className = 'reward-popup';
+    popup.innerHTML = '<div class="reward-box">'
+      + '<div class="reward-icon">🎉🎡🎉</div>'
+      + '<h2>5 SUBSCRIBERS!</h2>'
+      + '<p>You just hit 5 subscribers!</p>'
+      + '<div class="reward-prize">🎡 4 FREE SPINS 🎡</div>'
+      + '<p style="color:#aaa;font-size:0.9rem;">Use them on the Prize Wheel anytime!</p>'
+      + '<button class="reward-claim-btn" onclick="claimSubReward()">CLAIM REWARD! 🔥</button>'
+      + '</div>';
+    document.body.appendChild(popup);
+  }
+
+  function claimSubReward() {
+    var currentUser = getCurrentUser();
+    if (!currentUser) return;
+
+    // Give 4 free spins
+    var currentFree = cachedFreeSpins[currentUser] || 0;
+    db.ref('freeSpins/' + currentUser).set(currentFree + 4);
+
+    // Mark reward as claimed so it never shows again
+    db.ref('subRewardClaimed/' + currentUser).set(true);
+
+    // Remove popup
+    var popup = document.getElementById('rewardPopup');
+    if (popup) popup.remove();
   }
 
   // ===== INIT =====
