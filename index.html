@@ -4362,7 +4362,7 @@
           + entry.videoCount + ' video' + (entry.videoCount !== 1 ? 's' : '')
           + ' · ' + entry.totalVotes + ' vote' + (entry.totalVotes !== 1 ? 's' : '')
           + ' · ' + userSubCount + ' sub' + (userSubCount !== 1 ? 's' : '')
-          + ' · ' + userRefCount + ' referral' + (userRefCount !== 1 ? 's' : '')
+          + (userRefCount > 0 ? ' · ' + userRefCount + ' referral' + (userRefCount !== 1 ? 's' : '') : '')
           + (has5Refs && !claimedReward ? ' · <span style="color:gold;">🎡 Reward ready!</span>' : '')
           + (userFreeSpins > 0 ? ' · <span style="color:gold;">' + userFreeSpins + ' free spin' + (userFreeSpins !== 1 ? 's' : '') + '</span>' : '')
           + '</div>'
