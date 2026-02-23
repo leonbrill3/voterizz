@@ -1169,6 +1169,62 @@
     padding: 8px;
   }
 
+  /* ===== ALL PEOPLE SECTION ===== */
+  .all-people-section {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 2px solid rgba(255,255,255,0.1);
+  }
+  .all-people-title {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #00ffff;
+    margin-bottom: 15px;
+  }
+  .all-people-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+  .all-people-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(0,255,255,0.2);
+    border-radius: 15px;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .all-people-card:hover {
+    background: rgba(0,255,255,0.1);
+    border-color: rgba(0,255,255,0.5);
+    transform: scale(1.03);
+  }
+  .all-people-avatar {
+    font-size: 2rem;
+    margin-bottom: 4px;
+  }
+  .all-people-avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .all-people-name {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #fff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .all-people-stats {
+    font-size: 0.7rem;
+    color: #888;
+    margin-top: 2px;
+  }
+
   /* ===== EDIT MODAL ===== */
   .edit-modal {
     position: fixed;
@@ -2784,6 +2840,10 @@
   <div class="page-title" style="color: gold;">👑 LEADERBOARD 👑</div>
   <div id="subRewardBanner"></div>
   <ul class="leaderboard-list" id="leaderboardList"></ul>
+  <div class="all-people-section">
+    <div class="all-people-title">👥 ALL PEOPLE 👥</div>
+    <div id="allPeopleList" class="all-people-list"></div>
+  </div>
 </div>
 
 <!-- ===== RULES PAGE ===== -->
@@ -4384,7 +4444,7 @@
     // Render sub reward banner
     renderSubRewardBanner();
 
-    // Aggregate per user
+    // Aggregate per user from videos
     const userStats = {};
     videos.forEach(v => {
       if (!userStats[v.author]) {
@@ -4397,7 +4457,14 @@
       });
     });
 
-    // Build sorted list
+    // Include ALL registered users (even those with no posts)
+    Object.keys(cachedUsers).forEach(function(u) {
+      if (!userStats[u]) {
+        userStats[u] = { totalRating: 0, totalVotes: 0, videoCount: 0 };
+      }
+    });
+
+    // Build sorted list - all users, sorted by avg rating then by video count
     const ranked = Object.entries(userStats)
       .map(([user, stats]) => ({
         user,
@@ -4405,22 +4472,21 @@
         totalVotes: stats.totalVotes,
         videoCount: stats.videoCount
       }))
-      .filter(u => u.totalVotes > 0)
-      .sort((a, b) => b.avg - a.avg);
+      .sort((a, b) => b.avg - a.avg || b.totalVotes - a.totalVotes || b.videoCount - a.videoCount);
 
     if (ranked.length === 0) {
-      container.innerHTML = '<div class="leaderboard-empty">No votes yet! Go rate some videos! 🗳️</div>';
+      container.innerHTML = '<div class="leaderboard-empty">No users yet! 🗳️</div>';
       return;
     }
 
-    // Preload avatars for leaderboard users then render
+    // Preload avatars for all users then render
     var leaderboardUsers = ranked.map(function(e) { return e.user; });
     preloadAvatars(leaderboardUsers).then(function() {
       container.innerHTML = ranked.map((entry, i) => {
         const rank = i + 1;
         const rankClass = rank <= 3 ? ' rank-' + rank : '';
         const medal = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank;
-        const isKing = rank === 1;
+        const isKing = rank === 1 && entry.totalVotes > 0;
 
         var userRefCount = getReferralCount(entry.user);
         var has5Refs = userRefCount >= 5;
@@ -4446,7 +4512,7 @@
           + (userFreeSpins > 0 ? ' · <span style="color:gold;">' + userFreeSpins + ' free spin' + (userFreeSpins !== 1 ? 's' : '') + '</span>' : '')
           + '</div>'
           + '</div>'
-          + '<div class="leaderboard-score">' + entry.avg.toFixed(1) + '</div>'
+          + '<div class="leaderboard-score">' + (entry.totalVotes > 0 ? entry.avg.toFixed(1) : '-') + '</div>'
           + '</li>';
       }).join('');
     });
