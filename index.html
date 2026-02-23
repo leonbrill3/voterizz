@@ -1132,6 +1132,43 @@
     margin-top: 10px;
   }
 
+  .subscribers-list {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,0,255,0.3);
+    border-radius: 15px;
+    padding: 12px;
+    margin-top: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .subscribers-list.hidden { display: none; }
+  .subscribers-list-title {
+    color: #ff00ff;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .subscriber-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 0.9rem;
+  }
+  .subscriber-item:hover {
+    background: rgba(255,0,255,0.15);
+  }
+  .no-subscribers {
+    color: #888;
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+
   /* ===== EDIT MODAL ===== */
   .edit-modal {
     position: fixed;
@@ -2922,15 +2959,16 @@
       </div>
     </div>
     <div class="profile-sub-stats">
-      <div class="profile-stat">
+      <div class="profile-stat" style="cursor:pointer;" onclick="toggleSubscribersList()">
         <div class="stat-num" id="profileSubscribers">0</div>
-        <div class="stat-label">Subscribers</div>
+        <div class="stat-label">Subscribers ▾</div>
       </div>
       <div class="profile-stat">
         <div class="stat-num" id="profileSubscriptions">0</div>
         <div class="stat-label">Subscribed To</div>
       </div>
     </div>
+    <div id="subscribersList" class="subscribers-list hidden"></div>
   </div>
   <button class="settings-btn" onclick="showSettingsModal()">⚙️ Settings</button>
   <div class="profile-videos-title">Your Videos</div>
@@ -3890,6 +3928,47 @@
     return count;
   }
 
+  function getSubscribers(username) {
+    var subs = [];
+    Object.keys(cachedSubscriptions).forEach(function(user) {
+      if (cachedSubscriptions[user] && cachedSubscriptions[user][username]) {
+        subs.push(user);
+      }
+    });
+    return subs;
+  }
+
+  function toggleSubscribersList() {
+    var listEl = document.getElementById('subscribersList');
+    if (!listEl) return;
+    if (listEl.classList.contains('hidden')) {
+      var targetUser = viewingUser || getCurrentUser();
+      var subs = getSubscribers(targetUser);
+      if (subs.length === 0) {
+        listEl.innerHTML = '<div class="subscribers-list-title">Subscribers</div>'
+          + '<div class="no-subscribers">No subscribers yet</div>';
+      } else {
+        preloadAvatars(subs).then(function() {
+          var items = subs.map(function(u) {
+            return '<div class="subscriber-item" onclick="viewUserProfile(\'' + escapeHtml(u) + '\')">'
+              + getAvatarHtml(u) + ' ' + escapeHtml(u)
+              + '</div>';
+          }).join('');
+          listEl.innerHTML = '<div class="subscribers-list-title">Subscribers (' + subs.length + ')</div>' + items;
+        });
+        var items = subs.map(function(u) {
+          return '<div class="subscriber-item" onclick="viewUserProfile(\'' + escapeHtml(u) + '\')">'
+            + getAvatarHtml(u) + ' ' + escapeHtml(u)
+            + '</div>';
+        }).join('');
+        listEl.innerHTML = '<div class="subscribers-list-title">Subscribers (' + subs.length + ')</div>' + items;
+      }
+      listEl.classList.remove('hidden');
+    } else {
+      listEl.classList.add('hidden');
+    }
+  }
+
   function getSubscriptionCount(username) {
     if (!cachedSubscriptions[username]) return 0;
     return Object.keys(cachedSubscriptions[username]).length;
@@ -4379,6 +4458,9 @@
     const targetUser = viewingUser || currentUser;
     const isOwnProfile = !viewingUser;
     const videos = cachedVideos;
+    // Hide subscribers list when re-rendering profile
+    var subsList = document.getElementById('subscribersList');
+    if (subsList) subsList.classList.add('hidden');
     const userVideos = videos.filter(v => v.author === targetUser);
 
     // Load profile data from cache or Firebase
