@@ -2476,6 +2476,152 @@
     color: #0f0;
   }
 
+  /* ===== REFERRAL MODAL ===== */
+  .referral-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .referral-box {
+    background: linear-gradient(135deg, #1a0033, #0f0024);
+    border: 3px solid #0ff;
+    border-radius: 25px;
+    padding: 30px;
+    max-width: 450px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(0,255,255,0.3);
+  }
+
+  .referral-box h2 {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    color: #0ff;
+    text-shadow: 0 0 15px rgba(0,255,255,0.5);
+    margin-bottom: 10px;
+  }
+
+  .referral-box p {
+    color: #ccc;
+    font-size: 1.05rem;
+    margin-bottom: 20px;
+  }
+
+  .referral-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .referral-choice-btn {
+    padding: 16px;
+    border-radius: 18px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+
+  .referral-choice-btn:hover {
+    transform: scale(1.03);
+  }
+
+  .referral-choice-btn.alone {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: #aaa;
+  }
+
+  .referral-choice-btn.alone:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border-color: #fff;
+  }
+
+  .referral-choice-btn.friend {
+    background: linear-gradient(45deg, #ff00ff, #0ff);
+    border: none;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255,0,255,0.3);
+  }
+
+  .referral-choice-btn.friend:hover {
+    box-shadow: 0 0 30px rgba(255,0,255,0.5);
+  }
+
+  /* Referral pick user slide */
+  .referral-pick-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.5rem;
+    color: #ff0;
+    margin-bottom: 12px;
+  }
+
+  .referral-user-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+  }
+
+  .referral-user-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+  }
+
+  .referral-user-item:hover {
+    background: rgba(255,0,255,0.15);
+    transform: translateX(5px);
+  }
+
+  .referral-search {
+    width: 100%;
+    padding: 10px 16px;
+    border: 2px solid rgba(0,255,255,0.4);
+    border-radius: 15px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Comic Neue', cursive;
+    outline: none;
+    margin-bottom: 12px;
+  }
+
+  .referral-search:focus {
+    border-color: #0ff;
+    box-shadow: 0 0 15px rgba(0,255,255,0.3);
+  }
+
+  .referral-skip {
+    background: none;
+    border: none;
+    color: #666;
+    font-family: 'Comic Neue', cursive;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 8px;
+    transition: color 0.2s;
+  }
+
+  .referral-skip:hover {
+    color: #aaa;
+  }
+
   .free-spins-badge {
     display: inline-block;
     background: linear-gradient(45deg, gold, #ff8c00);
@@ -2732,6 +2878,29 @@
   </div>
 </div>
 
+<!-- ===== REFERRAL MODAL ===== -->
+<div class="referral-modal hidden" id="referralModal">
+  <div class="referral-box">
+    <!-- Slide 1: How did you find us? -->
+    <div id="referralSlide1">
+      <h2>HOW DID YOU FIND US?</h2>
+      <p>Welcome to vote.rizz! One quick question...</p>
+      <div class="referral-choices">
+        <button class="referral-choice-btn friend" onclick="showReferralPicker()">A FRIEND TOLD ME! 🤝</button>
+        <button class="referral-choice-btn alone" onclick="skipReferral()">I FOUND IT MYSELF 🔍</button>
+      </div>
+    </div>
+    <!-- Slide 2: Pick who told you -->
+    <div id="referralSlide2" class="hidden">
+      <div class="referral-pick-title">WHO TOLD YOU ABOUT US?</div>
+      <p style="color:#aaa;font-size:0.9rem;margin-bottom:12px;">Pick the friend who introduced you!</p>
+      <input type="text" class="referral-search" id="referralSearchInput" placeholder="Search for their username..." oninput="filterReferralUsers()">
+      <div class="referral-user-list" id="referralUserList"></div>
+      <button class="referral-skip" onclick="skipReferral()">Skip - I don't see them</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== PROFILE PAGE ===== -->
 <div class="container hidden" id="profilePage">
   <div class="page-title" style="color: #0ff;">😎 YOUR PROFILE 😎</div>
@@ -2946,9 +3115,11 @@
   let wheelSpinning = false;
   let cachedFreeSpins = {}; // { username: numberOfFreeSpins }
   let freeSpinsListener = null;
-  let subRewardClaimed = {}; // { username: true } - tracks who already claimed the 5-sub reward
+  let subRewardClaimed = {}; // { username: true } - tracks who already claimed the 5-referral reward
   let subRewardListener = null;
   let rewardPopupShown = false; // prevent showing popup multiple times per session
+  let cachedReferrals = {}; // { referrerUsername: { referredUser: true, ... } }
+  let referralsListener = null;
 
   const WHEEL_PRIZES = [
     { name: 'Golden Border', icon: '✨', key: 'golden-border' },
@@ -3043,11 +3214,80 @@
       profilePhoto: ''
     }).then(function() {
       setCurrentUser(pendingSignup.username);
-      pendingSignup = null;
       document.getElementById('rulesAgree').checked = false;
       updateRulesBtn();
-      enterApp();
+      // Show referral modal before entering app
+      showReferralModal();
     });
+  }
+
+  function showReferralModal() {
+    document.getElementById('referralSlide1').classList.remove('hidden');
+    document.getElementById('referralSlide2').classList.add('hidden');
+    document.getElementById('referralModal').classList.remove('hidden');
+
+    // Load all users for the picker
+    db.ref('users').once('value').then(function(snap) {
+      cachedUsers = snap.val() || {};
+    });
+  }
+
+  function showReferralPicker() {
+    document.getElementById('referralSlide1').classList.add('hidden');
+    document.getElementById('referralSlide2').classList.remove('hidden');
+    document.getElementById('referralSearchInput').value = '';
+    filterReferralUsers();
+    document.getElementById('referralSearchInput').focus();
+  }
+
+  function filterReferralUsers() {
+    var query = document.getElementById('referralSearchInput').value.trim().toLowerCase();
+    var currentUser = getCurrentUser();
+    var container = document.getElementById('referralUserList');
+
+    var users = Object.keys(cachedUsers).filter(function(u) {
+      return u !== currentUser && (!query || u.toLowerCase().includes(query));
+    });
+
+    if (users.length === 0) {
+      container.innerHTML = '<div style="color:#666;text-align:center;padding:20px;">No users found</div>';
+      return;
+    }
+
+    preloadAvatars(users.slice(0, 20)).then(function() {
+      var el = document.getElementById('referralUserList');
+      if (!el) return;
+      el.innerHTML = users.slice(0, 20).map(function(u) {
+        return '<div class="referral-user-item" onclick="selectReferrer(\'' + escapeHtml(u) + '\')">'
+          + getAvatarHtml(u) + ' ' + escapeHtml(u)
+          + '</div>';
+      }).join('');
+    });
+
+    container.innerHTML = users.slice(0, 20).map(function(u) {
+      return '<div class="referral-user-item" onclick="selectReferrer(\'' + escapeHtml(u) + '\')">'
+        + getAvatarHtml(u) + ' ' + escapeHtml(u)
+        + '</div>';
+    }).join('');
+  }
+
+  function selectReferrer(referrerUsername) {
+    var currentUser = getCurrentUser();
+    // Record referral in Firebase
+    db.ref('referrals/' + referrerUsername + '/' + currentUser).set(true);
+    // Auto-subscribe to referrer
+    db.ref('subscriptions/' + currentUser + '/' + referrerUsername).set(true);
+    finishReferral();
+  }
+
+  function skipReferral() {
+    finishReferral();
+  }
+
+  function finishReferral() {
+    document.getElementById('referralModal').classList.add('hidden');
+    pendingSignup = null;
+    enterApp();
   }
 
   function toggleAuthMode() {
@@ -3219,12 +3459,17 @@
       db.ref('subRewardClaimed').off('value', subRewardListener);
       subRewardListener = null;
     }
+    if (referralsListener) {
+      db.ref('referrals').off('value', referralsListener);
+      referralsListener = null;
+    }
     rizzKingHistory = {};
     userPrizes = {};
     wheelSpinning = false;
     cachedFreeSpins = {};
     subRewardClaimed = {};
     rewardPopupShown = false;
+    cachedReferrals = {};
 
     clearCurrentUser();
     document.getElementById('authScreen').classList.remove('hidden');
@@ -3318,6 +3563,13 @@
     if (!subRewardListener) {
       subRewardListener = db.ref('subRewardClaimed').on('value', function(snapshot) {
         subRewardClaimed = snapshot.val() || {};
+      });
+    }
+
+    // Attach referrals listener
+    if (!referralsListener) {
+      referralsListener = db.ref('referrals').on('value', function(snapshot) {
+        cachedReferrals = snapshot.val() || {};
       });
     }
 
@@ -4091,10 +4343,11 @@
         const medal = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank;
         const isKing = rank === 1;
 
-        var userSubCount = getSubscriberCount(entry.user);
-        var has5Subs = userSubCount >= 5;
+        var userRefCount = getReferralCount(entry.user);
+        var has5Refs = userRefCount >= 5;
         var userFreeSpins = cachedFreeSpins[entry.user] || 0;
         var claimedReward = subRewardClaimed[entry.user];
+        var userSubCount = getSubscriberCount(entry.user);
 
         return '<li class="leaderboard-item' + rankClass + '">'
           + '<div class="leaderboard-rank">' + medal + '</div>'
@@ -4109,7 +4362,8 @@
           + entry.videoCount + ' video' + (entry.videoCount !== 1 ? 's' : '')
           + ' · ' + entry.totalVotes + ' vote' + (entry.totalVotes !== 1 ? 's' : '')
           + ' · ' + userSubCount + ' sub' + (userSubCount !== 1 ? 's' : '')
-          + (has5Subs && !claimedReward ? ' · <span style="color:gold;">🎡 5-sub reward ready!</span>' : '')
+          + ' · ' + userRefCount + ' referral' + (userRefCount !== 1 ? 's' : '')
+          + (has5Refs && !claimedReward ? ' · <span style="color:gold;">🎡 Reward ready!</span>' : '')
           + (userFreeSpins > 0 ? ' · <span style="color:gold;">' + userFreeSpins + ' free spin' + (userFreeSpins !== 1 ? 's' : '') + '</span>' : '')
           + '</div>'
           + '</div>'
@@ -5235,7 +5489,7 @@
         + '<div class="lock-icon">🔒</div>'
         + '<h3>PRIZE WHEEL LOCKED</h3>'
         + '<p>Be the #1 Rizz King for 7 consecutive days to unlock!</p>'
-        + '<p style="color:#aaa;font-size:0.9rem;">Or get 5 subscribers for 4 free spins!</p>'
+        + '<p style="color:#aaa;font-size:0.9rem;">Or refer 5 friends for 4 free spins!</p>'
         + '<div class="streak-display">' + streak + '/7 Days</div>'
         + '<div class="streak-bar">';
       for (var i = 0; i < 7; i++) {
@@ -5396,22 +5650,25 @@
     requestAnimationFrame(animate);
   }
 
-  // ===== 5-SUBSCRIBER REWARD =====
+  // ===== 5-REFERRAL REWARD =====
+  function getReferralCount(username) {
+    var refs = cachedReferrals[username];
+    if (!refs) return 0;
+    return Object.keys(refs).length;
+  }
+
   function checkSubReward() {
     var currentUser = getCurrentUser();
     if (!currentUser || rewardPopupShown) return;
-    // Already claimed?
     if (subRewardClaimed[currentUser]) return;
-    // Check subscriber count
-    var subCount = getSubscriberCount(currentUser);
-    if (subCount >= 5) {
+    var refCount = getReferralCount(currentUser);
+    if (refCount >= 5) {
       rewardPopupShown = true;
       showRewardPopup();
     }
   }
 
   function showRewardPopup() {
-    // Remove any existing popup
     var existing = document.getElementById('rewardPopup');
     if (existing) existing.remove();
 
@@ -5420,8 +5677,8 @@
     popup.className = 'reward-popup';
     popup.innerHTML = '<div class="reward-box">'
       + '<div class="reward-icon">🎉🎡🎉</div>'
-      + '<h2>5 SUBSCRIBERS!</h2>'
-      + '<p>You just hit 5 subscribers!</p>'
+      + '<h2>5 FRIENDS REFERRED!</h2>'
+      + '<p>5 people said YOU told them about vote.rizz!</p>'
       + '<div class="reward-prize">🎡 4 FREE SPINS 🎡</div>'
       + '<p style="color:#aaa;font-size:0.9rem;">Use them on the Prize Wheel anytime!</p>'
       + '<button class="reward-claim-btn" onclick="claimSubReward()">CLAIM REWARD! 🔥</button>'
@@ -5435,31 +5692,29 @@
     var currentUser = getCurrentUser();
     if (!currentUser) { banner.innerHTML = ''; return; }
 
-    var subCount = getSubscriberCount(currentUser);
+    var refCount = getReferralCount(currentUser);
     var claimed = subRewardClaimed[currentUser];
     var freeCount = cachedFreeSpins[currentUser] || 0;
 
     if (claimed) {
-      // Already claimed
       banner.innerHTML = '<div class="sub-reward-banner claimed">'
         + '<div class="srb-icon">✅</div>'
         + '<div class="srb-info">'
-        + '<div class="srb-title">5-SUB REWARD CLAIMED!</div>'
+        + '<div class="srb-title">REFERRAL REWARD CLAIMED!</div>'
         + '<div class="srb-desc">You earned 4 free wheel spins.' + (freeCount > 0 ? ' You have ' + freeCount + ' left!' : ' All used up!') + '</div>'
         + '</div>'
         + '</div>';
     } else {
-      // Show progress
-      var progress = Math.min(subCount, 5);
+      var progress = Math.min(refCount, 5);
       var dotsHtml = '';
       for (var i = 0; i < 5; i++) {
         dotsHtml += '<div class="srb-dot' + (i < progress ? ' filled' : '') + '">' + (i < progress ? '✓' : (i + 1)) + '</div>';
       }
       banner.innerHTML = '<div class="sub-reward-banner">'
-        + '<div class="srb-icon">🎡</div>'
+        + '<div class="srb-icon">🤝</div>'
         + '<div class="srb-info">'
-        + '<div class="srb-title">GET 5 SUBSCRIBERS = 4 FREE SPINS!</div>'
-        + '<div class="srb-desc">' + progress + '/5 subscribers — '
+        + '<div class="srb-title">REFER 5 FRIENDS = 4 FREE SPINS!</div>'
+        + '<div class="srb-desc">' + progress + '/5 friends referred — '
         + (progress >= 5 ? 'You did it! Check the popup!' : (5 - progress) + ' more to go!')
         + '</div>'
         + '<div class="srb-progress">' + dotsHtml + '</div>'
@@ -5472,14 +5727,10 @@
     var currentUser = getCurrentUser();
     if (!currentUser) return;
 
-    // Give 4 free spins
     var currentFree = cachedFreeSpins[currentUser] || 0;
     db.ref('freeSpins/' + currentUser).set(currentFree + 4);
-
-    // Mark reward as claimed so it never shows again
     db.ref('subRewardClaimed/' + currentUser).set(true);
 
-    // Remove popup
     var popup = document.getElementById('rewardPopup');
     if (popup) popup.remove();
   }
