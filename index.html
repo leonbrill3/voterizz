@@ -4091,17 +4091,26 @@
         const medal = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank;
         const isKing = rank === 1;
 
+        var userSubCount = getSubscriberCount(entry.user);
+        var has5Subs = userSubCount >= 5;
+        var userFreeSpins = cachedFreeSpins[entry.user] || 0;
+        var claimedReward = subRewardClaimed[entry.user];
+
         return '<li class="leaderboard-item' + rankClass + '">'
           + '<div class="leaderboard-rank">' + medal + '</div>'
           + '<div class="leaderboard-info">'
           + '<div class="leaderboard-username">'
           + getClickableUsername(entry.user)
           + (isKing ? ' <span class="rizz-king-badge">👑</span>' : '')
+          + (claimedReward ? ' <span class="free-spins-badge" style="font-size:0.75rem;">🎡 REWARD</span>' : '')
           + '</div>'
           + (isKing ? '<div class="rizz-king-label">✨ RIZZ KING ✨</div>' : '')
           + '<div class="leaderboard-details">'
           + entry.videoCount + ' video' + (entry.videoCount !== 1 ? 's' : '')
           + ' · ' + entry.totalVotes + ' vote' + (entry.totalVotes !== 1 ? 's' : '')
+          + ' · ' + userSubCount + ' sub' + (userSubCount !== 1 ? 's' : '')
+          + (has5Subs && !claimedReward ? ' · <span style="color:gold;">🎡 5-sub reward ready!</span>' : '')
+          + (userFreeSpins > 0 ? ' · <span style="color:gold;">' + userFreeSpins + ' free spin' + (userFreeSpins !== 1 ? 's' : '') + '</span>' : '')
           + '</div>'
           + '</div>'
           + '<div class="leaderboard-score">' + entry.avg.toFixed(1) + '</div>'
