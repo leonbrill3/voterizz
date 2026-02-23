@@ -2408,6 +2408,74 @@
     box-shadow: 0 0 40px rgba(255,215,0,0.6);
   }
 
+  /* Sub reward banner on leaderboard */
+  .sub-reward-banner {
+    background: linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,140,0,0.08));
+    border: 2px solid rgba(255,215,0,0.4);
+    border-radius: 18px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .sub-reward-banner .srb-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+  }
+
+  .sub-reward-banner .srb-info {
+    flex: 1;
+  }
+
+  .sub-reward-banner .srb-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    color: gold;
+    margin-bottom: 4px;
+  }
+
+  .sub-reward-banner .srb-desc {
+    color: #aaa;
+    font-size: 0.9rem;
+  }
+
+  .sub-reward-banner .srb-progress {
+    display: flex;
+    gap: 5px;
+    margin-top: 8px;
+  }
+
+  .sub-reward-banner .srb-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,215,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #666;
+  }
+
+  .sub-reward-banner .srb-dot.filled {
+    background: linear-gradient(135deg, gold, #ff8c00);
+    border-color: gold;
+    color: #0f0024;
+    box-shadow: 0 0 6px rgba(255,215,0,0.4);
+  }
+
+  .sub-reward-banner.claimed {
+    border-color: rgba(0,255,0,0.3);
+    background: linear-gradient(135deg, rgba(0,255,0,0.08), rgba(0,200,0,0.04));
+  }
+
+  .sub-reward-banner.claimed .srb-title {
+    color: #0f0;
+  }
+
   .free-spins-badge {
     display: inline-block;
     background: linear-gradient(45deg, gold, #ff8c00);
@@ -2531,6 +2599,7 @@
 <!-- ===== LEADERBOARD PAGE ===== -->
 <div class="container hidden" id="leaderboardPage">
   <div class="page-title" style="color: gold;">👑 LEADERBOARD 👑</div>
+  <div id="subRewardBanner"></div>
   <ul class="leaderboard-list" id="leaderboardList"></ul>
 </div>
 
@@ -3981,6 +4050,9 @@
     // Check if user earned the 5-subscriber reward
     checkSubReward();
 
+    // Render sub reward banner
+    renderSubRewardBanner();
+
     // Aggregate per user
     const userStats = {};
     videos.forEach(v => {
@@ -5346,6 +5418,45 @@
       + '<button class="reward-claim-btn" onclick="claimSubReward()">CLAIM REWARD! 🔥</button>'
       + '</div>';
     document.body.appendChild(popup);
+  }
+
+  function renderSubRewardBanner() {
+    var banner = document.getElementById('subRewardBanner');
+    if (!banner) return;
+    var currentUser = getCurrentUser();
+    if (!currentUser) { banner.innerHTML = ''; return; }
+
+    var subCount = getSubscriberCount(currentUser);
+    var claimed = subRewardClaimed[currentUser];
+    var freeCount = cachedFreeSpins[currentUser] || 0;
+
+    if (claimed) {
+      // Already claimed
+      banner.innerHTML = '<div class="sub-reward-banner claimed">'
+        + '<div class="srb-icon">✅</div>'
+        + '<div class="srb-info">'
+        + '<div class="srb-title">5-SUB REWARD CLAIMED!</div>'
+        + '<div class="srb-desc">You earned 4 free wheel spins.' + (freeCount > 0 ? ' You have ' + freeCount + ' left!' : ' All used up!') + '</div>'
+        + '</div>'
+        + '</div>';
+    } else {
+      // Show progress
+      var progress = Math.min(subCount, 5);
+      var dotsHtml = '';
+      for (var i = 0; i < 5; i++) {
+        dotsHtml += '<div class="srb-dot' + (i < progress ? ' filled' : '') + '">' + (i < progress ? '✓' : (i + 1)) + '</div>';
+      }
+      banner.innerHTML = '<div class="sub-reward-banner">'
+        + '<div class="srb-icon">🎡</div>'
+        + '<div class="srb-info">'
+        + '<div class="srb-title">GET 5 SUBSCRIBERS = 4 FREE SPINS!</div>'
+        + '<div class="srb-desc">' + progress + '/5 subscribers — '
+        + (progress >= 5 ? 'You did it! Check the popup!' : (5 - progress) + ' more to go!')
+        + '</div>'
+        + '<div class="srb-progress">' + dotsHtml + '</div>'
+        + '</div>'
+        + '</div>';
+    }
   }
 
   function claimSubReward() {
