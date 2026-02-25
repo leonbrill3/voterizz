@@ -4067,10 +4067,9 @@
       });
     } else {
       // Full render — videos added/removed/reordered
-      var adIndex = 0;
-      container.innerHTML = sorted.map(function(v, idx) {
+      container.innerHTML = sorted.map(function(v) {
         var parts = buildCardParts(v, currentUser);
-        var cardHtml = '<div class="video-card" data-vid="' + v.id + '">'
+        return '<div class="video-card" data-vid="' + v.id + '">'
           + '<div class="video-header">'
           + '<div class="video-title">' + escapeHtml(v.title) + '</div>'
           + '<div class="video-author">' + parts.authorHtml + '</div>'
@@ -4081,12 +4080,6 @@
           + '<div class="cool-scale">' + parts.scaleHtml + '</div>'
           + parts.commentsHtml
           + '</div>';
-        // Insert an ad after every 3 posts
-        if ((idx + 1) % 3 === 0) {
-          cardHtml += getAdHtml(adIndex);
-          adIndex++;
-        }
-        return cardHtml;
       }).join('');
     }
   }
