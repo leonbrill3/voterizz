@@ -2847,6 +2847,7 @@
     <button onclick="showPage('feed')" id="nav-feed">Home</button>
     <button onclick="showPage('post')" id="nav-post">Post</button>
     <button onclick="showPage('leaderboard')" id="nav-leaderboard">Leaderboard</button>
+    <button onclick="showPage('announcements')" id="nav-announcements">Announcements</button>
     <button onclick="showPage('rules')" id="nav-rules">Rules</button>
     <button onclick="showPage('messages')" id="nav-messages">Messages</button>
     <button onclick="showPage('wheel')" id="nav-wheel">Prize Wheel</button>
@@ -2890,14 +2891,6 @@
 <!-- ===== FEED PAGE ===== -->
 <div class="container hidden" id="feedPage">
   <div class="page-title" style="color: #0ff;">🔥 THE FEED 🔥</div>
-
-  <!-- Announcements Section -->
-  <div class="section-title">📢 ANNOUNCEMENTS</div>
-  <div class="announcements-area" id="announcementsArea">
-    <div class="announcement-banner">
-      <div class="announcement-title">POST & VOTE & SHARE 😊</div>
-    </div>
-  </div>
 
   <!-- Feature Tiles -->
   <div class="feature-tiles">
@@ -2957,6 +2950,17 @@
   <div class="all-people-section">
     <div class="all-people-title">👥 ALL PEOPLE 👥</div>
     <div id="allPeopleList" class="all-people-list"></div>
+  </div>
+</div>
+
+<!-- ===== ANNOUNCEMENTS PAGE ===== -->
+<div class="container hidden" id="announcementsPage">
+  <div class="page-title" style="color: #ff00ff;">📢 ANNOUNCEMENTS 📢</div>
+  <div class="announcements-area">
+    <div class="announcement-banner">
+      <div class="announcement-title">POST & VOTE & SHARE 😊</div>
+      <div class="announcement-text">Post your best videos, vote on your friends, and share the site! The more you participate, the higher you climb!</div>
+    </div>
   </div>
 </div>
 
@@ -3809,11 +3813,11 @@
 
   // ===== NAVIGATION =====
   function hideAllPages() {
-    ['feedPage', 'postPage', 'leaderboardPage', 'rulesPage', 'profilePage', 'messagesPage', 'wheelPage'].forEach(id => {
+    ['feedPage', 'postPage', 'leaderboardPage', 'announcementsPage', 'rulesPage', 'profilePage', 'messagesPage', 'wheelPage'].forEach(id => {
       var el = document.getElementById(id);
       if (el) el.classList.add('hidden');
     });
-    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-rules', 'nav-profile', 'nav-messages', 'nav-wheel'].forEach(id => {
+    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-announcements', 'nav-rules', 'nav-profile', 'nav-messages', 'nav-wheel'].forEach(id => {
       var el = document.getElementById(id);
       if (el) el.classList.remove('active');
     });
@@ -3844,6 +3848,10 @@
         document.getElementById('leaderboardPage').classList.remove('hidden');
         document.getElementById('nav-leaderboard').classList.add('active');
         renderLeaderboard();
+        break;
+      case 'announcements':
+        document.getElementById('announcementsPage').classList.remove('hidden');
+        document.getElementById('nav-announcements').classList.add('active');
         break;
       case 'rules':
         document.getElementById('rulesPage').classList.remove('hidden');
