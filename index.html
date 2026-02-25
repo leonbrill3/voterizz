@@ -2727,6 +2727,106 @@
     vertical-align: middle;
     box-shadow: 0 0 8px rgba(255,215,0,0.4);
   }
+
+  /* ===== ANNOUNCEMENT BANNER ===== */
+  .announcement-banner {
+    background: linear-gradient(135deg, #ff00ff, #8800ff, #00ffff);
+    border-radius: 18px;
+    padding: 16px 20px;
+    margin-bottom: 18px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: announcePulse 3s ease-in-out infinite;
+  }
+  @keyframes announcePulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(255,0,255,0.4); }
+    50% { box-shadow: 0 0 30px rgba(255,0,255,0.7), 0 0 60px rgba(0,255,255,0.3); }
+  }
+  .announcement-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 200%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    animation: announceShine 4s ease-in-out infinite;
+  }
+  @keyframes announceShine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+  .announcement-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.5rem;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    margin-bottom: 6px;
+    letter-spacing: 2px;
+  }
+  .announcement-text {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.95);
+    line-height: 1.4;
+  }
+  .announcement-dismiss {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  .announcement-dismiss:hover { color: #fff; }
+
+  /* ===== AD BANNERS ===== */
+  .ad-banner {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,0,255,0.25);
+    border-radius: 18px;
+    padding: 18px;
+    margin: 18px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .ad-banner:hover {
+    border-color: rgba(255,0,255,0.5);
+  }
+  .ad-label {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    font-size: 0.6rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .ad-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.3rem;
+    margin-bottom: 6px;
+  }
+  .ad-text {
+    font-size: 0.85rem;
+    color: #ccc;
+    margin-bottom: 10px;
+  }
+  .ad-cta {
+    display: inline-block;
+    padding: 8px 24px;
+    border-radius: 25px;
+    font-family: 'Bangers', cursive;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .ad-cta:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255,0,255,0.4);
+  }
 </style>
 </head>
 <body>
@@ -2784,6 +2884,13 @@
 <!-- ===== FEED PAGE ===== -->
 <div class="container hidden" id="feedPage">
   <div class="page-title" style="color: #0ff;">🔥 THE FEED 🔥</div>
+
+  <!-- Announcement Banner -->
+  <div class="announcement-banner" id="announcementBanner">
+    <button class="announcement-dismiss" onclick="dismissAnnouncement()">✕</button>
+    <div class="announcement-title">📢 POST & SHARE!</div>
+    <div class="announcement-text">Post your best videos, rate your friends, and climb the leaderboard! Refer 5 friends to earn FREE wheel spins! 🎡🔥</div>
+  </div>
 
   <!-- Feature Tiles -->
   <div class="feature-tiles">
@@ -3598,6 +3705,9 @@
       });
     }
 
+    // Check if announcement was dismissed
+    checkAnnouncementDismissed();
+
     // Show loading screen while we wait for the first Firebase snapshot
     if (!videosLoaded) {
       hideAllPages();
@@ -3942,9 +4052,10 @@
       });
     } else {
       // Full render — videos added/removed/reordered
-      container.innerHTML = sorted.map(function(v) {
+      var adIndex = 0;
+      container.innerHTML = sorted.map(function(v, idx) {
         var parts = buildCardParts(v, currentUser);
-        return '<div class="video-card" data-vid="' + v.id + '">'
+        var cardHtml = '<div class="video-card" data-vid="' + v.id + '">'
           + '<div class="video-header">'
           + '<div class="video-title">' + escapeHtml(v.title) + '</div>'
           + '<div class="video-author">' + parts.authorHtml + '</div>'
@@ -3955,6 +4066,12 @@
           + '<div class="cool-scale">' + parts.scaleHtml + '</div>'
           + parts.commentsHtml
           + '</div>';
+        // Insert an ad after every 3 posts
+        if ((idx + 1) % 3 === 0) {
+          cardHtml += getAdHtml(adIndex);
+          adIndex++;
+        }
+        return cardHtml;
       }).join('');
     }
   }
@@ -5157,6 +5274,79 @@
   }
 
   // ===== FEATURE TILES UPDATE =====
+  // ===== ANNOUNCEMENT & ADS =====
+  function dismissAnnouncement() {
+    var banner = document.getElementById('announcementBanner');
+    if (banner) banner.style.display = 'none';
+    sessionStorage.setItem('vrizz_announce_dismissed', 'true');
+  }
+
+  function checkAnnouncementDismissed() {
+    if (sessionStorage.getItem('vrizz_announce_dismissed') === 'true') {
+      var banner = document.getElementById('announcementBanner');
+      if (banner) banner.style.display = 'none';
+    }
+  }
+
+  var AD_POOL = [
+    {
+      title: '🎬 POST YOUR BEST VIDEO!',
+      text: 'Show off your skills! Upload a video and see how the community rates you.',
+      cta: 'POST NOW',
+      ctaColor: 'linear-gradient(135deg, #ff00ff, #ff0080)',
+      ctaTextColor: '#fff',
+      action: function() { showPage('post'); }
+    },
+    {
+      title: '👑 CLIMB THE LEADERBOARD!',
+      text: 'Get votes on your videos to rise up the ranks. Can you become the Rizz King?',
+      cta: 'VIEW LEADERBOARD',
+      ctaColor: 'linear-gradient(135deg, gold, #ff8c00)',
+      ctaTextColor: '#0f0024',
+      action: function() { showPage('leaderboard'); }
+    },
+    {
+      title: '🤝 REFER FRIENDS = FREE SPINS!',
+      text: 'Tell 5 friends about vote.rizz and earn 4 FREE wheel spins! Share the link!',
+      cta: 'SHARE NOW',
+      ctaColor: 'linear-gradient(135deg, #00ffff, #00ff88)',
+      ctaTextColor: '#0f0024',
+      action: function() {
+        if (navigator.share) {
+          navigator.share({ title: 'vote.rizz', text: 'Check out vote.rizz - post videos and get rated!', url: 'https://voterizz.onrender.com' });
+        } else {
+          navigator.clipboard.writeText('https://voterizz.onrender.com').then(function() { alert('Link copied!'); });
+        }
+      }
+    },
+    {
+      title: '🎡 SPIN THE RIZZ WHEEL!',
+      text: 'Win cool prizes like Golden Borders, Rainbow Names, and Diamond Badges!',
+      cta: 'CHECK IT OUT',
+      ctaColor: 'linear-gradient(135deg, #8800ff, #ff00ff)',
+      ctaTextColor: '#fff',
+      action: function() { showPage('wheel'); }
+    },
+    {
+      title: '💬 SEND A MESSAGE!',
+      text: 'Chat with other users! DM your friends right here on vote.rizz.',
+      cta: 'OPEN MESSAGES',
+      ctaColor: 'linear-gradient(135deg, #ff00ff, #8800ff)',
+      ctaTextColor: '#fff',
+      action: function() { showPage('messages'); }
+    }
+  ];
+
+  function getAdHtml(index) {
+    var ad = AD_POOL[index % AD_POOL.length];
+    return '<div class="ad-banner">'
+      + '<div class="ad-label">ad</div>'
+      + '<div class="ad-title" style="color:#ff00ff;">' + ad.title + '</div>'
+      + '<div class="ad-text">' + ad.text + '</div>'
+      + '<button class="ad-cta" style="background:' + ad.ctaColor + ';color:' + ad.ctaTextColor + ';" onclick="AD_POOL[' + (index % AD_POOL.length) + '].action()">' + ad.cta + '</button>'
+      + '</div>';
+  }
+
   function updateFeatureTiles() {
     var currentUser = getCurrentUser();
     if (!currentUser) return;
