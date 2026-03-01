@@ -3788,6 +3788,15 @@
   let isSignUp = false;
   let pendingSignup = null; // { username, password } for after rules accepted
 
+  // Check for referral link parameter
+  var referralFromLink = null;
+  (function() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('ref')) {
+      referralFromLink = params.get('ref');
+    }
+  })();
+
   function updateRulesBtn() {
     var checkbox = document.getElementById('rulesAgree');
     var btn = document.getElementById('rulesAcceptBtn');
@@ -3816,6 +3825,22 @@
   }
 
   function showReferralModal() {
+    // If user came from a referral link, auto-credit and skip the modal
+    if (referralFromLink) {
+      var currentUser = getCurrentUser();
+      db.ref('users/' + referralFromLink).once('value').then(function(snap) {
+        if (snap.exists() && referralFromLink !== currentUser) {
+          // Auto-credit referral
+          db.ref('referrals/' + referralFromLink + '/' + currentUser).set(true);
+          db.ref('subscriptions/' + currentUser + '/' + referralFromLink).set(true);
+        }
+        referralFromLink = null;
+        pendingSignup = null;
+        showBirthdayModal();
+      });
+      return;
+    }
+
     document.getElementById('referralSlide1').classList.remove('hidden');
     document.getElementById('referralSlide2').classList.add('hidden');
     document.getElementById('referralModal').classList.remove('hidden');
@@ -6565,9 +6590,10 @@
 
   // ===== 100-USER GOAL =====
   function copyShareLink() {
-    var link = 'https://voterizz.onrender.com';
+    var currentUser = getCurrentUser();
+    var link = 'https://voterizz.onrender.com/?ref=' + encodeURIComponent(currentUser);
     if (navigator.share) {
-      navigator.share({ title: 'vote.rizz', text: 'Check out vote.rizz - post videos and get rated!', url: link });
+      navigator.share({ title: 'vote.rizz', text: 'Join me on vote.rizz! Post videos and get rated! 🔥', url: link });
     } else {
       navigator.clipboard.writeText(link).then(function() {
         var confirm = document.getElementById('copyConfirm');
