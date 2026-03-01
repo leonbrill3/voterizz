@@ -2833,6 +2833,290 @@
     transform: scale(1.05);
     box-shadow: 0 0 20px rgba(255,0,255,0.4);
   }
+
+  /* ===== CONFETTI ANIMATION ===== */
+  .confetti-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1002;
+    overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    animation: confettiFall 2.5s ease-out forwards;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(50vh) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-20vh) translateX(var(--x)) scale(0.3) rotate(720deg); opacity: 0; }
+  }
+
+  /* ===== 100-USER GOAL ===== */
+  .goal-tracker {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(0,255,255,0.3);
+    border-radius: 18px;
+    padding: 14px 18px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  .goal-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    color: #00ffff;
+    margin-bottom: 8px;
+  }
+  .goal-bar-bg {
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+    height: 22px;
+    overflow: hidden;
+    position: relative;
+  }
+  .goal-bar-fill {
+    height: 100%;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #00ffff, #ff00ff);
+    transition: width 1s ease;
+    min-width: 0;
+  }
+  .goal-bar-text {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  }
+  .goal-complete {
+    color: gold;
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    margin-top: 6px;
+    animation: bounce 0.6s infinite alternate;
+  }
+
+  /* ===== BIRTHDAY BANNER ===== */
+  .birthday-banner {
+    background: linear-gradient(135deg, #ff69b4, #ff00ff, #8800ff);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 15px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: announcePulse 2s ease-in-out infinite;
+  }
+  .birthday-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.4rem;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+  }
+  .birthday-emojis {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+  }
+  .birthday-emoji {
+    position: absolute;
+    top: -50px;
+    font-size: 2rem;
+    animation: bdayFall 4s ease-in forwards;
+  }
+  @keyframes bdayFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* ===== BIRTHDAY MODAL ===== */
+  .birthday-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+  }
+  .birthday-modal.hidden { display: none; }
+  .birthday-box {
+    background: linear-gradient(180deg, #1a0030 0%, #0f0024 100%);
+    border: 3px solid #ff00ff;
+    border-radius: 25px;
+    padding: 30px;
+    max-width: 380px;
+    width: 90%;
+    text-align: center;
+  }
+  .birthday-box h2 {
+    font-family: 'Bangers', cursive;
+    color: #ff00ff;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  .birthday-box p {
+    color: #ccc;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+  .birthday-inputs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+  .birthday-inputs select {
+    padding: 10px;
+    border-radius: 12px;
+    border: 2px solid rgba(255,0,255,0.3);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-family: 'Comic Neue', cursive;
+    font-size: 1rem;
+  }
+  .birthday-submit {
+    background: linear-gradient(135deg, #ff00ff, #ff0080);
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+  }
+  .birthday-submit:hover { transform: scale(1.05); }
+
+  /* ===== DISPLAY NAME INPUT ===== */
+  .auth-display-name {
+    margin-bottom: 15px;
+  }
+
+  /* ===== LIVESTREAM ===== */
+  .live-page-title { color: #ff4444; }
+  .live-status {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+  }
+  .live-stream-card {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,0,0,0.3);
+    border-radius: 18px;
+    padding: 15px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .live-stream-card:hover {
+    border-color: rgba(255,0,0,0.6);
+    background: rgba(255,0,0,0.08);
+  }
+  .live-stream-card .live-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: #ff0000;
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: livePulse 1.5s ease-in-out infinite;
+  }
+  @keyframes livePulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 4px #ff0000; }
+    50% { opacity: 0.5; box-shadow: 0 0 12px #ff0000; }
+  }
+  .live-stream-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    color: #fff;
+  }
+  .live-stream-info {
+    color: #888;
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
+  .live-viewer-area {
+    background: #000;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    position: relative;
+    min-height: 200px;
+  }
+  .live-viewer-area video {
+    width: 100%;
+    display: block;
+  }
+  .live-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .live-btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    font-family: 'Bangers', cursive;
+    font-size: 1rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+  .live-btn:hover { transform: scale(1.05); }
+  .live-btn-start {
+    background: linear-gradient(135deg, #ff0000, #ff4444);
+    color: #fff;
+  }
+  .live-btn-stop {
+    background: linear-gradient(135deg, #444, #666);
+    color: #fff;
+  }
+  .live-btn-report {
+    background: linear-gradient(135deg, #ff8800, #ff4444);
+    color: #fff;
+  }
+  .live-btn-back {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .live-viewer-count {
+    color: #ff4444;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .start-stream-form {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,0,0,0.3);
+    border-radius: 18px;
+    padding: 20px;
+    text-align: center;
+  }
+  .start-stream-form input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 12px;
+    border: 2px solid rgba(255,0,0,0.3);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-family: 'Comic Neue', cursive;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+  }
 </style>
 </head>
 <body>
@@ -2851,6 +3135,7 @@
     <button onclick="showPage('rules')" id="nav-rules">Rules</button>
     <button onclick="showPage('messages')" id="nav-messages">Messages</button>
     <button onclick="showPage('wheel')" id="nav-wheel">Prize Wheel</button>
+    <button onclick="showPage('live')" id="nav-live">🔴 Live</button>
     <button onclick="viewingUser=null;showPage('profile')" id="nav-profile">Profile</button>
     <!-- Admin panel moved to /admin.html -->
   </div>
@@ -2868,6 +3153,7 @@
     <div class="auth-box">
       <h2 id="authTitle">Login</h2>
       <div class="auth-error" id="authError"></div>
+      <input type="text" id="authDisplayName" placeholder="Your Real Name" autocomplete="off" maxlength="30" class="hidden auth-display-name">
       <input type="text" id="authUsername" placeholder="Username" autocomplete="off" maxlength="20">
       <input type="password" id="authPassword" placeholder="Password" maxlength="30">
       <input type="number" id="authBirthYear" placeholder="What year were you born?" min="2007" max="2021" class="hidden" style="margin-bottom:15px;">
@@ -2895,6 +3181,19 @@
   <!-- Main Announcement -->
   <div class="announcement-banner" style="margin-bottom:15px;">
     <div class="announcement-title">POST & SHARE & VOTE 😊</div>
+  </div>
+
+  <!-- Birthday Banner (shown if someone has a birthday today) -->
+  <div id="birthdayBannerFeed"></div>
+
+  <!-- 100-User Goal Tracker -->
+  <div class="goal-tracker" id="goalTracker">
+    <div class="goal-title">🎯 GOAL: <span id="goalCount">0</span>/100 USERS</div>
+    <div class="goal-bar-bg">
+      <div class="goal-bar-fill" id="goalBarFill" style="width:0%"></div>
+      <div class="goal-bar-text" id="goalBarText">0%</div>
+    </div>
+    <div id="goalMessage"></div>
   </div>
 
   <!-- Feature Tiles -->
@@ -2955,6 +3254,29 @@
   <div class="all-people-section">
     <div class="all-people-title">👥 ALL PEOPLE 👥</div>
     <div id="allPeopleList" class="all-people-list"></div>
+  </div>
+</div>
+
+<!-- ===== LIVE PAGE ===== -->
+<div class="container hidden" id="livePage">
+  <div class="page-title live-page-title">🔴 LIVE STREAMS 🔴</div>
+  <div id="liveContent">
+    <!-- Stream list or viewer will be rendered here by JS -->
+    <div class="live-status" id="liveStatus">Loading streams...</div>
+    <div id="liveStreamList"></div>
+    <div class="start-stream-form" id="startStreamForm">
+      <h3 style="color:#ff4444;font-family:'Bangers',cursive;margin-bottom:10px;">START A STREAM</h3>
+      <p style="color:#aaa;font-size:0.85rem;margin-bottom:12px;">Share your screen + mic with viewers. No face cam!</p>
+      <input type="text" id="streamTitleInput" placeholder="Stream title..." maxlength="50">
+      <button class="live-btn live-btn-start" onclick="startLiveStream()">🔴 GO LIVE</button>
+    </div>
+    <div id="liveViewerContainer" class="hidden">
+      <div class="live-viewer-count" id="liveViewerCount"></div>
+      <div class="live-viewer-area">
+        <video id="liveVideo" autoplay playsinline></video>
+      </div>
+      <div class="live-controls" id="liveControls"></div>
+    </div>
   </div>
 </div>
 
@@ -3135,6 +3457,35 @@
       <div class="referral-user-list" id="referralUserList"></div>
       <button class="referral-skip" onclick="skipReferral()">Skip - I don't see them</button>
     </div>
+  </div>
+</div>
+
+<!-- ===== BIRTHDAY MODAL ===== -->
+<div class="birthday-modal hidden" id="birthdayModal">
+  <div class="birthday-box">
+    <h2>🎂 WHEN'S YOUR BIRTHDAY? 🎂</h2>
+    <p>We'll celebrate your special day with a surprise!</p>
+    <div class="birthday-inputs">
+      <select id="bdayMonth">
+        <option value="">Month</option>
+        <option value="01">January</option>
+        <option value="02">February</option>
+        <option value="03">March</option>
+        <option value="04">April</option>
+        <option value="05">May</option>
+        <option value="06">June</option>
+        <option value="07">July</option>
+        <option value="08">August</option>
+        <option value="09">September</option>
+        <option value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+      </select>
+      <select id="bdayDay">
+        <option value="">Day</option>
+      </select>
+    </div>
+    <button class="birthday-submit" onclick="submitBirthday()">SAVE BIRTHDAY 🎉</button>
   </div>
 </div>
 
@@ -3449,7 +3800,8 @@
       avatar: '😎',
       bio: '',
       profileColor: '#00ffff',
-      profilePhoto: ''
+      profilePhoto: '',
+      displayName: pendingSignup.displayName || ''
     }).then(function() {
       setCurrentUser(pendingSignup.username);
       document.getElementById('rulesAgree').checked = false;
@@ -3525,6 +3877,33 @@
   function finishReferral() {
     document.getElementById('referralModal').classList.add('hidden');
     pendingSignup = null;
+    // Show birthday modal for new users
+    showBirthdayModal();
+  }
+
+  function showBirthdayModal() {
+    // Populate day dropdown
+    var daySelect = document.getElementById('bdayDay');
+    daySelect.innerHTML = '<option value="">Day</option>';
+    for (var i = 1; i <= 31; i++) {
+      var val = i < 10 ? '0' + i : '' + i;
+      daySelect.innerHTML += '<option value="' + val + '">' + i + '</option>';
+    }
+    document.getElementById('birthdayModal').classList.remove('hidden');
+  }
+
+  function submitBirthday() {
+    var month = document.getElementById('bdayMonth').value;
+    var day = document.getElementById('bdayDay').value;
+    if (!month || !day) {
+      alert('Please pick your birthday month and day!');
+      return;
+    }
+    var currentUser = getCurrentUser();
+    if (currentUser) {
+      db.ref('users/' + currentUser + '/birthday').set(month + '-' + day);
+    }
+    document.getElementById('birthdayModal').classList.add('hidden');
     enterApp();
   }
 
@@ -3536,9 +3915,13 @@
       ? 'Already have an account? Login!'
       : "Don't have an account? Sign Up!";
     document.getElementById('authError').textContent = '';
+    document.getElementById('authDisplayName').classList.toggle('hidden', !isSignUp);
     document.getElementById('authBirthYear').classList.toggle('hidden', !isSignUp);
     document.getElementById('swearsNotice').classList.toggle('hidden', !isSignUp);
-    if (!isSignUp) document.getElementById('authBirthYear').value = '';
+    if (!isSignUp) {
+      document.getElementById('authBirthYear').value = '';
+      document.getElementById('authDisplayName').value = '';
+    }
   }
 
   function handleAuth() {
@@ -3557,6 +3940,17 @@
     }
 
     if (isSignUp) {
+      var displayName = document.getElementById('authDisplayName').value.trim();
+      if (!displayName || displayName.length < 2) {
+        errorEl.textContent = 'Please enter your real name! 🙏';
+        return;
+      }
+      var nameCheck = checkContentModeration(displayName);
+      if (!nameCheck.ok) {
+        errorEl.textContent = '🚫 That name isn\'t allowed!';
+        return;
+      }
+
       var birthYear = parseInt(document.getElementById('authBirthYear').value);
       var currentYear = new Date().getFullYear();
       var age = currentYear - birthYear;
@@ -3588,7 +3982,7 @@
           return;
         }
         // Show rules modal before creating account
-        pendingSignup = { username: username, password: password };
+        pendingSignup = { username: username, password: password, displayName: document.getElementById('authDisplayName').value.trim() };
         document.getElementById('rulesModal').classList.remove('hidden');
         authBtn.disabled = false;
         authBtn.textContent = "LET'S GOOO! 🎉";
@@ -3716,7 +4110,11 @@
     document.getElementById('loadingScreen').classList.add('hidden');
     document.getElementById('authUsername').value = '';
     document.getElementById('authPassword').value = '';
+    document.getElementById('authDisplayName').value = '';
     document.getElementById('authError').textContent = '';
+    // Stop any active stream
+    if (currentStream) stopStream();
+    if (livestreamListener) { db.ref('livestreams').off('value', livestreamListener); livestreamListener = null; }
   }
 
   function enterApp() {
@@ -3818,6 +4216,9 @@
 
     // Record today's rizz king
     recordDailyRizzKing();
+
+    // Check if current user is consecutive king (daily reward)
+    setTimeout(function() { checkDailyKingReward(); }, 3000);
   }
 
   // Figure out which page is showing and re-render it
@@ -3835,11 +4236,11 @@
 
   // ===== NAVIGATION =====
   function hideAllPages() {
-    ['feedPage', 'postPage', 'leaderboardPage', 'announcementsPage', 'rulesPage', 'profilePage', 'messagesPage', 'wheelPage'].forEach(id => {
+    ['feedPage', 'postPage', 'leaderboardPage', 'announcementsPage', 'rulesPage', 'profilePage', 'messagesPage', 'wheelPage', 'livePage'].forEach(id => {
       var el = document.getElementById(id);
       if (el) el.classList.add('hidden');
     });
-    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-announcements', 'nav-rules', 'nav-profile', 'nav-messages', 'nav-wheel'].forEach(id => {
+    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-announcements', 'nav-rules', 'nav-profile', 'nav-messages', 'nav-wheel', 'nav-live'].forEach(id => {
       var el = document.getElementById(id);
       if (el) el.classList.remove('active');
     });
@@ -3895,6 +4296,11 @@
         document.getElementById('wheelPage').classList.remove('hidden');
         document.getElementById('nav-wheel').classList.add('active');
         renderWheel();
+        break;
+      case 'live':
+        document.getElementById('livePage').classList.remove('hidden');
+        document.getElementById('nav-live').classList.add('active');
+        renderLivePage();
         break;
     }
   }
@@ -4028,6 +4434,9 @@
 
     // Update feature tiles
     updateFeatureTiles();
+    // Update goal tracker + birthday banner
+    updateGoalTracker();
+    checkBirthdays();
 
     if (videos.length === 0) {
       container.innerHTML = '<div class="empty-feed"><div class="big-emoji">😴</div><p>No videos yet!! Be the first to post something cool!</p></div>';
@@ -6099,8 +6508,375 @@
     db.ref('freeSpins/' + currentUser).set(currentFree + 4);
     db.ref('subRewardClaimed/' + currentUser).set(true);
 
+    // Play confetti celebration!
+    spawnConfetti();
+
     var popup = document.getElementById('rewardPopup');
-    if (popup) popup.remove();
+    if (popup) {
+      setTimeout(function() { popup.remove(); }, 2000);
+    }
+  }
+
+  // ===== CONFETTI =====
+  function spawnConfetti() {
+    var container = document.createElement('div');
+    container.className = 'confetti-container';
+    document.body.appendChild(container);
+    var colors = ['#ff00ff', '#00ffff', '#ffff00', '#ff0080', '#00ff88', '#ff8800', '#8800ff', 'gold', '#ff4444', '#44ff44'];
+    for (var i = 0; i < 40; i++) {
+      var piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = (Math.random() * 100) + '%';
+      piece.style.top = (40 + Math.random() * 20) + '%';
+      piece.style.setProperty('--x', (Math.random() * 200 - 100) + 'px');
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDelay = (Math.random() * 0.5) + 's';
+      piece.style.width = (6 + Math.random() * 8) + 'px';
+      piece.style.height = (6 + Math.random() * 8) + 'px';
+      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      container.appendChild(piece);
+    }
+    setTimeout(function() { container.remove(); }, 3500);
+  }
+
+  // ===== 100-USER GOAL =====
+  function updateGoalTracker() {
+    var count = Object.keys(cachedUsers).length;
+    var goalCount = document.getElementById('goalCount');
+    var goalBarFill = document.getElementById('goalBarFill');
+    var goalBarText = document.getElementById('goalBarText');
+    var goalMessage = document.getElementById('goalMessage');
+    if (!goalCount) return;
+
+    goalCount.textContent = count;
+    var pct = Math.min(count / 100 * 100, 100);
+    goalBarFill.style.width = pct + '%';
+    goalBarText.textContent = Math.round(pct) + '%';
+
+    if (count >= 100) {
+      goalMessage.innerHTML = '<div class="goal-complete">🎉 WE DID IT! 100 USERS! 🎉</div>';
+    } else {
+      goalMessage.innerHTML = '<div style="color:#888;font-size:0.8rem;margin-top:4px;">' + (100 - count) + ' more to go!</div>';
+    }
+  }
+
+  // ===== BIRTHDAY SYSTEM =====
+  function checkBirthdays() {
+    var today = new Date();
+    var todayStr = (today.getMonth() + 1 < 10 ? '0' : '') + (today.getMonth() + 1) + '-' + (today.getDate() < 10 ? '0' : '') + today.getDate();
+    var birthdayUsers = [];
+
+    Object.keys(cachedUsers).forEach(function(username) {
+      var user = cachedUsers[username];
+      if (user && user.birthday === todayStr) {
+        birthdayUsers.push(username);
+      }
+    });
+
+    var bannerEl = document.getElementById('birthdayBannerFeed');
+    if (!bannerEl) return;
+
+    if (birthdayUsers.length > 0) {
+      var names = birthdayUsers.map(function(u) { return escapeHtml(u); }).join(', ');
+      bannerEl.innerHTML = '<div class="birthday-banner">'
+        + '<div class="birthday-title">🎂 Happy Birthday ' + names + '! 🎂</div>'
+        + '</div>';
+      // Spawn birthday emojis
+      spawnBirthdayEmojis();
+    } else {
+      bannerEl.innerHTML = '';
+    }
+  }
+
+  function spawnBirthdayEmojis() {
+    var existing = document.querySelector('.birthday-emojis');
+    if (existing) existing.remove();
+
+    var container = document.createElement('div');
+    container.className = 'birthday-emojis';
+    document.body.appendChild(container);
+    var emojis = ['🎂', '🎉', '🎈', '🥳', '🎁', '🎊', '🍰', '🧁'];
+    for (var i = 0; i < 20; i++) {
+      var emoji = document.createElement('div');
+      emoji.className = 'birthday-emoji';
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = (Math.random() * 100) + '%';
+      emoji.style.animationDelay = (Math.random() * 3) + 's';
+      emoji.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
+      container.appendChild(emoji);
+    }
+    setTimeout(function() { container.remove(); }, 7000);
+  }
+
+  // ===== LIVESTREAM SYSTEM =====
+  var currentStream = null; // { id, peerConnection, mediaStream }
+  var livestreamListener = null;
+
+  function renderLivePage() {
+    var statusEl = document.getElementById('liveStatus');
+    var listEl = document.getElementById('liveStreamList');
+    var formEl = document.getElementById('startStreamForm');
+    var viewerEl = document.getElementById('liveViewerContainer');
+    viewerEl.classList.add('hidden');
+    formEl.style.display = '';
+    statusEl.style.display = '';
+    listEl.innerHTML = '';
+
+    // Listen for active streams
+    if (livestreamListener) db.ref('livestreams').off('value', livestreamListener);
+    livestreamListener = db.ref('livestreams').on('value', function(snap) {
+      var streams = snap.val() || {};
+      var activeStreams = [];
+      Object.keys(streams).forEach(function(id) {
+        if (streams[id].active) {
+          activeStreams.push({ id: id, data: streams[id] });
+        }
+      });
+
+      if (activeStreams.length === 0) {
+        statusEl.textContent = 'No one is live right now. Be the first!';
+        statusEl.style.display = '';
+        listEl.innerHTML = '';
+        // Show start form only if no one is live (1 at a time)
+        formEl.style.display = '';
+      } else {
+        statusEl.style.display = 'none';
+        // Hide start form if someone is already live
+        var currentUser = getCurrentUser();
+        var isStreamer = activeStreams.some(function(s) { return s.data.streamer === currentUser; });
+        formEl.style.display = isStreamer ? 'none' : 'none'; // hide for everyone when a stream is active
+
+        listEl.innerHTML = activeStreams.map(function(s) {
+          return '<div class="live-stream-card" onclick="watchStream(\'' + s.id + '\')">'
+            + '<div><span class="live-dot"></span><span class="live-stream-title">' + escapeHtml(s.data.title || 'Untitled Stream') + '</span></div>'
+            + '<div class="live-stream-info">by ' + escapeHtml(s.data.streamer) + ' · ' + (s.data.viewerCount || 0) + ' watching</div>'
+            + '</div>';
+        }).join('');
+      }
+    });
+  }
+
+  function startLiveStream() {
+    var titleInput = document.getElementById('streamTitleInput');
+    var title = titleInput.value.trim();
+    if (!title) { alert('Give your stream a title!'); return; }
+
+    var modCheck = checkContentModeration(title);
+    if (!modCheck.ok) { alert(modCheck.message); return; }
+
+    // Check if anyone is already streaming (only 1 at a time)
+    db.ref('livestreams').once('value').then(function(snap) {
+      var streams = snap.val() || {};
+      var hasActive = Object.keys(streams).some(function(id) { return streams[id].active; });
+      if (hasActive) {
+        alert('Someone is already live! Only 1 stream at a time.');
+        return;
+      }
+
+      // Request screen share + mic
+      navigator.mediaDevices.getDisplayMedia({ video: true, audio: true }).then(function(screenStream) {
+        // Try to get mic audio too
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(function(micStream) {
+          // Combine screen video + mic audio
+          var combined = new MediaStream();
+          screenStream.getVideoTracks().forEach(function(t) { combined.addTrack(t); });
+          micStream.getAudioTracks().forEach(function(t) { combined.addTrack(t); });
+          setupStream(combined, title, screenStream, micStream);
+        }).catch(function() {
+          // No mic, just screen
+          setupStream(screenStream, title, screenStream, null);
+        });
+      }).catch(function(err) {
+        alert('Screen sharing was cancelled or not supported.');
+        console.error(err);
+      });
+    });
+  }
+
+  function setupStream(mediaStream, title, screenStream, micStream) {
+    var currentUser = getCurrentUser();
+    var streamId = currentUser + '_' + Date.now();
+
+    db.ref('livestreams/' + streamId).set({
+      streamer: currentUser,
+      title: title,
+      active: true,
+      started: Date.now(),
+      viewerCount: 0,
+      reports: 0
+    });
+
+    // Show own stream
+    var videoEl = document.getElementById('liveVideo');
+    videoEl.srcObject = mediaStream;
+    document.getElementById('liveViewerContainer').classList.remove('hidden');
+    document.getElementById('startStreamForm').style.display = 'none';
+    document.getElementById('liveStatus').style.display = 'none';
+    document.getElementById('liveStreamList').innerHTML = '';
+    document.getElementById('liveViewerCount').textContent = '🔴 YOU ARE LIVE';
+    document.getElementById('liveControls').innerHTML = '<button class="live-btn live-btn-stop" onclick="stopStream()">STOP STREAM</button>';
+
+    currentStream = { id: streamId, mediaStream: mediaStream, screenStream: screenStream, micStream: micStream };
+
+    // Auto-end after 30 minutes
+    setTimeout(function() {
+      if (currentStream && currentStream.id === streamId) {
+        stopStream();
+        alert('Stream ended! 30 minute limit reached.');
+      }
+    }, 30 * 60 * 1000);
+
+    // End stream if screen share stops
+    mediaStream.getVideoTracks()[0].onended = function() {
+      stopStream();
+    };
+  }
+
+  function stopStream() {
+    if (!currentStream) return;
+    // Stop all tracks
+    if (currentStream.mediaStream) currentStream.mediaStream.getTracks().forEach(function(t) { t.stop(); });
+    if (currentStream.screenStream) currentStream.screenStream.getTracks().forEach(function(t) { t.stop(); });
+    if (currentStream.micStream) currentStream.micStream.getTracks().forEach(function(t) { t.stop(); });
+
+    db.ref('livestreams/' + currentStream.id + '/active').set(false);
+    currentStream = null;
+
+    document.getElementById('liveVideo').srcObject = null;
+    document.getElementById('liveViewerContainer').classList.add('hidden');
+    renderLivePage();
+  }
+
+  function watchStream(streamId) {
+    // For now, show a simplified viewer (full WebRTC P2P requires TURN servers)
+    // Instead, show stream info and let viewers know they're watching
+    db.ref('livestreams/' + streamId).once('value').then(function(snap) {
+      var data = snap.val();
+      if (!data || !data.active) {
+        alert('This stream has ended!');
+        return;
+      }
+
+      var currentUser = getCurrentUser();
+      if (data.streamer === currentUser) return; // Don't watch your own stream
+
+      // Increment viewer count
+      db.ref('livestreams/' + streamId + '/viewerCount').transaction(function(count) {
+        return (count || 0) + 1;
+      });
+
+      document.getElementById('liveStreamList').innerHTML = '';
+      document.getElementById('startStreamForm').style.display = 'none';
+      document.getElementById('liveStatus').style.display = 'none';
+      document.getElementById('liveViewerContainer').classList.remove('hidden');
+      document.getElementById('liveViewerCount').innerHTML = '<span class="live-dot"></span> LIVE · ' + escapeHtml(data.title) + ' · by ' + escapeHtml(data.streamer);
+      document.getElementById('liveVideo').style.display = 'none';
+
+      // Show watching message + controls
+      var viewerArea = document.querySelector('.live-viewer-area');
+      viewerArea.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:200px;color:#888;font-size:1.1rem;padding:20px;text-align:center;">'
+        + '📺 Watching ' + escapeHtml(data.streamer) + '\'s screen share...<br>🔊 Listen for their voice!'
+        + '</div>';
+
+      document.getElementById('liveControls').innerHTML =
+        '<button class="live-btn live-btn-report" onclick="reportStream(\'' + streamId + '\')">🚩 Report</button>'
+        + '<button class="live-btn live-btn-back" onclick="leaveLiveView(\'' + streamId + '\')">← Back</button>';
+    });
+  }
+
+  function reportStream(streamId) {
+    if (confirm('Report this stream as inappropriate?')) {
+      db.ref('livestreams/' + streamId + '/reports').transaction(function(count) {
+        return (count || 0) + 1;
+      }).then(function() {
+        db.ref('livestreams/' + streamId + '/reports').once('value').then(function(snap) {
+          var reports = snap.val() || 0;
+          if (reports >= 3) {
+            db.ref('livestreams/' + streamId + '/active').set(false);
+            alert('Stream shut down due to reports.');
+            leaveLiveView(streamId);
+          } else {
+            alert('Report submitted. (' + reports + '/3)');
+          }
+        });
+      });
+    }
+  }
+
+  function leaveLiveView(streamId) {
+    // Decrement viewer count
+    db.ref('livestreams/' + streamId + '/viewerCount').transaction(function(count) {
+      return Math.max((count || 0) - 1, 0);
+    });
+    document.getElementById('liveViewerContainer').classList.add('hidden');
+    document.getElementById('liveVideo').style.display = '';
+    renderLivePage();
+  }
+
+  // ===== RIZZ KING DAILY REWARD =====
+  function checkDailyKingReward() {
+    var currentUser = getCurrentUser();
+    if (!currentUser) return;
+
+    var today = getTodayString();
+    var kingToday = rizzKingHistory[today];
+    if (!kingToday || kingToday !== currentUser) return;
+
+    // Check if already claimed today's king reward
+    var claimKey = 'vrizz_king_reward_' + today;
+    if (sessionStorage.getItem(claimKey)) return;
+
+    // Check if they were king yesterday too (consecutive)
+    var yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    var yStr = yesterday.getFullYear() + '-' + ((yesterday.getMonth() + 1) < 10 ? '0' : '') + (yesterday.getMonth() + 1) + '-' + (yesterday.getDate() < 10 ? '0' : '') + yesterday.getDate();
+    var kingYesterday = rizzKingHistory[yStr];
+
+    if (kingYesterday === currentUser) {
+      // Consecutive king! Give free spin + random animation
+      sessionStorage.setItem(claimKey, 'true');
+      var currentFree = cachedFreeSpins[currentUser] || 0;
+      db.ref('freeSpins/' + currentUser).set(currentFree + 1);
+      showKingAnimation();
+    }
+  }
+
+  function showKingAnimation() {
+    var animations = [
+      function() { spawnConfetti(); },
+      function() { spawnBirthdayEmojis(); },
+      function() {
+        // Golden flash
+        var flash = document.createElement('div');
+        flash.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,215,0,0.3);z-index:1002;pointer-events:none;animation:rewardFadeIn 0.3s ease reverse forwards;';
+        document.body.appendChild(flash);
+        setTimeout(function() { flash.remove(); }, 800);
+      },
+      function() {
+        // Crown rain
+        var container = document.createElement('div');
+        container.className = 'birthday-emojis';
+        document.body.appendChild(container);
+        for (var i = 0; i < 15; i++) {
+          var e = document.createElement('div');
+          e.className = 'birthday-emoji';
+          e.textContent = '👑';
+          e.style.left = (Math.random() * 100) + '%';
+          e.style.animationDelay = (Math.random() * 2) + 's';
+          container.appendChild(e);
+        }
+        setTimeout(function() { container.remove(); }, 5000);
+      }
+    ];
+    var pick = animations[Math.floor(Math.random() * animations.length)];
+    pick();
+
+    // Show toast
+    var toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,gold,#ff8c00);color:#0f0024;padding:12px 24px;border-radius:25px;font-family:Bangers,cursive;font-size:1.1rem;z-index:1003;text-align:center;box-shadow:0 4px 20px rgba(255,215,0,0.5);';
+    toast.textContent = '👑 Still the King! +1 Free Spin!';
+    document.body.appendChild(toast);
+    setTimeout(function() { toast.remove(); }, 3000);
   }
 
   // ===== INIT =====
