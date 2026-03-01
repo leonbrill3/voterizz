@@ -3904,7 +3904,7 @@
       db.ref('users/' + currentUser + '/birthday').set(month + '-' + day);
     }
     document.getElementById('birthdayModal').classList.add('hidden');
-    enterApp();
+    doEnterApp();
   }
 
   function toggleAuthMode() {
@@ -4118,13 +4118,33 @@
   }
 
   function enterApp() {
+    var currentUser = getCurrentUser();
+
+    // Check if user has a birthday set - if not, ask them first
+    db.ref('users/' + currentUser + '/birthday').once('value').then(function(snap) {
+      if (!snap.val()) {
+        // No birthday set - show birthday modal before entering app
+        document.getElementById('authScreen').classList.add('hidden');
+        showBirthdayModal();
+        return;
+      }
+      // Birthday already set, continue normally
+      doEnterApp();
+    }).catch(function() {
+      doEnterApp();
+    });
+  }
+
+  function doEnterApp() {
+    var currentUser = getCurrentUser();
+    document.getElementById('birthdayModal').classList.add('hidden');
     document.getElementById('authScreen').classList.add('hidden');
     document.getElementById('navbar').classList.remove('hidden');
     // Load own avatar and set nav
-    loadUserProfile(getCurrentUser()).then(function() {
-      document.getElementById('navUsername').innerHTML = getAvatarHtml(getCurrentUser()) + ' ' + escapeHtml(getCurrentUser());
+    loadUserProfile(currentUser).then(function() {
+      document.getElementById('navUsername').innerHTML = getAvatarHtml(currentUser) + ' ' + escapeHtml(currentUser);
     });
-    document.getElementById('navUsername').textContent = getCurrentUser();
+    document.getElementById('navUsername').textContent = currentUser;
 
     // Check if user is admin
     checkAdminStatus();
