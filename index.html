@@ -2854,6 +2854,43 @@
     100% { transform: translateY(-20vh) translateX(var(--x)) scale(0.3) rotate(720deg); opacity: 0; }
   }
 
+  /* ===== ANIMATION CARDS (shareable) ===== */
+  .anim-card-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85); z-index: 1005;
+    display: flex; align-items: center; justify-content: center;
+    animation: rewardFadeIn 0.3s ease;
+  }
+  .anim-card {
+    width: 280px; height: 350px;
+    background: linear-gradient(135deg, #1a0033, #0f0024);
+    border: 3px solid gold;
+    border-radius: 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    box-shadow: 0 0 40px rgba(255,215,0,0.3);
+  }
+  .anim-card-icon { font-size: 5rem; margin-bottom: 10px; }
+  .anim-card-name { font-family: 'Bangers', cursive; font-size: 1.8rem; color: gold; text-align: center; }
+  .anim-card-owner { color: #aaa; font-size: 0.9rem; margin-top: 6px; }
+  .anim-card-actions { display: flex; gap: 10px; margin-top: 18px; }
+  .anim-card-actions button {
+    padding: 8px 16px; border: none; border-radius: 20px;
+    font-family: 'Bangers', cursive; font-size: 1rem; cursor: pointer;
+  }
+  .anim-card-share { background: linear-gradient(45deg, #ff00ff, #8800ff); color: #fff; }
+  .anim-card-save { background: linear-gradient(45deg, #00ffff, #0088ff); color: #fff; }
+  .anim-card-close { background: rgba(255,255,255,0.1); color: #fff; }
+
+  /* ===== BIRTHDAY PROFILE ANIMATION ===== */
+  .bday-profile-glow {
+    animation: bdayGlow 1.5s ease-in-out infinite alternate;
+  }
+  @keyframes bdayGlow {
+    0% { box-shadow: 0 0 15px rgba(255,0,255,0.5), 0 0 30px rgba(255,0,255,0.2); }
+    100% { box-shadow: 0 0 30px rgba(255,0,255,0.8), 0 0 60px rgba(255,0,255,0.4), 0 0 80px rgba(136,0,255,0.3); }
+  }
+
   /* ===== 100-USER GOAL ===== */
   .goal-tracker {
     background: rgba(255,255,255,0.06);
@@ -3524,6 +3561,7 @@
       </div>
     </div>
     <div id="subscribersList" class="subscribers-list hidden"></div>
+    <div id="bdayCountdown" style="display:none;margin-top:12px;text-align:center;background:linear-gradient(135deg,rgba(255,0,255,0.1),rgba(136,0,255,0.1));border:1px solid rgba(255,0,255,0.3);border-radius:15px;padding:12px;"></div>
   </div>
   <button class="settings-btn" onclick="showSettingsModal()">⚙️ Settings</button>
   <div class="profile-videos-title">Your Videos</div>
@@ -5188,6 +5226,35 @@
       document.getElementById('profileSubscribers').textContent = getSubscriberCount(targetUser);
       document.getElementById('profileSubscriptions').textContent = getSubscriptionCount(targetUser);
 
+      // Birthday countdown (only on your own profile)
+      var bdayEl = document.getElementById('bdayCountdown');
+      if (bdayEl) {
+        if (isOwnProfile && profile.birthday) {
+          var parts = profile.birthday.split('-');
+          var bMonth = parseInt(parts[0]) - 1;
+          var bDay = parseInt(parts[1]);
+          var now = new Date();
+          var thisYear = now.getFullYear();
+          var nextBday = new Date(thisYear, bMonth, bDay);
+          if (nextBday <= now) nextBday = new Date(thisYear + 1, bMonth, bDay);
+          var diff = Math.ceil((nextBday - now) / (1000 * 60 * 60 * 24));
+          if (diff === 0 || (now.getMonth() === bMonth && now.getDate() === bDay)) {
+            bdayEl.innerHTML = '<div style="font-family:Bangers,cursive;font-size:1.3rem;color:#ff00ff;">🎂 TODAY IS YOUR BIRTHDAY! 🎂</div>';
+            // Play birthday animation on your profile!
+            var bdayAnimKey = 'vrizz_bday_anim_' + now.getFullYear() + '-' + (now.getMonth()+1) + '-' + now.getDate();
+            if (!sessionStorage.getItem(bdayAnimKey)) {
+              sessionStorage.setItem(bdayAnimKey, 'true');
+              setTimeout(function() { playBirthdayProfileAnimation(); }, 500);
+            }
+          } else {
+            bdayEl.innerHTML = '<div style="font-family:Bangers,cursive;font-size:1.1rem;color:#ff00ff;">🎂 ' + diff + ' day' + (diff !== 1 ? 's' : '') + ' until your birthday! 🎂</div>';
+          }
+          bdayEl.style.display = '';
+        } else {
+          bdayEl.style.display = 'none';
+        }
+      }
+
       // Action buttons area
       var settingsBtnEl = document.querySelector('#profilePage .settings-btn');
       var editProfileBtnEl = document.getElementById('profileEditBtn');
@@ -5294,7 +5361,8 @@
         avatar: data.avatar || '😎',
         bio: data.bio || '',
         profileColor: data.profileColor || '#00ffff',
-        profilePhoto: data.profilePhoto || ''
+        profilePhoto: data.profilePhoto || '',
+        birthday: data.birthday || ''
       };
       avatarCache[username] = profile;
       return profile;
@@ -6296,10 +6364,10 @@
     // Show current prizes
     var prizeKeys = Object.keys(myPrizes).filter(function(k) { return myPrizes[k]; });
     if (prizeKeys.length > 0) {
-      html += '<div style="margin-bottom:20px;"><span style="color:#aaa;">Your prizes: </span>';
+      html += '<div style="margin-bottom:20px;"><span style="color:#aaa;">Your prizes (tap to share): </span>';
       prizeKeys.forEach(function(k) {
         var prize = WHEEL_PRIZES.find(function(p) { return p.key === k; });
-        if (prize) html += '<span class="prize-badge" style="font-size:1.3rem;margin:0 4px;" title="' + prize.name + '">' + prize.icon + '</span>';
+        if (prize) html += '<span class="prize-badge" style="font-size:1.3rem;margin:0 4px;cursor:pointer;" title="' + prize.name + '" onclick="showAnimationCard(\'' + k + '\')">' + prize.icon + '</span>';
       });
       html += '</div>';
     }
@@ -6465,7 +6533,7 @@
 
         var resultEl = document.getElementById('wheelResult');
         if (resultEl) {
-          resultEl.innerHTML = '🎉 You won: ' + prize.icon + ' ' + prize.name + '! 🎉';
+          resultEl.innerHTML = '🎉 You won: ' + prize.icon + ' ' + prize.name + '! 🎉<br><button style="margin-top:8px;padding:6px 16px;border:none;border-radius:15px;background:linear-gradient(45deg,#ff00ff,#8800ff);color:#fff;font-family:Bangers,cursive;cursor:pointer;" onclick="showAnimationCard(\'' + prize.key + '\')">SHARE / SAVE</button>';
         }
 
         // Re-render wheel after a moment to update free spins count / button state
@@ -6586,6 +6654,115 @@
       container.appendChild(piece);
     }
     setTimeout(function() { container.remove(); }, 3500);
+  }
+
+  // ===== SHAREABLE ANIMATION CARDS =====
+  function showAnimationCard(prizeKey) {
+    var currentUser = getCurrentUser();
+    var prize = WHEEL_PRIZES.find(function(p) { return p.key === prizeKey; });
+    if (!prize) return;
+
+    var overlay = document.createElement('div');
+    overlay.className = 'anim-card-overlay';
+    overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+
+    var cardBorder = 'gold';
+    if (prizeKey === 'fire-border') cardBorder = '#ff4400';
+    if (prizeKey === 'rainbow-name') cardBorder = '#ff00ff';
+    if (prizeKey === 'neon-glow') cardBorder = '#00ffff';
+
+    overlay.innerHTML = '<div class="anim-card" style="border-color:' + cardBorder + ';">' +
+      '<div class="anim-card-icon">' + prize.icon + '</div>' +
+      '<div class="anim-card-name">' + escapeHtml(prize.name) + '</div>' +
+      '<div class="anim-card-owner">Earned by @' + escapeHtml(currentUser) + '</div>' +
+      '<div class="anim-card-actions">' +
+        '<button class="anim-card-share" onclick="shareAnimationCard(\'' + prizeKey + '\')">SHARE</button>' +
+        '<button class="anim-card-save" onclick="saveAnimationCard(this)">SAVE</button>' +
+        '<button class="anim-card-close" onclick="this.closest(\'.anim-card-overlay\').remove()">CLOSE</button>' +
+      '</div>' +
+    '</div>';
+
+    document.body.appendChild(overlay);
+
+    // Play a mini animation on the card
+    if (prizeKey === 'golden-border' || prizeKey === 'fire-border') {
+      spawnConfetti();
+    }
+  }
+
+  function shareAnimationCard(prizeKey) {
+    var currentUser = getCurrentUser();
+    var prize = WHEEL_PRIZES.find(function(p) { return p.key === prizeKey; });
+    if (!prize) return;
+    var text = '🏆 I earned ' + prize.icon + ' ' + prize.name + ' on vote.rizz! 🔥\nJoin me: https://voterizz.onrender.com/?ref=' + encodeURIComponent(currentUser);
+    if (navigator.share) {
+      navigator.share({ title: 'vote.rizz Prize!', text: text }).catch(function() {});
+    } else {
+      navigator.clipboard.writeText(text).then(function() {
+        alert('Copied to clipboard!');
+      });
+    }
+  }
+
+  function saveAnimationCard(btn) {
+    // Create a canvas snapshot of the card
+    var card = btn.closest('.anim-card');
+    var canvas = document.createElement('canvas');
+    canvas.width = 560; canvas.height = 700;
+    var ctx = canvas.getContext('2d');
+
+    // Draw background
+    var grad = ctx.createLinearGradient(0, 0, 560, 700);
+    grad.addColorStop(0, '#1a0033');
+    grad.addColorStop(1, '#0f0024');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.roundRect(0, 0, 560, 700, 40);
+    ctx.fill();
+
+    // Gold border
+    ctx.strokeStyle = 'gold';
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.roundRect(3, 3, 554, 694, 38);
+    ctx.stroke();
+
+    // Icon
+    ctx.font = '100px serif';
+    ctx.textAlign = 'center';
+    var iconEl = card.querySelector('.anim-card-icon');
+    ctx.fillText(iconEl.textContent, 280, 280);
+
+    // Name
+    ctx.font = 'bold 36px Bangers, cursive, sans-serif';
+    ctx.fillStyle = 'gold';
+    var nameEl = card.querySelector('.anim-card-name');
+    ctx.fillText(nameEl.textContent, 280, 360);
+
+    // Owner
+    ctx.font = '18px sans-serif';
+    ctx.fillStyle = '#aaa';
+    var ownerEl = card.querySelector('.anim-card-owner');
+    ctx.fillText(ownerEl.textContent, 280, 400);
+
+    // vote.rizz watermark
+    ctx.font = 'bold 24px Bangers, cursive, sans-serif';
+    ctx.fillStyle = 'rgba(255,0,255,0.6)';
+    ctx.fillText('vote.rizz', 280, 640);
+
+    // Download
+    var link = document.createElement('a');
+    link.download = 'voterizz-prize.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+
+  // ===== BIRTHDAY ON YOUR PROFILE =====
+  function playBirthdayProfileAnimation() {
+    var profileHeader = document.querySelector('#profilePage .profile-header');
+    if (profileHeader) profileHeader.classList.add('bday-profile-glow');
+    spawnBirthdayEmojis();
+    spawnConfetti();
   }
 
   // ===== 100-USER GOAL =====
