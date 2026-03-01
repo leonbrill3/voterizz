@@ -3181,6 +3181,10 @@
   <!-- Main Announcement -->
   <div class="announcement-banner" style="margin-bottom:15px;">
     <div class="announcement-title">POST & SHARE & VOTE 😊</div>
+    <div style="margin-top:8px;">
+      <button onclick="copyShareLink()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:8px 18px;border-radius:20px;font-family:'Bangers',cursive;font-size:0.95rem;cursor:pointer;letter-spacing:1px;">📋 COPY LINK TO SHARE</button>
+    </div>
+    <div id="copyConfirm" style="color:#0f0;font-size:0.8rem;margin-top:4px;display:none;">Link copied!</div>
   </div>
 
   <!-- Birthday Banner (shown if someone has a birthday today) -->
@@ -6560,6 +6564,21 @@
   }
 
   // ===== 100-USER GOAL =====
+  function copyShareLink() {
+    var link = 'https://voterizz.onrender.com';
+    if (navigator.share) {
+      navigator.share({ title: 'vote.rizz', text: 'Check out vote.rizz - post videos and get rated!', url: link });
+    } else {
+      navigator.clipboard.writeText(link).then(function() {
+        var confirm = document.getElementById('copyConfirm');
+        if (confirm) {
+          confirm.style.display = '';
+          setTimeout(function() { confirm.style.display = 'none'; }, 2000);
+        }
+      });
+    }
+  }
+
   function updateGoalTracker() {
     var count = Object.keys(cachedUsers).length;
     var goalCount = document.getElementById('goalCount');
