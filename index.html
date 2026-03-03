@@ -5913,33 +5913,37 @@
   }
 
   // ===== AI POSTS =====
-  var aiPostTitles = [
-    'Rate my vibe check',
-    'Is this giving main character energy?',
-    'POV: you woke up and chose rizz',
-    'No cap, this goes hard',
-    'Tell me this isn\'t fire',
-    'W or L? Be honest',
-    'This is lowkey underrated',
-    'Unmatched energy right here',
-    'Bet you can\'t rate this below a 9',
-    'Living rent free in your head',
-    'The rizz is unreal',
-    'Vibe check: am I valid?',
-    'Rate the aesthetic',
-    'This hits different fr fr',
-    'Main character moment',
-    'Certified classic right here',
-    'Top tier content incoming',
-    'If this ain\'t a 10 I quit',
-    'Sleeper hit of the year',
-    'Hot take: this is a masterpiece'
-  ];
-
-  var aiPostImages = [
-    'https://picsum.photos/seed/' + Math.random().toString(36).slice(2) + '/600/400',
-    'https://picsum.photos/seed/' + Math.random().toString(36).slice(2) + '/600/400',
-    'https://picsum.photos/seed/' + Math.random().toString(36).slice(2) + '/600/400'
+  var aiPostThemes = [
+    { title: 'Rate this sunset', search: 'sunset,sky,golden-hour' },
+    { title: 'This view is unreal', search: 'landscape,mountains,nature' },
+    { title: 'Dream car energy', search: 'sports-car,luxury,supercar' },
+    { title: 'Drip check', search: 'fashion,streetwear,style' },
+    { title: 'Would you live here?', search: 'mansion,luxury-house,architecture' },
+    { title: 'Aesthetic or nah?', search: 'aesthetic,pastel,vaporwave' },
+    { title: 'This meal goes crazy', search: 'food,gourmet,restaurant' },
+    { title: 'Beach vibes only', search: 'beach,ocean,tropical' },
+    { title: 'City lights hit different', search: 'city,night,skyline' },
+    { title: 'Rate this fit', search: 'outfit,sneakers,streetstyle' },
+    { title: 'Nature is undefeated', search: 'waterfall,forest,nature' },
+    { title: 'Snow day aesthetic', search: 'snow,winter,mountains' },
+    { title: 'This room is a vibe', search: 'room,interior,neon' },
+    { title: 'Wild animal energy', search: 'wildlife,animal,lion' },
+    { title: 'Space is insane', search: 'space,galaxy,nebula' },
+    { title: 'Rate this art', search: 'art,graffiti,mural' },
+    { title: 'Pool day W or L?', search: 'pool,summer,resort' },
+    { title: 'Skateboard check', search: 'skateboard,skatepark,action' },
+    { title: 'Gaming setup rate 1-10', search: 'gaming,setup,rgb' },
+    { title: 'This puppy tho', search: 'puppy,dog,cute' },
+    { title: 'Sunrise or sunset?', search: 'sunrise,clouds,colorful-sky' },
+    { title: 'Rate the kicks', search: 'sneakers,jordan,shoes' },
+    { title: 'Road trip vibes', search: 'road-trip,highway,adventure' },
+    { title: 'This dessert is crazy', search: 'dessert,cake,chocolate' },
+    { title: 'Mountain top view', search: 'mountain-top,hiking,summit' },
+    { title: 'Aquarium aesthetic', search: 'aquarium,fish,underwater' },
+    { title: 'Rainy day mood', search: 'rain,city-rain,cozy' },
+    { title: 'Fireplace vibes', search: 'fireplace,cozy,cabin' },
+    { title: 'Northern lights are INSANE', search: 'aurora,northern-lights' },
+    { title: 'This cat is a mood', search: 'cat,kitten,funny-cat' }
   ];
 
   function generateAIPost() {
@@ -5949,14 +5953,16 @@
     btn.disabled = true;
     btn.textContent = '🤖 GENERATING...';
 
-    var title = aiPostTitles[Math.floor(Math.random() * aiPostTitles.length)];
+    var theme = aiPostThemes[Math.floor(Math.random() * aiPostThemes.length)];
+    var searchTerms = theme.search.split(',');
+    var pick = searchTerms[Math.floor(Math.random() * searchTerms.length)];
     var seed = Math.random().toString(36).slice(2, 10);
-    var imageUrl = 'https://picsum.photos/seed/' + seed + '/600/400';
+    var imageUrl = 'https://source.unsplash.com/600x400/?' + encodeURIComponent(pick) + '&' + seed;
 
     var id = 'ai_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 
     db.ref('videos/' + id).set({
-      title: '🤖 ' + title,
+      title: '🤖 ' + theme.title,
       url: imageUrl,
       type: 'image',
       author: currentUser,
@@ -5967,8 +5973,12 @@
     var successEl = document.getElementById('postSuccess');
     successEl.style.color = '#0f0';
     successEl.textContent = '🤖 AI post created! Check the feed!';
-    btn.disabled = false;
-    btn.textContent = '🤖 AI GENERATE A POST';
+
+    // Cooldown - re-enable after 3 seconds
+    setTimeout(function() {
+      btn.disabled = false;
+      btn.textContent = '🤖 AI GENERATE A POST';
+    }, 3000);
   }
 
   function editComment(videoId, commentId) {
