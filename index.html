@@ -4887,15 +4887,7 @@
       }
     }
 
-    // Check for excessive caps (yelling/aggressive)
-    const capsRatio = (text.match(/[A-Z]/g) || []).length / text.length;
-    if (text.length > 10 && capsRatio > 0.7) {
-      return {
-        ok: false,
-        reason: 'excessive caps',
-        message: '🚫 Please don\'t use ALL CAPS - it looks like yelling!'
-      };
-    }
+    // All caps allowed
 
     // Check for spam (repeated characters)
     if (/(.)\1{4,}/.test(text)) {
