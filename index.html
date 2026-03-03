@@ -5197,7 +5197,7 @@
 
       // Username
       var usernameEl = document.getElementById('profileUsername');
-      usernameEl.textContent = targetUser;
+      usernameEl.innerHTML = escapeHtml(targetUser) + (profile.displayName ? '<div style="font-size:1rem;color:#aaa;font-family:sans-serif;margin-top:2px;">' + escapeHtml(profile.displayName) + '</div>' : '');
       usernameEl.style.color = profileColor;
 
       // Bio
@@ -5375,7 +5375,8 @@
         bio: data.bio || '',
         profileColor: data.profileColor || '#00ffff',
         profilePhoto: data.profilePhoto || '',
-        birthday: data.birthday || ''
+        birthday: data.birthday || '',
+        displayName: data.displayName || ''
       };
       avatarCache[username] = profile;
       return profile;
@@ -5398,7 +5399,9 @@
       if (userPrizes[username]['rainbow-name']) nameClass = ' prize-rainbow-name';
       else if (userPrizes[username]['neon-glow']) nameClass = ' prize-neon-glow';
     }
-    return '<span class="clickable-user' + nameClass + '" onclick="viewUserProfile(\'' + escapeHtml(username) + '\')">' + getAvatarHtml(username) + ' ' + escapeHtml(username) + badges + '</span>';
+    var cached = avatarCache[username];
+    var realName = (cached && cached.displayName) ? '<div style="font-size:0.75rem;color:#aaa;margin-top:1px;">' + escapeHtml(cached.displayName) + '</div>' : '';
+    return '<span class="clickable-user' + nameClass + '" onclick="viewUserProfile(\'' + escapeHtml(username) + '\')" style="display:inline-block;">' + getAvatarHtml(username) + ' ' + escapeHtml(username) + badges + realName + '</span>';
   }
 
   function getPrizeBadges(username) {
