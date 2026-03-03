@@ -5313,6 +5313,18 @@
         dmBtn.textContent = '💬 Message';
         dmBtn.onclick = function() { openDMFromProfile(targetUser); };
         headerEl.appendChild(dmBtn);
+
+        // Admin: Delete Account button
+        if (isAdmin) {
+          var oldDelAccBtn = document.getElementById('adminDeleteAccBtn');
+          if (oldDelAccBtn) oldDelAccBtn.remove();
+          var delAccBtn = document.createElement('button');
+          delAccBtn.id = 'adminDeleteAccBtn';
+          delAccBtn.style.cssText = 'margin-top:10px;padding:8px 24px;border:2px solid #ff4444;background:rgba(255,0,0,0.15);color:#ff4444;border-radius:25px;font-family:Bangers,cursive;font-size:1rem;cursor:pointer;display:block;width:fit-content;margin-left:auto;margin-right:auto;';
+          delAccBtn.textContent = '🗑️ Delete Account';
+          delAccBtn.onclick = function() { adminDeleteAccount(targetUser); };
+          headerEl.appendChild(delAccBtn);
+        }
       }
 
       // Videos title
@@ -5610,6 +5622,76 @@
         renderFeed();
       }
     });
+  }
+
+  function adminDeleteAccount(username) {
+    if (!isAdmin) return;
+    if (!confirm('Delete @' + username + '\'s account? This removes ALL their data!')) return;
+    if (!confirm('Are you SURE? This cannot be undone!')) return;
+
+    // Delete user data from all Firebase paths
+    var deletions = {};
+    deletions['users/' + username] = null;
+    deletions['admins/' + username] = null;
+    deletions['subscriptions/' + username] = null;
+    deletions['referrals/' + username] = null;
+    deletions['userPrizes/' + username] = null;
+    deletions['wheelSpins/' + username] = null;
+    deletions['freeSpins/' + username] = null;
+    deletions['subRewardClaimed/' + username] = null;
+    db.ref().update(deletions);
+
+    // Delete their videos
+    db.ref('videos').once('value').then(function(snap) {
+      var videos = snap.val() || {};
+      var vidDeletions = {};
+      Object.keys(videos).forEach(function(vid) {
+        if (videos[vid].author === username) {
+          vidDeletions['videos/' + vid] = null;
+        }
+      });
+      if (Object.keys(vidDeletions).length > 0) db.ref().update(vidDeletions);
+    });
+
+    // Remove them from other users' subscriptions
+    db.ref('subscriptions').once('value').then(function(snap) {
+      var subs = snap.val() || {};
+      var subDeletions = {};
+      Object.keys(subs).forEach(function(user) {
+        if (subs[user][username]) {
+          subDeletions['subscriptions/' + user + '/' + username] = null;
+        }
+      });
+      if (Object.keys(subDeletions).length > 0) db.ref().update(subDeletions);
+    });
+
+    // Remove them from other users' referrals
+    db.ref('referrals').once('value').then(function(snap) {
+      var refs = snap.val() || {};
+      var refDeletions = {};
+      Object.keys(refs).forEach(function(user) {
+        if (refs[user][username]) {
+          refDeletions['referrals/' + user + '/' + username] = null;
+        }
+      });
+      if (Object.keys(refDeletions).length > 0) db.ref().update(refDeletions);
+    });
+
+    // Delete DMs involving this user
+    db.ref('dms').once('value').then(function(snap) {
+      var dms = snap.val() || {};
+      var dmDeletions = {};
+      Object.keys(dms).forEach(function(convoId) {
+        if (convoId.includes(username)) {
+          dmDeletions['dms/' + convoId] = null;
+        }
+      });
+      if (Object.keys(dmDeletions).length > 0) db.ref().update(dmDeletions);
+    });
+
+    alert('@' + username + ' has been deleted!');
+    viewingUser = null;
+    showPage('feed');
   }
 
   // ===== EDIT MODAL =====
