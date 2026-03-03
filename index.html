@@ -4969,31 +4969,7 @@
       }
 
       postBtn.disabled = true;
-      postBtn.textContent = 'CHECKING FOR FACES... 🔍';
-      successEl.style.color = '#0ff';
-      successEl.textContent = 'Scanning for faces (this keeps everyone safe!)';
-
-      // Load face detection if needed
-      var modelLoaded = await loadFaceApi();
-
-      if (modelLoaded) {
-        var hasFace = false;
-        if (isImage) {
-          hasFace = await detectFaceInImage(file);
-        } else {
-          hasFace = await detectFaceInVideo(file);
-        }
-
-        if (hasFace) {
-          successEl.style.color = '#ff4444';
-          successEl.textContent = '🚫 FACE DETECTED! For safety, no face pics allowed. Try a different photo/video!';
-          postBtn.disabled = false;
-          postBtn.textContent = 'POST IT! 🎬';
-          return;
-        }
-      }
-
-      // No face detected - proceed with upload
+      // Proceed with upload
       postBtn.textContent = 'UPLOADING... 0%';
       successEl.textContent = '';
       var progressEl = document.getElementById('uploadProgress');
@@ -5553,18 +5529,6 @@
       saveBtn.disabled = true;
 
       try {
-        // Check for faces
-        var modelLoaded = await loadFaceApi();
-        if (modelLoaded) {
-          var hasFace = await detectFaceInImage(pendingProfilePhoto);
-          if (hasFace) {
-            alert('Face detected! For safety, no face pics allowed. Try a different photo!');
-            saveBtn.textContent = 'SAVE PROFILE';
-            saveBtn.disabled = false;
-            return;
-          }
-        }
-
         var ref = storage.ref('profile-photos/' + currentUser + '/' + Date.now());
         await ref.put(pendingProfilePhoto);
         var downloadURL = await ref.getDownloadURL();
