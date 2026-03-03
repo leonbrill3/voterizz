@@ -3190,11 +3190,11 @@
     <div class="auth-box">
       <h2 id="authTitle">Login</h2>
       <div class="auth-error" id="authError"></div>
-      <input type="text" id="authDisplayName" placeholder="Your Real Name (optional)" autocomplete="off" maxlength="30" class="hidden auth-display-name">
+      <input type="text" id="authDisplayName" placeholder="Your Real Name" autocomplete="off" maxlength="30" class="hidden auth-display-name">
       <input type="text" id="authUsername" placeholder="Username" autocomplete="off" maxlength="20">
       <input type="password" id="authPassword" placeholder="Password" maxlength="30">
-      <input type="number" id="authBirthYear" class="hidden" style="display:none;">
-      <div id="swearsNotice" class="hidden" style="color:#ff0;font-size:0.85rem;margin-bottom:12px;text-align:center;">⚠️ Swearing is allowed, but inappropriate behavior is NOT.</div>
+      <input type="number" id="authBirthYear" placeholder="What year were you born?" min="2007" max="2021" class="hidden" style="margin-bottom:15px;">
+      <div id="swearsNotice" class="hidden" style="color:#ff0;font-size:0.85rem;margin-bottom:12px;text-align:center;">⚠️ Swearing is allowed, but inappropriate behavior is NOT. Ages 5-18 only.</div>
       <button class="btn-primary" id="authBtn" onclick="handleAuth()">LET'S GO! 🚀</button>
       <div class="auth-toggle">
         <span id="authToggle" onclick="toggleAuthMode()">Don't have an account? Sign Up!</span>
@@ -3898,7 +3898,7 @@
         }
         referralFromLink = null;
         pendingSignup = null;
-        doEnterApp();
+        showBirthdayModal();
       });
       return;
     }
@@ -3968,7 +3968,7 @@
   function finishReferral() {
     document.getElementById('referralModal').classList.add('hidden');
     pendingSignup = null;
-    doEnterApp();
+    showBirthdayModal();
   }
 
   function showBirthdayModal() {
@@ -4031,12 +4031,22 @@
 
     if (isSignUp) {
       var displayName = document.getElementById('authDisplayName').value.trim();
-      if (displayName) {
-        var nameCheck = checkContentModeration(displayName);
-        if (!nameCheck.ok) {
-          errorEl.textContent = '🚫 That name isn\'t allowed!';
-          return;
-        }
+      if (!displayName || displayName.length < 2) {
+        errorEl.textContent = 'Please enter your real name! 🙏';
+        return;
+      }
+      var nameCheck = checkContentModeration(displayName);
+      if (!nameCheck.ok) {
+        errorEl.textContent = '🚫 That name isn\'t allowed!';
+        return;
+      }
+
+      var birthYear = parseInt(document.getElementById('authBirthYear').value);
+      var currentYear = new Date().getFullYear();
+      var age = currentYear - birthYear;
+      if (!birthYear || age < 5 || age > 18) {
+        errorEl.textContent = 'You gotta be between 5 and 18 to sign up!! 🚫';
+        return;
       }
     }
 
@@ -4199,7 +4209,19 @@
   }
 
   function enterApp() {
-    doEnterApp();
+    var currentUser = getCurrentUser();
+
+    // Check if user has a birthday set - if not, ask them first
+    db.ref('users/' + currentUser + '/birthday').once('value').then(function(snap) {
+      if (!snap.val()) {
+        document.getElementById('authScreen').classList.add('hidden');
+        showBirthdayModal();
+        return;
+      }
+      doEnterApp();
+    }).catch(function() {
+      doEnterApp();
+    });
   }
 
   function doEnterApp() {
