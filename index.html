@@ -7185,7 +7185,7 @@
       db.ref('livestreams/' + streamId + '/viewers/' + viewerId + '/answer').on('value', function(ansSnap) {
         var answer = ansSnap.val();
         if (answer && pc.signalingState === 'have-local-offer') {
-          pc.setRemoteDescription(new RTCSessionDescription(answer)).catch(function(err) {
+          pc.setRemoteDescription(answer).catch(function(err) {
             console.error('Set answer error:', err);
           });
         }
@@ -7226,9 +7226,10 @@
     currentStream.autoEndTimer = autoEndTimer;
 
     // End stream if screen share stops (user clicks "Stop sharing")
-    mediaStream.getVideoTracks()[0].onended = function() {
-      stopStream();
-    };
+    var videoTrack = mediaStream.getVideoTracks()[0];
+    if (videoTrack) {
+      videoTrack.onended = function() { stopStream(); };
+    }
   }
 
   function stopStream() {
@@ -7357,7 +7358,7 @@
         if (!offer || !offer.sdp) return;
         if (pc.signalingState !== 'stable') return;
 
-        pc.setRemoteDescription(new RTCSessionDescription(offer)).then(function() {
+        pc.setRemoteDescription(offer).then(function() {
           return pc.createAnswer();
         }).then(function(answer) {
           return pc.setLocalDescription(answer);
