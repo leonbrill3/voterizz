@@ -3190,11 +3190,11 @@
     <div class="auth-box">
       <h2 id="authTitle">Login</h2>
       <div class="auth-error" id="authError"></div>
-      <input type="text" id="authDisplayName" placeholder="Your Real Name" autocomplete="off" maxlength="30" class="hidden auth-display-name">
+      <input type="text" id="authDisplayName" placeholder="Your Real Name (optional)" autocomplete="off" maxlength="30" class="hidden auth-display-name">
       <input type="text" id="authUsername" placeholder="Username" autocomplete="off" maxlength="20">
       <input type="password" id="authPassword" placeholder="Password" maxlength="30">
-      <input type="number" id="authBirthYear" placeholder="What year were you born?" min="2007" max="2021" class="hidden" style="margin-bottom:15px;">
-      <div id="swearsNotice" class="hidden" style="color:#ff0;font-size:0.85rem;margin-bottom:12px;text-align:center;">⚠️ Swearing is allowed, but inappropriate behavior is NOT. Ages 5-18 only.</div>
+      <input type="number" id="authBirthYear" class="hidden" style="display:none;">
+      <div id="swearsNotice" class="hidden" style="color:#ff0;font-size:0.85rem;margin-bottom:12px;text-align:center;">⚠️ Swearing is allowed, but inappropriate behavior is NOT.</div>
       <button class="btn-primary" id="authBtn" onclick="handleAuth()">LET'S GO! 🚀</button>
       <div class="auth-toggle">
         <span id="authToggle" onclick="toggleAuthMode()">Don't have an account? Sign Up!</span>
@@ -3263,6 +3263,25 @@
   </div>
   <div id="searchResults" class="search-results hidden"></div>
   <div id="feedList"></div>
+
+  <!-- Feedback Button -->
+  <div style="text-align:center;margin:20px 0;">
+    <button onclick="showFeedbackModal()" style="background:linear-gradient(135deg,rgba(255,0,255,0.2),rgba(0,255,255,0.2));border:2px solid rgba(255,0,255,0.3);color:#fff;padding:10px 24px;border-radius:25px;font-family:'Bangers',cursive;font-size:1rem;cursor:pointer;">💬 SEND FEEDBACK</button>
+  </div>
+</div>
+
+<!-- Feedback Modal -->
+<div class="hidden" id="feedbackModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:1005;display:flex;align-items:center;justify-content:center;">
+  <div style="background:linear-gradient(135deg,#1a0033,#0f0024);border:3px solid #ff00ff;border-radius:20px;padding:24px;max-width:350px;width:90%;text-align:center;">
+    <h2 style="font-family:'Bangers',cursive;color:#ff00ff;margin-bottom:10px;">💬 FEEDBACK</h2>
+    <p style="color:#aaa;font-size:0.85rem;margin-bottom:12px;">Tell us what you think! Bugs, ideas, anything.</p>
+    <textarea id="feedbackText" placeholder="Type your feedback..." maxlength="500" style="width:100%;height:100px;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.15);border-radius:12px;color:#fff;padding:10px;font-size:0.95rem;resize:none;"></textarea>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:12px;">
+      <button onclick="submitFeedback()" style="background:linear-gradient(45deg,#ff00ff,#8800ff);color:#fff;border:none;padding:10px 24px;border-radius:20px;font-family:'Bangers',cursive;font-size:1rem;cursor:pointer;">SEND</button>
+      <button onclick="document.getElementById('feedbackModal').classList.add('hidden')" style="background:rgba(255,255,255,0.1);color:#fff;border:none;padding:10px 24px;border-radius:20px;font-family:'Bangers',cursive;font-size:1rem;cursor:pointer;">CANCEL</button>
+    </div>
+    <div id="feedbackStatus" style="margin-top:8px;font-size:0.85rem;"></div>
+  </div>
 </div>
 
 <!-- ===== POST PAGE ===== -->
@@ -3284,6 +3303,11 @@
     <div class="hint">Upload a file from your device or paste a link!</div>
     <button class="btn-primary" id="postBtn" onclick="postVideo()">POST IT! 🎬</button>
     <div class="post-success" id="postSuccess"></div>
+    <div class="or-divider">— OR —</div>
+    <div style="text-align:center;">
+      <button onclick="generateAIPost()" id="aiPostBtn" style="background:linear-gradient(135deg,#8800ff,#ff00ff,#00ffff);color:#fff;border:none;padding:12px 28px;border-radius:25px;font-family:'Bangers',cursive;font-size:1.1rem;cursor:pointer;letter-spacing:1px;">🤖 AI GENERATE A POST</button>
+      <p style="color:#888;font-size:0.8rem;margin-top:6px;">Let AI create a fun post for you!</p>
+    </div>
   </div>
 </div>
 
@@ -3874,7 +3898,7 @@
         }
         referralFromLink = null;
         pendingSignup = null;
-        showBirthdayModal();
+        doEnterApp();
       });
       return;
     }
@@ -3944,8 +3968,7 @@
   function finishReferral() {
     document.getElementById('referralModal').classList.add('hidden');
     pendingSignup = null;
-    // Show birthday modal for new users
-    showBirthdayModal();
+    doEnterApp();
   }
 
   function showBirthdayModal() {
@@ -4008,22 +4031,12 @@
 
     if (isSignUp) {
       var displayName = document.getElementById('authDisplayName').value.trim();
-      if (!displayName || displayName.length < 2) {
-        errorEl.textContent = 'Please enter your real name! 🙏';
-        return;
-      }
-      var nameCheck = checkContentModeration(displayName);
-      if (!nameCheck.ok) {
-        errorEl.textContent = '🚫 That name isn\'t allowed!';
-        return;
-      }
-
-      var birthYear = parseInt(document.getElementById('authBirthYear').value);
-      var currentYear = new Date().getFullYear();
-      var age = currentYear - birthYear;
-      if (!birthYear || age < 5 || age > 18) {
-        errorEl.textContent = 'You gotta be between 5 and 18 to sign up!! 🚫';
-        return;
+      if (displayName) {
+        var nameCheck = checkContentModeration(displayName);
+        if (!nameCheck.ok) {
+          errorEl.textContent = '🚫 That name isn\'t allowed!';
+          return;
+        }
       }
     }
 
@@ -4186,21 +4199,7 @@
   }
 
   function enterApp() {
-    var currentUser = getCurrentUser();
-
-    // Check if user has a birthday set - if not, ask them first
-    db.ref('users/' + currentUser + '/birthday').once('value').then(function(snap) {
-      if (!snap.val()) {
-        // No birthday set - show birthday modal before entering app
-        document.getElementById('authScreen').classList.add('hidden');
-        showBirthdayModal();
-        return;
-      }
-      // Birthday already set, continue normally
-      doEnterApp();
-    }).catch(function() {
-      doEnterApp();
-    });
+    doEnterApp();
   }
 
   function doEnterApp() {
@@ -5884,6 +5883,100 @@
         }).catch(function() {});
       }
     }
+  }
+
+  // ===== FEEDBACK =====
+  function showFeedbackModal() {
+    document.getElementById('feedbackText').value = '';
+    document.getElementById('feedbackStatus').textContent = '';
+    document.getElementById('feedbackModal').classList.remove('hidden');
+    document.getElementById('feedbackModal').style.display = 'flex';
+  }
+
+  function submitFeedback() {
+    var text = document.getElementById('feedbackText').value.trim();
+    if (!text) {
+      document.getElementById('feedbackStatus').style.color = '#ff4444';
+      document.getElementById('feedbackStatus').textContent = 'Write something first!';
+      return;
+    }
+    var modCheck = checkContentModeration(text);
+    if (!modCheck.ok) {
+      document.getElementById('feedbackStatus').style.color = '#ff4444';
+      document.getElementById('feedbackStatus').textContent = modCheck.message;
+      return;
+    }
+    var currentUser = getCurrentUser();
+    db.ref('feedback').push({
+      user: currentUser,
+      text: text,
+      created: Date.now()
+    });
+    document.getElementById('feedbackStatus').style.color = '#0f0';
+    document.getElementById('feedbackStatus').textContent = 'Thanks for the feedback!';
+    document.getElementById('feedbackText').value = '';
+    setTimeout(function() {
+      document.getElementById('feedbackModal').classList.add('hidden');
+    }, 1500);
+  }
+
+  // ===== AI POSTS =====
+  var aiPostTitles = [
+    'Rate my vibe check',
+    'Is this giving main character energy?',
+    'POV: you woke up and chose rizz',
+    'No cap, this goes hard',
+    'Tell me this isn\'t fire',
+    'W or L? Be honest',
+    'This is lowkey underrated',
+    'Unmatched energy right here',
+    'Bet you can\'t rate this below a 9',
+    'Living rent free in your head',
+    'The rizz is unreal',
+    'Vibe check: am I valid?',
+    'Rate the aesthetic',
+    'This hits different fr fr',
+    'Main character moment',
+    'Certified classic right here',
+    'Top tier content incoming',
+    'If this ain\'t a 10 I quit',
+    'Sleeper hit of the year',
+    'Hot take: this is a masterpiece'
+  ];
+
+  var aiPostImages = [
+    'https://picsum.photos/seed/' + Math.random().toString(36).slice(2) + '/600/400',
+    'https://picsum.photos/seed/' + Math.random().toString(36).slice(2) + '/600/400',
+    'https://picsum.photos/seed/' + Math.random().toString(36).slice(2) + '/600/400'
+  ];
+
+  function generateAIPost() {
+    var currentUser = getCurrentUser();
+    if (!currentUser) return;
+    var btn = document.getElementById('aiPostBtn');
+    btn.disabled = true;
+    btn.textContent = '🤖 GENERATING...';
+
+    var title = aiPostTitles[Math.floor(Math.random() * aiPostTitles.length)];
+    var seed = Math.random().toString(36).slice(2, 10);
+    var imageUrl = 'https://picsum.photos/seed/' + seed + '/600/400';
+
+    var id = 'ai_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+
+    db.ref('videos/' + id).set({
+      title: '🤖 ' + title,
+      url: imageUrl,
+      type: 'image',
+      author: currentUser,
+      created: Date.now(),
+      isAI: true
+    });
+
+    var successEl = document.getElementById('postSuccess');
+    successEl.style.color = '#0f0';
+    successEl.textContent = '🤖 AI post created! Check the feed!';
+    btn.disabled = false;
+    btn.textContent = '🤖 AI GENERATE A POST';
   }
 
   function editComment(videoId, commentId) {
