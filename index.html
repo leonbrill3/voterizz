@@ -8796,23 +8796,90 @@
     drawPhotoCanvas();
   }
 
-  function handlePhotoCanvasClick(e) {
+  var draggingSticker = null;
+  var dragOffsetX = 0;
+  var dragOffsetY = 0;
+  var dragStartTime = 0;
+
+  function getCanvasPos(e) {
     var rect = photoCanvas.getBoundingClientRect();
     var scaleX = photoCanvas.width / rect.width;
     var scaleY = photoCanvas.height / rect.height;
-    var cx = (e.clientX - rect.left) * scaleX;
-    var cy = (e.clientY - rect.top) * scaleY;
+    var clientX, clientY;
+    if (e.touches && e.touches.length > 0) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+  }
 
-    // Check if clicked on a sticker (remove it)
+  function findStickerAt(cx, cy) {
     for (var i = photoStickers.length - 1; i >= 0; i--) {
       var s = photoStickers[i];
-      if (Math.abs(cx - s.x) < s.size && Math.abs(cy - s.y) < s.size) {
-        photoStickers.splice(i, 1);
-        drawPhotoCanvas();
-        return;
+      if (Math.abs(cx - s.x) < s.size * 0.7 && Math.abs(cy - s.y) < s.size * 0.7) {
+        return i;
       }
     }
+    return -1;
   }
+
+  function handlePhotoCanvasClick(e) {
+    // Click/tap without drag = remove sticker
+  }
+
+  function onCanvasPointerDown(e) {
+    if (!photoCanvas) return;
+    var pos = getCanvasPos(e);
+    var idx = findStickerAt(pos.x, pos.y);
+    if (idx >= 0) {
+      draggingSticker = idx;
+      dragOffsetX = pos.x - photoStickers[idx].x;
+      dragOffsetY = pos.y - photoStickers[idx].y;
+      dragStartTime = Date.now();
+      e.preventDefault();
+    }
+  }
+
+  function onCanvasPointerMove(e) {
+    if (draggingSticker === null || !photoCanvas) return;
+    var pos = getCanvasPos(e);
+    photoStickers[draggingSticker].x = pos.x - dragOffsetX;
+    photoStickers[draggingSticker].y = pos.y - dragOffsetY;
+    drawPhotoCanvas();
+    e.preventDefault();
+  }
+
+  function onCanvasPointerUp(e) {
+    if (draggingSticker === null) return;
+    var elapsed = Date.now() - dragStartTime;
+    // If it was a quick tap (not a drag), remove the sticker
+    if (elapsed < 200) {
+      var pos = getCanvasPos(e.changedTouches ? e : e);
+      photoStickers.splice(draggingSticker, 1);
+      drawPhotoCanvas();
+    }
+    draggingSticker = null;
+  }
+
+  // Attach drag listeners to photo canvas when it exists
+  (function() {
+    var checkCanvas = setInterval(function() {
+      var c = document.getElementById('photoFilterCanvas');
+      if (c && !c._dragListenersAttached) {
+        c._dragListenersAttached = true;
+        c.addEventListener('mousedown', onCanvasPointerDown);
+        c.addEventListener('mousemove', onCanvasPointerMove);
+        c.addEventListener('mouseup', onCanvasPointerUp);
+        c.addEventListener('touchstart', onCanvasPointerDown, { passive: false });
+        c.addEventListener('touchmove', onCanvasPointerMove, { passive: false });
+        c.addEventListener('touchend', onCanvasPointerUp);
+        clearInterval(checkCanvas);
+      }
+    }, 500);
+  })();
 
   function drawPhotoCanvas() {
     if (!photoOriginalImage || !photoCtx) return;
