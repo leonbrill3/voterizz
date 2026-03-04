@@ -2939,6 +2939,67 @@
     animation: bounce 0.6s infinite alternate;
   }
 
+  /* 100 USER CELEBRATION */
+  .goal-celebration-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    animation: fadeIn 0.5s;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .goal-celebration-text {
+    font-family: 'Bangers', cursive;
+    font-size: 3.5rem;
+    background: linear-gradient(90deg, gold, #ff00ff, #00ffff, gold);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rainbowSlide 2s linear infinite;
+    text-align: center;
+    text-shadow: none;
+    margin-bottom: 10px;
+  }
+  .goal-celebration-sub {
+    color: #fff;
+    font-family: 'Comic Neue', cursive;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .goal-confetti-piece {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    z-index: 10000;
+    animation: confettiFall linear forwards;
+    pointer-events: none;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-10px) rotate(0deg) scale(1); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg) scale(0.5); opacity: 0; }
+  }
+  .goal-firework {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    z-index: 10000;
+    pointer-events: none;
+    animation: fireworkBurst 1s ease-out forwards;
+  }
+  @keyframes fireworkBurst {
+    0% { transform: scale(0); opacity: 1; }
+    50% { transform: scale(3); opacity: 1; }
+    100% { transform: scale(5); opacity: 0; }
+  }
+
   /* ===== BIRTHDAY BANNER ===== */
   .birthday-banner {
     background: linear-gradient(135deg, #ff69b4, #ff00ff, #8800ff);
@@ -7478,6 +7539,7 @@
     }
   }
 
+  var goal100celebrated = false;
   function updateGoalTracker() {
     var count = Object.keys(cachedUsers).length;
     var goalCount = document.getElementById('goalCount');
@@ -7493,9 +7555,70 @@
 
     if (count >= 100) {
       goalMessage.innerHTML = '<div class="goal-complete">🎉 WE DID IT! 100 USERS! 🎉</div>';
+      // Show celebration animation once per session
+      if (!goal100celebrated && !localStorage.getItem('vrizz_100_celebrated')) {
+        goal100celebrated = true;
+        localStorage.setItem('vrizz_100_celebrated', '1');
+        show100Celebration();
+      }
     } else {
       goalMessage.innerHTML = '<div style="color:#888;font-size:0.8rem;margin-top:4px;">' + (100 - count) + ' more to go!</div>';
     }
+  }
+
+  function show100Celebration() {
+    // Confetti pieces
+    var colors = ['#ff00ff', '#00ffff', '#ff0', 'gold', '#0f0', '#f00', '#ff69b4', '#8800ff', '#fff'];
+    for (var i = 0; i < 80; i++) {
+      var piece = document.createElement('div');
+      piece.className = 'goal-confetti-piece';
+      piece.style.left = Math.random() * 100 + 'vw';
+      piece.style.top = '-20px';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDuration = (2 + Math.random() * 3) + 's';
+      piece.style.animationDelay = (Math.random() * 2) + 's';
+      piece.style.width = (8 + Math.random() * 12) + 'px';
+      piece.style.height = (8 + Math.random() * 12) + 'px';
+      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      document.body.appendChild(piece);
+      setTimeout(function() { piece.remove(); }, 6000);
+    }
+
+    // Firework bursts
+    for (var j = 0; j < 12; j++) {
+      (function(delay) {
+        setTimeout(function() {
+          var cx = 10 + Math.random() * 80;
+          var cy = 10 + Math.random() * 60;
+          for (var k = 0; k < 10; k++) {
+            var spark = document.createElement('div');
+            spark.className = 'goal-firework';
+            spark.style.left = cx + 'vw';
+            spark.style.top = cy + 'vh';
+            spark.style.background = colors[Math.floor(Math.random() * colors.length)];
+            spark.style.animationDelay = (Math.random() * 0.3) + 's';
+            spark.style.marginLeft = (Math.random() - 0.5) * 60 + 'px';
+            spark.style.marginTop = (Math.random() - 0.5) * 60 + 'px';
+            document.body.appendChild(spark);
+            setTimeout(function() { spark.remove(); }, 2000);
+          }
+        }, delay);
+      })(j * 400);
+    }
+
+    // Big overlay message
+    var overlay = document.createElement('div');
+    overlay.className = 'goal-celebration-overlay';
+    overlay.onclick = function() { overlay.remove(); };
+    overlay.innerHTML = '<div style="font-size:5rem;margin-bottom:20px;">🏆🎉🔥</div>' +
+      '<div class="goal-celebration-text">100 USERS!</div>' +
+      '<div class="goal-celebration-sub">WE ACTUALLY DID IT!</div>' +
+      '<div style="font-size:3rem;margin:10px 0;">🎊🥳🎊</div>' +
+      '<div style="color:#aaa;font-size:0.9rem;margin-top:30px;">tap to close</div>';
+    document.body.appendChild(overlay);
+
+    // Auto-close after 8 seconds
+    setTimeout(function() { if (overlay.parentNode) overlay.remove(); }, 8000);
   }
 
   // ===== BIRTHDAY SYSTEM =====
