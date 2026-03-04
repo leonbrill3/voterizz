@@ -3154,6 +3154,404 @@
     margin-bottom: 12px;
     box-sizing: border-box;
   }
+
+  /* ===== MORE DROPDOWN ===== */
+  .more-dropdown-wrap {
+    position: relative;
+    display: inline-block;
+  }
+  .more-dropdown-wrap > button {
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    border: 2px solid #fff;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-family: 'Comic Neue', cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .more-dropdown-wrap > button:hover,
+  .more-dropdown-wrap > button.active {
+    background: #fff;
+    color: #0f0024;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px #fff;
+  }
+  .more-dropdown {
+    display: none;
+    position: absolute;
+    top: 110%;
+    right: 0;
+    background: rgba(15,0,36,0.97);
+    border: 2px solid rgba(255,0,255,0.5);
+    border-radius: 16px;
+    padding: 8px 0;
+    min-width: 180px;
+    z-index: 200;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+  }
+  .more-dropdown.show { display: block; }
+  .more-dropdown button {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    color: #fff;
+    padding: 12px 20px;
+    text-align: left;
+    font-family: 'Comic Neue', cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .more-dropdown button:hover {
+    background: rgba(255,0,255,0.2);
+  }
+
+  /* ===== GAME TABS ===== */
+  .game-tabs {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .game-tab {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 2px solid rgba(0,255,255,0.3);
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .game-tab:hover, .game-tab.active {
+    background: #00ffff;
+    color: #0f0024;
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(0,255,255,0.5);
+  }
+  .game-section { display: none; }
+  .game-section.active { display: block; }
+
+  /* Trivia */
+  .trivia-img { width: 100%; max-width: 350px; border-radius: 16px; margin: 10px auto; display: block; border: 3px solid rgba(0,255,255,0.3); }
+  .trivia-options { display: flex; flex-direction: column; gap: 10px; max-width: 400px; margin: 15px auto; }
+  .trivia-opt {
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(0,255,255,0.3);
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 16px;
+    font-family: 'Comic Neue', cursive;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .trivia-opt:hover { border-color: #00ffff; background: rgba(0,255,255,0.15); }
+  .trivia-opt.correct { background: rgba(0,255,0,0.3); border-color: #0f0; }
+  .trivia-opt.wrong { background: rgba(255,0,0,0.3); border-color: #f00; }
+  .trivia-score { text-align: center; font-size: 1.3rem; color: #00ffff; font-weight: 700; margin: 10px 0; }
+
+  /* WYR */
+  .wyr-card {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(255,0,255,0.3);
+    border-radius: 20px;
+    padding: 24px;
+    max-width: 450px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .wyr-question { color: #ff00ff; font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; }
+  .wyr-options { display: flex; flex-direction: column; gap: 12px; }
+  .wyr-btn {
+    background: rgba(255,0,255,0.15);
+    border: 2px solid rgba(255,0,255,0.4);
+    color: #fff;
+    padding: 18px;
+    border-radius: 16px;
+    font-family: 'Comic Neue', cursive;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .wyr-btn:hover { border-color: #ff00ff; background: rgba(255,0,255,0.3); }
+  .wyr-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: rgba(255,0,255,0.25);
+    transition: width 0.5s;
+    border-radius: 14px;
+    z-index: 0;
+  }
+  .wyr-btn span { position: relative; z-index: 1; }
+
+  /* Caption This */
+  .caption-img { width: 100%; max-width: 350px; border-radius: 16px; margin: 10px auto; display: block; border: 3px solid rgba(255,215,0,0.4); }
+  .caption-input-row { display: flex; gap: 8px; max-width: 400px; margin: 12px auto; }
+  .caption-input-row input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid rgba(255,215,0,0.3);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-family: 'Comic Neue', cursive;
+    font-size: 1rem;
+  }
+  .caption-input-row button {
+    background: gold;
+    color: #0f0024;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 16px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .caption-list { max-width: 400px; margin: 15px auto; }
+  .caption-item {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .caption-item .cap-text { color: #fff; font-weight: 700; flex: 1; }
+  .caption-item .cap-user { color: #aaa; font-size: 0.85rem; }
+  .caption-item .cap-vote {
+    background: rgba(255,215,0,0.2);
+    border: 1px solid gold;
+    color: gold;
+    border-radius: 12px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-weight: 700;
+    margin-left: 10px;
+  }
+
+  /* Meme Generator */
+  .meme-templates { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0; justify-content: center; flex-wrap: wrap; }
+  .meme-tpl {
+    width: 70px; height: 70px;
+    border-radius: 12px;
+    border: 2px solid rgba(0,255,255,0.3);
+    cursor: pointer;
+    object-fit: cover;
+    transition: all 0.2s;
+  }
+  .meme-tpl:hover, .meme-tpl.active { border-color: #00ffff; box-shadow: 0 0 12px rgba(0,255,255,0.5); transform: scale(1.1); }
+  .meme-canvas-wrap { text-align: center; margin: 15px 0; }
+  .meme-canvas-wrap canvas { border-radius: 12px; border: 2px solid rgba(0,255,255,0.3); max-width: 100%; }
+  .meme-text-inputs { max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+  .meme-text-inputs input {
+    padding: 12px 16px;
+    border: 2px solid rgba(0,255,255,0.3);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-family: 'Comic Neue', cursive;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  /* ===== FACE FILTERS PAGE ===== */
+  .face-filter-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 3px solid rgba(255,0,255,0.4);
+  }
+  .face-filter-container video {
+    width: 100%;
+    display: block;
+    transform: scaleX(-1);
+  }
+  .face-filter-container canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scaleX(-1);
+  }
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 15px 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,0,255,0.3);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 20px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: rgba(255,0,255,0.3);
+    border-color: #ff00ff;
+    box-shadow: 0 0 12px rgba(255,0,255,0.4);
+  }
+  .face-filter-notice {
+    text-align: center;
+    color: #ff00ff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-top: 12px;
+    padding: 8px;
+    background: rgba(255,0,255,0.1);
+    border-radius: 12px;
+  }
+
+  /* ===== PHOTO FILTERS PAGE ===== */
+  .photo-filter-upload {
+    text-align: center;
+    padding: 40px 20px;
+    border: 3px dashed rgba(0,255,255,0.3);
+    border-radius: 20px;
+    margin: 15px auto;
+    max-width: 400px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .photo-filter-upload:hover { border-color: #00ffff; background: rgba(0,255,255,0.05); }
+  .photo-canvas-wrap {
+    text-align: center;
+    margin: 15px auto;
+    max-width: 400px;
+    position: relative;
+  }
+  .photo-canvas-wrap canvas {
+    border-radius: 16px;
+    border: 2px solid rgba(0,255,255,0.3);
+    max-width: 100%;
+    cursor: crosshair;
+  }
+  .photo-filter-tabs {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin: 15px 0;
+  }
+  .photo-filter-tab {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 2px solid rgba(0,255,255,0.3);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .photo-filter-tab:hover, .photo-filter-tab.active {
+    background: #00ffff;
+    color: #0f0024;
+    border-color: #00ffff;
+  }
+  .photo-filter-options {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .photo-filter-opt {
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(0,255,255,0.2);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 16px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    min-width: 60px;
+  }
+  .photo-filter-opt:hover, .photo-filter-opt.active {
+    border-color: #00ffff;
+    background: rgba(0,255,255,0.15);
+  }
+  .sticker-tray {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .sticker-btn {
+    font-size: 1.8rem;
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(0,255,255,0.2);
+    border-radius: 12px;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sticker-btn:hover { border-color: #00ffff; transform: scale(1.15); }
+  .frame-options { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; padding: 10px; }
+  .frame-opt {
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(0,255,255,0.2);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 16px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .frame-opt:hover, .frame-opt.active { border-color: #00ffff; background: rgba(0,255,255,0.15); }
+  .photo-post-btn {
+    display: block;
+    margin: 20px auto;
+    background: linear-gradient(135deg, #00ffff, #ff00ff);
+    color: #0f0024;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 30px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .photo-post-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(0,255,255,0.5); }
 </style>
 </head>
 <body>
@@ -3169,12 +3567,20 @@
     <button onclick="showPage('post')" id="nav-post">Post</button>
     <button onclick="showPage('leaderboard')" id="nav-leaderboard">Leaderboard</button>
     <button onclick="showPage('announcements')" id="nav-announcements">Announcements</button>
-    <button onclick="showPage('rules')" id="nav-rules">Rules</button>
     <button onclick="showPage('messages')" id="nav-messages">Messages</button>
-    <button onclick="showPage('wheel')" id="nav-wheel">Prize Wheel</button>
-    <button onclick="showPage('live')" id="nav-live">🔴 Live</button>
     <button onclick="viewingUser=null;showPage('profile')" id="nav-profile">Profile</button>
-    <!-- Admin panel moved to /admin.html -->
+    <div class="more-dropdown-wrap">
+      <button onclick="toggleMoreMenu()" id="nav-more">More ▾</button>
+      <div class="more-dropdown" id="moreDropdown">
+        <button onclick="showPage('rules');closeMoreMenu()">📜 Rules</button>
+        <button onclick="showPage('wheel');closeMoreMenu()">🎡 Prize Wheel</button>
+        <button onclick="showPage('live');closeMoreMenu()">🔴 Live</button>
+        <button onclick="showPage('games');closeMoreMenu()">🎮 Games</button>
+        <button onclick="showPage('facefilters');closeMoreMenu()">🤪 Face Filters</button>
+        <button onclick="showPage('photofilters');closeMoreMenu()">📸 Photo Filters</button>
+        <button onclick="showPage('toc');closeMoreMenu()">📋 All Features</button>
+      </div>
+    </div>
   </div>
   <div class="user-info">
     <span id="navUsername"></span>
@@ -3619,6 +4025,96 @@
 <div class="container hidden" id="wheelPage">
   <div class="page-title" style="color: gold;">🎡 PRIZE WHEEL 🎡</div>
   <div class="wheel-container" id="wheelContent"></div>
+</div>
+
+<!-- ===== TABLE OF CONTENTS PAGE ===== -->
+<div class="container hidden" id="tocPage">
+  <div class="page-title" style="color: #00ffff;">📋 ALL FEATURES 📋</div>
+  <div style="max-width:450px;margin:0 auto;">
+    <div style="background:rgba(255,255,255,0.06);border:2px solid rgba(0,255,255,0.2);border-radius:16px;padding:8px;margin-bottom:20px;">
+      <div onclick="showPage('feed')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">🏠</span><div><div style="color:#fff;font-weight:700;">Home Feed</div><div style="color:#aaa;font-size:0.85rem;">Browse and vote on posts</div></div></div>
+      <div onclick="showPage('post')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">📹</span><div><div style="color:#fff;font-weight:700;">Post</div><div style="color:#aaa;font-size:0.85rem;">Upload videos and photos</div></div></div>
+      <div onclick="showPage('leaderboard')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">🏆</span><div><div style="color:#fff;font-weight:700;">Leaderboard</div><div style="color:#aaa;font-size:0.85rem;">See who has the most rizz</div></div></div>
+      <div onclick="showPage('announcements')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">📢</span><div><div style="color:#fff;font-weight:700;">Announcements</div><div style="color:#aaa;font-size:0.85rem;">Latest news and updates</div></div></div>
+      <div onclick="showPage('messages')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">💬</span><div><div style="color:#fff;font-weight:700;">Messages</div><div style="color:#aaa;font-size:0.85rem;">DM other users</div></div></div>
+      <div onclick="viewingUser=null;showPage('profile')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">👤</span><div><div style="color:#fff;font-weight:700;">Profile</div><div style="color:#aaa;font-size:0.85rem;">Your profile, avatar, and stats</div></div></div>
+      <div onclick="showPage('rules')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">📜</span><div><div style="color:#fff;font-weight:700;">Rules</div><div style="color:#aaa;font-size:0.85rem;">Community guidelines</div></div></div>
+      <div onclick="showPage('wheel')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">🎡</span><div><div style="color:#fff;font-weight:700;">Prize Wheel</div><div style="color:#aaa;font-size:0.85rem;">Spin to win prizes and badges</div></div></div>
+      <div onclick="showPage('live')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">🔴</span><div><div style="color:#fff;font-weight:700;">Livestreams</div><div style="color:#aaa;font-size:0.85rem;">Watch and start live streams</div></div></div>
+      <div onclick="showPage('games')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">🎮</span><div><div style="color:#fff;font-weight:700;">Meme Games</div><div style="color:#aaa;font-size:0.85rem;">Trivia, WYR, Caption This, Meme Gen</div></div></div>
+      <div onclick="showPage('facefilters')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">🤪</span><div><div style="color:#fff;font-weight:700;">Face Filters</div><div style="color:#aaa;font-size:0.85rem;">Fun camera filters (just for fun!)</div></div></div>
+      <div onclick="showPage('photofilters')" style="padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">📸</span><div><div style="color:#fff;font-weight:700;">Photo Filters</div><div style="color:#aaa;font-size:0.85rem;">Edit photos and post with filters</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== GAMES PAGE ===== -->
+<div class="container hidden" id="gamesPage">
+  <div class="page-title" style="color: #00ffff;">🎮 MEME GAMES 🎮</div>
+  <div class="game-tabs">
+    <button class="game-tab active" onclick="switchGameTab('trivia')">🧠 Trivia</button>
+    <button class="game-tab" onclick="switchGameTab('wyr')">🤔 WYR</button>
+    <button class="game-tab" onclick="switchGameTab('caption')">💬 Caption</button>
+    <button class="game-tab" onclick="switchGameTab('memegen')">🖼️ Meme Gen</button>
+  </div>
+  <!-- Trivia Section -->
+  <div class="game-section active" id="gameTrivia">
+    <div id="triviaContent"></div>
+  </div>
+  <!-- Would You Rather Section -->
+  <div class="game-section" id="gameWyr">
+    <div id="wyrContent"></div>
+  </div>
+  <!-- Caption This Section -->
+  <div class="game-section" id="gameCaption">
+    <div id="captionContent"></div>
+  </div>
+  <!-- Meme Generator Section -->
+  <div class="game-section" id="gameMemegen">
+    <div id="memegenContent"></div>
+  </div>
+</div>
+
+<!-- ===== FACE FILTERS PAGE ===== -->
+<div class="container hidden" id="facefiltersPage">
+  <div class="page-title" style="color: #ff00ff;">🤪 FACE FILTERS 🤪</div>
+  <div class="face-filter-notice">Just for fun! Face filters can't be posted 🎉</div>
+  <div style="text-align:center;margin:15px 0;">
+    <button onclick="startFaceCamera()" style="background:linear-gradient(135deg,#ff00ff,#00ffff);color:#0f0024;border:none;padding:14px 30px;border-radius:25px;font-family:'Bangers',cursive;font-size:1.2rem;cursor:pointer;">📸 START CAMERA</button>
+    <button onclick="stopFaceCamera()" style="background:rgba(255,0,0,0.6);color:#fff;border:none;padding:14px 20px;border-radius:25px;font-family:'Comic Neue',cursive;font-weight:700;cursor:pointer;display:none;" id="stopFaceCamBtn">STOP</button>
+  </div>
+  <div class="face-filter-container" id="faceFilterContainer" style="display:none;">
+    <video id="faceVideo" autoplay playsinline></video>
+    <canvas id="faceCanvas"></canvas>
+  </div>
+  <div class="filter-bar" id="faceFilterBar" style="display:none;"></div>
+</div>
+
+<!-- ===== PHOTO FILTERS PAGE ===== -->
+<div class="container hidden" id="photofiltersPage">
+  <div class="page-title" style="color: #00ffff;">📸 PHOTO FILTERS 📸</div>
+  <div class="photo-filter-upload" id="photoFilterUpload" onclick="document.getElementById('photoFilterFile').click()">
+    <div style="font-size:3rem;margin-bottom:10px;">📁</div>
+    <div style="color:#00ffff;font-weight:700;font-size:1.1rem;">TAP TO CHOOSE A PHOTO</div>
+    <input type="file" id="photoFilterFile" accept="image/*" style="display:none;" onchange="handlePhotoFilterUpload(this)">
+  </div>
+  <div class="photo-canvas-wrap" id="photoCanvasWrap" style="display:none;">
+    <canvas id="photoFilterCanvas" width="400" height="400"></canvas>
+  </div>
+  <div id="photoFilterControls" style="display:none;">
+    <div class="photo-filter-tabs">
+      <button class="photo-filter-tab active" onclick="switchPhotoTab('colors')">🎨 Colors</button>
+      <button class="photo-filter-tab" onclick="switchPhotoTab('stickers')">😎 Stickers</button>
+      <button class="photo-filter-tab" onclick="switchPhotoTab('frames')">🖼️ Frames</button>
+    </div>
+    <div id="photoTabColors" class="photo-filter-options"></div>
+    <div id="photoTabStickers" class="sticker-tray" style="display:none;"></div>
+    <div id="photoTabFrames" class="frame-options" style="display:none;"></div>
+    <div style="text-align:center;margin:10px 0;">
+      <button onclick="resetPhotoFilter()" style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,0,0,0.3);color:#ff6666;padding:10px 20px;border-radius:20px;font-family:'Comic Neue',cursive;font-weight:700;cursor:pointer;">🔄 Reset</button>
+    </div>
+    <button class="photo-post-btn" onclick="postFilteredPhoto()">POST TO FEED 🚀</button>
+  </div>
 </div>
 
 <!-- ===== NEW MESSAGE MODAL ===== -->
@@ -4323,14 +4819,18 @@
 
   // ===== NAVIGATION =====
   function hideAllPages() {
-    ['feedPage', 'postPage', 'leaderboardPage', 'announcementsPage', 'rulesPage', 'profilePage', 'messagesPage', 'wheelPage', 'livePage'].forEach(id => {
+    ['feedPage', 'postPage', 'leaderboardPage', 'announcementsPage', 'rulesPage', 'profilePage', 'messagesPage', 'wheelPage', 'livePage', 'gamesPage', 'facefiltersPage', 'photofiltersPage', 'tocPage'].forEach(id => {
       var el = document.getElementById(id);
       if (el) el.classList.add('hidden');
     });
-    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-announcements', 'nav-rules', 'nav-profile', 'nav-messages', 'nav-wheel', 'nav-live'].forEach(id => {
+    ['nav-feed', 'nav-post', 'nav-leaderboard', 'nav-announcements', 'nav-profile', 'nav-messages', 'nav-more'].forEach(id => {
       var el = document.getElementById(id);
       if (el) el.classList.remove('active');
     });
+    // Stop face camera when leaving page
+    if (typeof faceFilterStream !== 'undefined' && faceFilterStream) {
+      stopFaceCamera();
+    }
   }
 
   function showPage(page) {
@@ -4365,7 +4865,7 @@
         break;
       case 'rules':
         document.getElementById('rulesPage').classList.remove('hidden');
-        document.getElementById('nav-rules').classList.add('active');
+        document.getElementById('nav-more').classList.add('active');
         break;
       case 'profile':
         document.getElementById('profilePage').classList.remove('hidden');
@@ -4381,13 +4881,30 @@
         break;
       case 'wheel':
         document.getElementById('wheelPage').classList.remove('hidden');
-        document.getElementById('nav-wheel').classList.add('active');
+        document.getElementById('nav-more').classList.add('active');
         renderWheel();
         break;
       case 'live':
         document.getElementById('livePage').classList.remove('hidden');
-        document.getElementById('nav-live').classList.add('active');
+        document.getElementById('nav-more').classList.add('active');
         renderLivePage();
+        break;
+      case 'games':
+        document.getElementById('gamesPage').classList.remove('hidden');
+        document.getElementById('nav-more').classList.add('active');
+        initGames();
+        break;
+      case 'facefilters':
+        document.getElementById('facefiltersPage').classList.remove('hidden');
+        document.getElementById('nav-more').classList.add('active');
+        break;
+      case 'photofilters':
+        document.getElementById('photofiltersPage').classList.remove('hidden');
+        document.getElementById('nav-more').classList.add('active');
+        break;
+      case 'toc':
+        document.getElementById('tocPage').classList.remove('hidden');
+        document.getElementById('nav-more').classList.add('active');
         break;
     }
   }
@@ -7533,6 +8050,944 @@
       });
     }
   })();
+
+  // ==========================================================
+  // ===== MORE DROPDOWN MENU =================================
+  // ==========================================================
+  function toggleMoreMenu() {
+    var dd = document.getElementById('moreDropdown');
+    dd.classList.toggle('show');
+  }
+  function closeMoreMenu() {
+    var dd = document.getElementById('moreDropdown');
+    if (dd) dd.classList.remove('show');
+  }
+  document.addEventListener('click', function(e) {
+    var wrap = document.querySelector('.more-dropdown-wrap');
+    if (wrap && !wrap.contains(e.target)) closeMoreMenu();
+  });
+
+  // ==========================================================
+  // ===== MEME GAMES =========================================
+  // ==========================================================
+  var gamesInitialized = false;
+
+  function switchGameTab(tab) {
+    document.querySelectorAll('.game-tab').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.game-section').forEach(function(s) { s.classList.remove('active'); });
+    event.target.classList.add('active');
+    var sectionId = 'game' + tab.charAt(0).toUpperCase() + tab.slice(1);
+    var section = document.getElementById(sectionId);
+    if (section) section.classList.add('active');
+    if (tab === 'trivia' && !triviaStarted) startTrivia();
+    if (tab === 'wyr') loadWYR();
+    if (tab === 'caption') loadCaptionThis();
+    if (tab === 'memegen') initMemeGen();
+  }
+
+  function initGames() {
+    if (!gamesInitialized) {
+      gamesInitialized = true;
+      startTrivia();
+    }
+  }
+
+  // --- MEME TRIVIA ---
+  var triviaQuestions = [
+    { img: 'https://i.imgflip.com/30b1gx.jpg', answer: 'Drake Hotline Bling', options: ['Drake Hotline Bling', 'Distracted Boyfriend', 'Change My Mind', 'Two Buttons'] },
+    { img: 'https://i.imgflip.com/1ur9b0.jpg', answer: 'Distracted Boyfriend', options: ['Expanding Brain', 'Distracted Boyfriend', 'Surprised Pikachu', 'Drake Hotline Bling'] },
+    { img: 'https://i.imgflip.com/2wifvo.jpg', answer: 'Surprised Pikachu', options: ['This Is Fine', 'Surprised Pikachu', 'Mocking SpongeBob', 'Doge'] },
+    { img: 'https://i.imgflip.com/1otk96.jpg', answer: 'Expanding Brain', options: ['Galaxy Brain', 'Expanding Brain', 'Change My Mind', 'Bernie Sanders'] },
+    { img: 'https://i.imgflip.com/24y43o.jpg', answer: 'Change My Mind', options: ['Change My Mind', 'Drake Hotline Bling', 'Disaster Girl', 'Hide the Pain Harold'] },
+    { img: 'https://i.imgflip.com/26am.jpg', answer: 'This Is Fine', options: ['Grumpy Cat', 'This Is Fine', 'Doge', 'Bad Luck Brian'] },
+    { img: 'https://i.imgflip.com/4/1bij.jpg', answer: 'One Does Not Simply', options: ['One Does Not Simply', 'Ancient Aliens', 'Futurama Fry', 'Success Kid'] },
+    { img: 'https://i.imgflip.com/4/1bhw.jpg', answer: 'Futurama Fry', options: ['Conspiracy Keanu', 'Futurama Fry', 'Bad Luck Brian', 'Philosoraptor'] },
+    { img: 'https://i.imgflip.com/1h7in3.jpg', answer: 'Mocking SpongeBob', options: ['SpongeBob Rainbow', 'Mocking SpongeBob', 'Patrick Star', 'Squidward'] },
+    { img: 'https://i.imgflip.com/4t0m5.jpg', answer: 'Doge', options: ['Cheems', 'Doge', 'Grumpy Cat', 'Keyboard Cat'] },
+    { img: 'https://i.imgflip.com/9ehk.jpg', answer: 'Bad Luck Brian', options: ['Bad Luck Brian', 'Success Kid', 'Scumbag Steve', 'Good Guy Greg'] },
+    { img: 'https://i.imgflip.com/4/gk5rs.jpg', answer: 'Disaster Girl', options: ['Evil Toddler', 'Disaster Girl', 'Side Eyeing Chloe', 'Success Kid'] },
+    { img: 'https://i.imgflip.com/3oevdk.jpg', answer: 'Bernie I Am Once Again Asking', options: ['Old Man Yells at Cloud', 'Bernie I Am Once Again Asking', 'Change My Mind', 'Leonardo DiCaprio Cheers'] },
+    { img: 'https://i.imgflip.com/5c7lwq.jpg', answer: 'Think Mark Think', options: ['Think Mark Think', 'Surprised Pikachu', 'Drake Hotline Bling', 'Two Buttons'] },
+    { img: 'https://i.imgflip.com/2ybua0.jpg', answer: 'Woman Yelling at Cat', options: ['Woman Yelling at Cat', 'Distracted Boyfriend', 'Karen Manager', 'Angry Lady'] },
+    { img: 'https://i.imgflip.com/1c1uej.jpg', answer: 'Hide the Pain Harold', options: ['Old Man Stock Photo', 'Hide the Pain Harold', 'Bad Luck Brian', 'Success Kid'] },
+    { img: 'https://i.imgflip.com/261o3j.jpg', answer: 'Roll Safe Think About It', options: ['Pointing to Head', 'Roll Safe Think About It', 'Galaxy Brain', 'Smart Guy'] },
+    { img: 'https://i.imgflip.com/4/22bdq8.jpg', answer: 'Left Exit 12 Off Ramp', options: ['Left Exit 12 Off Ramp', 'Two Buttons', 'Daily Struggle', 'Crossroads'] },
+    { img: 'https://i.imgflip.com/4/1e7ql7.jpg', answer: 'Is This a Pigeon', options: ['Is This a Pigeon', 'Confused Math Lady', 'Surprised Pikachu', 'Anime Butterfly'] },
+    { img: 'https://i.imgflip.com/1itoun.jpg', answer: 'Two Buttons', options: ['Daily Struggle', 'Two Buttons', 'Left Exit 12', 'Change My Mind'] }
+  ];
+  var triviaStarted = false;
+  var triviaScore = 0;
+  var triviaQ = 0;
+  var triviaOrder = [];
+
+  function shuffleArray(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function startTrivia() {
+    triviaStarted = true;
+    triviaScore = 0;
+    triviaQ = 0;
+    triviaOrder = shuffleArray(triviaQuestions).slice(0, 10);
+    showTriviaQuestion();
+  }
+
+  function showTriviaQuestion() {
+    var el = document.getElementById('triviaContent');
+    if (triviaQ >= triviaOrder.length) {
+      el.innerHTML = '<div style="text-align:center;padding:30px;">' +
+        '<div style="font-size:3rem;margin-bottom:15px;">🏆</div>' +
+        '<div class="trivia-score">FINAL SCORE: ' + triviaScore + '/' + triviaOrder.length + '</div>' +
+        '<div style="color:#aaa;margin:15px 0;">' + (triviaScore >= 8 ? 'MEME LORD! 👑' : triviaScore >= 5 ? 'Not bad! 😎' : 'Study your memes! 📚') + '</div>' +
+        '<button onclick="startTrivia()" style="background:#00ffff;color:#0f0024;border:none;padding:14px 30px;border-radius:25px;font-family:\'Bangers\',cursive;font-size:1.2rem;cursor:pointer;">PLAY AGAIN</button></div>';
+      return;
+    }
+    var q = triviaOrder[triviaQ];
+    var opts = shuffleArray(q.options);
+    el.innerHTML = '<div class="trivia-score">Question ' + (triviaQ + 1) + '/' + triviaOrder.length + ' | Score: ' + triviaScore + '</div>' +
+      '<img class="trivia-img" src="' + q.img + '" alt="meme">' +
+      '<div style="text-align:center;color:#00ffff;font-weight:700;margin:10px 0;">What meme is this?</div>' +
+      '<div class="trivia-options">' + opts.map(function(o) {
+        return '<button class="trivia-opt" onclick="answerTrivia(this,\'' + o.replace(/'/g, "\\'") + '\',\'' + q.answer.replace(/'/g, "\\'") + '\')">' + o + '</button>';
+      }).join('') + '</div>';
+  }
+
+  function answerTrivia(btn, picked, correct) {
+    var btns = btn.parentElement.querySelectorAll('.trivia-opt');
+    btns.forEach(function(b) {
+      b.disabled = true;
+      b.style.pointerEvents = 'none';
+      if (b.textContent === correct) b.classList.add('correct');
+    });
+    if (picked === correct) {
+      triviaScore++;
+      btn.classList.add('correct');
+    } else {
+      btn.classList.add('wrong');
+    }
+    triviaQ++;
+    setTimeout(showTriviaQuestion, 1200);
+  }
+
+  // --- WOULD YOU RATHER ---
+  var wyrQuestions = [
+    { a: 'Only speak in meme quotes forever', b: 'Only communicate through GIFs' },
+    { a: 'Have your life narrated by Morgan Freeman', b: 'Have a laugh track play after everything you say' },
+    { a: 'Be rickrolled every time you open a door', b: 'Have the Windows error sound play when you make a mistake' },
+    { a: 'Only eat food that looks like memes', b: 'Only wear clothes with memes printed on them' },
+    { a: 'Be stuck in the "This Is Fine" fire room', b: 'Be the distracted boyfriend forever' },
+    { a: 'Have Doge as your pet', b: 'Have Grumpy Cat as your pet' },
+    { a: 'Live in the backrooms', b: 'Live in the Minecraft nether' },
+    { a: 'Have shrek as your roommate', b: 'Have Spongebob as your roommate' },
+    { a: 'Only listen to Rickroll for a year', b: 'Only watch Nyan Cat for a year' },
+    { a: 'Be a NPC in real life', b: 'Have your life be a battle royale' },
+    { a: 'Have unlimited Robux but no friends', b: 'Have all friends but zero Robux' },
+    { a: 'Get jumpscared randomly 3 times a day', b: 'Have the FBI open up meme happen to you weekly' },
+    { a: 'Be the main character in every cringe video', b: 'Be a background NPC in every viral video' },
+    { a: 'Have your google search history public', b: 'Have your camera roll public' },
+    { a: 'Only do fortnite dances to move', b: 'Only speak in autotune' },
+    { a: 'Fight 100 duck-sized horses', b: 'Fight 1 horse-sized duck' },
+    { a: 'Have your theme song be the coffin dance', b: 'Have your theme song be baby shark' },
+    { a: 'Be trapped in among us IRL', b: 'Be trapped in squid game IRL' },
+    { a: 'Get ratio\'d on every post you make', b: 'Get no likes on anything ever' },
+    { a: 'Have unlimited wifi but 1% battery forever', b: 'Have full battery but the slowest wifi ever' }
+  ];
+  var wyrIndex = 0;
+  var wyrShuffled = [];
+
+  function loadWYR() {
+    if (wyrShuffled.length === 0) wyrShuffled = shuffleArray(wyrQuestions);
+    showWYR();
+  }
+
+  function showWYR() {
+    var el = document.getElementById('wyrContent');
+    if (wyrIndex >= wyrShuffled.length) {
+      wyrIndex = 0;
+      wyrShuffled = shuffleArray(wyrQuestions);
+    }
+    var q = wyrShuffled[wyrIndex];
+    var qId = 'wyr_' + wyrIndex;
+    el.innerHTML = '<div class="wyr-card">' +
+      '<div class="wyr-question">WOULD YOU RATHER...</div>' +
+      '<div class="wyr-options">' +
+      '<button class="wyr-btn" onclick="voteWYR(\'' + qId + '\',\'a\',this)"><div class="wyr-fill" id="wyrFillA"></div><span>' + q.a + '</span></button>' +
+      '<div style="color:#ff00ff;font-weight:700;font-size:1.5rem;margin:5px 0;">OR</div>' +
+      '<button class="wyr-btn" onclick="voteWYR(\'' + qId + '\',\'b\',this)"><div class="wyr-fill" id="wyrFillB"></div><span>' + q.b + '</span></button>' +
+      '</div></div>';
+  }
+
+  function voteWYR(qId, choice, btn) {
+    var btns = btn.parentElement.querySelectorAll('.wyr-btn');
+    btns.forEach(function(b) { b.style.pointerEvents = 'none'; });
+    var ref = db.ref('games/wyr/' + qId);
+    ref.child(choice === 'a' ? 'optionA' : 'optionB').transaction(function(val) { return (val || 0) + 1; });
+    setTimeout(function() {
+      ref.once('value', function(snap) {
+        var data = snap.val() || {};
+        var a = data.optionA || 0;
+        var b = data.optionB || 0;
+        var total = a + b;
+        var pctA = total > 0 ? Math.round(a / total * 100) : 50;
+        var pctB = total > 0 ? Math.round(b / total * 100) : 50;
+        var fillA = document.getElementById('wyrFillA');
+        var fillB = document.getElementById('wyrFillB');
+        if (fillA) fillA.style.width = pctA + '%';
+        if (fillB) fillB.style.width = pctB + '%';
+        btns[0].querySelector('span').innerHTML = wyrShuffled[wyrIndex].a + ' <b style="color:#ff0;">(' + pctA + '%)</b>';
+        btns[1].querySelector('span').innerHTML = wyrShuffled[wyrIndex].b + ' <b style="color:#ff0;">(' + pctB + '%)</b>';
+        var nextBtn = document.createElement('div');
+        nextBtn.style.textAlign = 'center';
+        nextBtn.style.marginTop = '15px';
+        nextBtn.innerHTML = '<button onclick="wyrIndex++;showWYR()" style="background:#ff00ff;color:#fff;border:none;padding:12px 30px;border-radius:25px;font-family:\'Bangers\',cursive;font-size:1.1rem;cursor:pointer;">NEXT ➡️</button>';
+        btn.closest('.wyr-card').appendChild(nextBtn);
+      });
+    }, 300);
+  }
+
+  // --- CAPTION THIS ---
+  var captionImages = [
+    { id: 'cap1', img: 'https://i.imgflip.com/30b1gx.jpg', name: 'Drake' },
+    { id: 'cap2', img: 'https://i.imgflip.com/1ur9b0.jpg', name: 'Distracted BF' },
+    { id: 'cap3', img: 'https://i.imgflip.com/2wifvo.jpg', name: 'Surprised Pikachu' },
+    { id: 'cap4', img: 'https://i.imgflip.com/26am.jpg', name: 'This Is Fine' },
+    { id: 'cap5', img: 'https://i.imgflip.com/1h7in3.jpg', name: 'Mocking SpongeBob' },
+    { id: 'cap6', img: 'https://i.imgflip.com/4t0m5.jpg', name: 'Doge' },
+    { id: 'cap7', img: 'https://i.imgflip.com/2ybua0.jpg', name: 'Woman Yelling at Cat' },
+    { id: 'cap8', img: 'https://i.imgflip.com/3oevdk.jpg', name: 'Bernie Asking' }
+  ];
+  var currentCaptionImg = null;
+
+  function loadCaptionThis() {
+    if (!currentCaptionImg) currentCaptionImg = captionImages[Math.floor(Math.random() * captionImages.length)];
+    renderCaptionThis();
+  }
+
+  function renderCaptionThis() {
+    var el = document.getElementById('captionContent');
+    var img = currentCaptionImg;
+    el.innerHTML = '<div style="text-align:center;color:gold;font-weight:700;font-size:1.2rem;margin-bottom:10px;">Caption this meme! 💬</div>' +
+      '<img class="caption-img" src="' + img.img + '" alt="' + img.name + '">' +
+      '<div class="caption-input-row"><input type="text" id="captionInput" placeholder="Your caption..." maxlength="100"><button onclick="submitCaption()">SEND</button></div>' +
+      '<div style="text-align:center;margin:10px 0;"><button onclick="currentCaptionImg=captionImages[Math.floor(Math.random()*captionImages.length)];renderCaptionThis()" style="background:rgba(255,255,255,0.1);border:1px solid gold;color:gold;padding:8px 18px;border-radius:20px;font-family:\'Comic Neue\',cursive;font-weight:700;cursor:pointer;">🔄 New Image</button></div>' +
+      '<div class="caption-list" id="captionList"></div>';
+    loadCaptions();
+  }
+
+  function loadCaptions() {
+    var img = currentCaptionImg;
+    db.ref('games/captions/' + img.id).orderByChild('votes').limitToLast(20).once('value', function(snap) {
+      var list = document.getElementById('captionList');
+      if (!list) return;
+      var entries = [];
+      snap.forEach(function(c) {
+        entries.push({ key: c.key, val: c.val() });
+      });
+      entries.sort(function(a, b) { return (b.val.votes || 0) - (a.val.votes || 0); });
+      if (entries.length === 0) {
+        list.innerHTML = '<div style="text-align:center;color:#888;padding:20px;">No captions yet. Be the first! 🏆</div>';
+        return;
+      }
+      list.innerHTML = entries.map(function(e, i) {
+        var crown = i === 0 ? '👑 ' : '';
+        return '<div class="caption-item"><div><div class="cap-text">' + crown + escapeHtml(e.val.caption) + '</div><div class="cap-user">— ' + escapeHtml(e.val.username) + '</div></div><button class="cap-vote" onclick="voteCaptionItem(\'' + currentCaptionImg.id + '\',\'' + e.key + '\')">⬆ ' + (e.val.votes || 0) + '</button></div>';
+      }).join('');
+    });
+  }
+
+  function submitCaption() {
+    var input = document.getElementById('captionInput');
+    var text = input.value.trim();
+    if (!text) return;
+    var user = getCurrentUser();
+    if (!user) return;
+    var modCheck = checkContentModeration(text);
+    if (modCheck) { alert(modCheck); return; }
+    db.ref('games/captions/' + currentCaptionImg.id).push({
+      username: user,
+      caption: text,
+      votes: 0,
+      timestamp: Date.now()
+    });
+    input.value = '';
+    setTimeout(loadCaptions, 500);
+  }
+
+  function voteCaptionItem(imgId, key) {
+    db.ref('games/captions/' + imgId + '/' + key + '/votes').transaction(function(v) { return (v || 0) + 1; });
+    setTimeout(loadCaptions, 300);
+  }
+
+  // --- MEME GENERATOR ---
+  var memeTemplates = [
+    { name: 'Drake', url: 'https://i.imgflip.com/30b1gx.jpg', topY: 0.12, botY: 0.62 },
+    { name: 'Distracted BF', url: 'https://i.imgflip.com/1ur9b0.jpg', topY: 0.1, botY: 0.85 },
+    { name: 'Expanding Brain', url: 'https://i.imgflip.com/1otk96.jpg', topY: 0.05, botY: 0.85 },
+    { name: 'Change My Mind', url: 'https://i.imgflip.com/24y43o.jpg', topY: 0.1, botY: 0.85 },
+    { name: 'This Is Fine', url: 'https://i.imgflip.com/26am.jpg', topY: 0.1, botY: 0.85 },
+    { name: 'Surprised Pikachu', url: 'https://i.imgflip.com/2wifvo.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'SpongeBob', url: 'https://i.imgflip.com/1h7in3.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Doge', url: 'https://i.imgflip.com/4t0m5.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Woman Yelling', url: 'https://i.imgflip.com/2ybua0.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Bernie Asking', url: 'https://i.imgflip.com/3oevdk.jpg', topY: 0.08, botY: 0.85 }
+  ];
+  var currentMemeTemplate = null;
+  var memeCanvas = null;
+  var memeCtx = null;
+  var memeImg = null;
+
+  function initMemeGen() {
+    var el = document.getElementById('memegenContent');
+    el.innerHTML = '<div style="text-align:center;color:#00ffff;font-weight:700;margin-bottom:10px;">Pick a template:</div>' +
+      '<div class="meme-templates" id="memeTemplateList"></div>' +
+      '<div class="meme-canvas-wrap"><canvas id="memeCanvas" width="500" height="500"></canvas></div>' +
+      '<div class="meme-text-inputs">' +
+      '<input type="text" id="memeTopText" placeholder="TOP TEXT" maxlength="60" oninput="renderMeme()">' +
+      '<input type="text" id="memeBottomText" placeholder="BOTTOM TEXT" maxlength="60" oninput="renderMeme()">' +
+      '</div>' +
+      '<div style="text-align:center;margin-top:15px;">' +
+      '<button onclick="saveMeme()" style="background:#00ffff;color:#0f0024;border:none;padding:14px 30px;border-radius:25px;font-family:\'Bangers\',cursive;font-size:1.1rem;cursor:pointer;">💾 SAVE MEME</button></div>';
+
+    var listEl = document.getElementById('memeTemplateList');
+    listEl.innerHTML = memeTemplates.map(function(t, i) {
+      return '<img class="meme-tpl' + (i === 0 ? ' active' : '') + '" src="' + t.url + '" alt="' + t.name + '" title="' + t.name + '" onclick="selectMemeTemplate(' + i + ')" crossorigin="anonymous">';
+    }).join('');
+
+    memeCanvas = document.getElementById('memeCanvas');
+    memeCtx = memeCanvas.getContext('2d');
+    selectMemeTemplate(0);
+  }
+
+  function selectMemeTemplate(idx) {
+    currentMemeTemplate = memeTemplates[idx];
+    document.querySelectorAll('.meme-tpl').forEach(function(t, i) {
+      t.classList.toggle('active', i === idx);
+    });
+    memeImg = new Image();
+    memeImg.crossOrigin = 'anonymous';
+    memeImg.onload = function() { renderMeme(); };
+    memeImg.src = currentMemeTemplate.url;
+  }
+
+  function renderMeme() {
+    if (!memeImg || !memeCtx) return;
+    var c = memeCanvas;
+    var ctx = memeCtx;
+    var ratio = memeImg.naturalWidth / memeImg.naturalHeight;
+    c.width = 500;
+    c.height = Math.round(500 / ratio);
+    ctx.drawImage(memeImg, 0, 0, c.width, c.height);
+
+    var topText = (document.getElementById('memeTopText').value || '').toUpperCase();
+    var botText = (document.getElementById('memeBottomText').value || '').toUpperCase();
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#fff';
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = Math.max(2, c.width / 100);
+    ctx.lineJoin = 'round';
+
+    var fontSize = Math.max(20, c.width / 14);
+    ctx.font = 'bold ' + fontSize + 'px Impact, Arial Black, sans-serif';
+
+    if (topText) {
+      var ty = fontSize + 10;
+      ctx.strokeText(topText, c.width / 2, ty);
+      ctx.fillText(topText, c.width / 2, ty);
+    }
+    if (botText) {
+      var by = c.height - 15;
+      ctx.strokeText(botText, c.width / 2, by);
+      ctx.fillText(botText, c.width / 2, by);
+    }
+  }
+
+  function saveMeme() {
+    if (!memeCanvas) return;
+    memeCanvas.toBlob(function(blob) {
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'meme_' + Date.now() + '.png';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+  }
+
+  // ==========================================================
+  // ===== FACE FILTERS =======================================
+  // ==========================================================
+  var faceFilterStream = null;
+  var faceFilterLoop = null;
+  var faceFilterActive = '';
+  var faceLandmarksLoaded = false;
+  var frameCount = 0;
+
+  var faceFilterList = [
+    { id: 'none', label: '❌ None' },
+    { id: 'dog', label: '🐶 Dog' },
+    { id: 'cat', label: '😺 Cat' },
+    { id: 'sunglasses', label: '🕶️ Shades' },
+    { id: 'crown', label: '👑 Crown' },
+    { id: 'hearts', label: '❤️ Hearts' },
+    { id: 'clown', label: '🤡 Clown' },
+    { id: 'sparkle', label: '✨ Sparkle' },
+    { id: 'fire', label: '🔥 Fire' },
+    { id: 'alien', label: '👽 Alien' }
+  ];
+
+  async function startFaceCamera() {
+    try {
+      faceFilterStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 480 }, height: { ideal: 640 } }, audio: false });
+      var video = document.getElementById('faceVideo');
+      video.srcObject = faceFilterStream;
+      await video.play();
+
+      document.getElementById('faceFilterContainer').style.display = '';
+      document.getElementById('faceFilterBar').style.display = '';
+      document.getElementById('stopFaceCamBtn').style.display = '';
+
+      var canvas = document.getElementById('faceCanvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      // Build filter bar
+      var bar = document.getElementById('faceFilterBar');
+      bar.innerHTML = faceFilterList.map(function(f) {
+        return '<button class="filter-btn' + (f.id === 'none' ? ' active' : '') + '" onclick="selectFaceFilter(\'' + f.id + '\',this)">' + f.label + '</button>';
+      }).join('');
+
+      // Load face landmarks model if needed
+      if (!faceLandmarksLoaded) {
+        try {
+          await faceapi.nets.faceLandmark68TinyNet.loadFromUri('https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model');
+          faceLandmarksLoaded = true;
+        } catch(e) {
+          console.warn('Could not load landmarks model', e);
+        }
+      }
+
+      faceFilterActive = 'none';
+      runFaceFilterLoop();
+    } catch(e) {
+      alert('Could not access camera: ' + e.message);
+    }
+  }
+
+  function stopFaceCamera() {
+    if (faceFilterLoop) { cancelAnimationFrame(faceFilterLoop); faceFilterLoop = null; }
+    if (faceFilterStream) {
+      faceFilterStream.getTracks().forEach(function(t) { t.stop(); });
+      faceFilterStream = null;
+    }
+    var video = document.getElementById('faceVideo');
+    if (video) video.srcObject = null;
+    document.getElementById('faceFilterContainer').style.display = 'none';
+    document.getElementById('faceFilterBar').style.display = 'none';
+    document.getElementById('stopFaceCamBtn').style.display = 'none';
+    var canvas = document.getElementById('faceCanvas');
+    if (canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  function selectFaceFilter(id, btn) {
+    faceFilterActive = id;
+    document.querySelectorAll('#faceFilterBar .filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+  }
+
+  function runFaceFilterLoop() {
+    var video = document.getElementById('faceVideo');
+    var canvas = document.getElementById('faceCanvas');
+    var ctx = canvas.getContext('2d');
+
+    async function loop() {
+      if (!faceFilterStream) return;
+      faceFilterLoop = requestAnimationFrame(loop);
+      frameCount++;
+      if (frameCount % 3 !== 0) return; // process every 3rd frame
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (faceFilterActive === 'none' || faceFilterActive === '') return;
+
+      if (faceFilterActive === 'sparkle' || faceFilterActive === 'fire') {
+        // Full-screen effect, no face detection needed
+        drawFullScreenEffect(ctx, canvas.width, canvas.height, faceFilterActive);
+        return;
+      }
+
+      if (!faceLandmarksLoaded) return;
+
+      try {
+        var detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 256, scoreThreshold: 0.5 })).withFaceLandmarks(true);
+        if (detections && detections.length > 0) {
+          detections.forEach(function(det) {
+            var landmarks = det.landmarks;
+            var positions = landmarks.positions;
+            drawFaceFilter(ctx, positions, faceFilterActive, canvas.width, canvas.height);
+          });
+        }
+      } catch(e) {
+        // face detection failed this frame, skip
+      }
+    }
+    loop();
+  }
+
+  function drawFaceFilter(ctx, positions, filter, cw, ch) {
+    // Key landmark indices (68-point model):
+    // Left eye: 36-41, Right eye: 42-47
+    // Nose tip: 30, Nose bridge: 27
+    // Mouth: 48-67, Jaw: 0-16
+    // Forehead approx: above 19-24 (eyebrows)
+
+    var leftEyeCenter = avgPoints(positions, [36,37,38,39,40,41]);
+    var rightEyeCenter = avgPoints(positions, [42,43,44,45,46,47]);
+    var noseTip = { x: positions[30].x, y: positions[30].y };
+    var mouthCenter = avgPoints(positions, [48,51,54,57]);
+    var foreHead = { x: (positions[19].x + positions[24].x) / 2, y: positions[19].y - (positions[30].y - positions[19].y) * 0.6 };
+    var faceWidth = Math.abs(positions[16].x - positions[0].x);
+
+    var emojiSize = faceWidth * 0.45;
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    switch(filter) {
+      case 'dog':
+        ctx.font = emojiSize + 'px serif';
+        ctx.fillText('🐶', noseTip.x, noseTip.y + emojiSize * 0.2);
+        ctx.font = (emojiSize * 0.6) + 'px serif';
+        ctx.fillText('🐕', leftEyeCenter.x, leftEyeCenter.y - emojiSize * 0.7);
+        ctx.fillText('🐕', rightEyeCenter.x, rightEyeCenter.y - emojiSize * 0.7);
+        // tongue
+        ctx.font = (emojiSize * 0.5) + 'px serif';
+        ctx.fillText('👅', mouthCenter.x, mouthCenter.y + emojiSize * 0.3);
+        break;
+      case 'cat':
+        ctx.font = (emojiSize * 0.7) + 'px serif';
+        ctx.fillText('🐱', leftEyeCenter.x - emojiSize * 0.2, foreHead.y);
+        ctx.fillText('🐱', rightEyeCenter.x + emojiSize * 0.2, foreHead.y);
+        ctx.font = (emojiSize * 0.5) + 'px serif';
+        ctx.fillText('🐾', noseTip.x, noseTip.y);
+        // whiskers (lines)
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        [-1, 1].forEach(function(side) {
+          for (var i = -1; i <= 1; i++) {
+            ctx.beginPath();
+            ctx.moveTo(noseTip.x + side * emojiSize * 0.15, noseTip.y + i * 8);
+            ctx.lineTo(noseTip.x + side * emojiSize * 0.7, noseTip.y + i * 12 - 5);
+            ctx.stroke();
+          }
+        });
+        break;
+      case 'sunglasses':
+        ctx.font = emojiSize + 'px serif';
+        var glassesX = (leftEyeCenter.x + rightEyeCenter.x) / 2;
+        var glassesY = (leftEyeCenter.y + rightEyeCenter.y) / 2;
+        ctx.fillText('🕶️', glassesX, glassesY);
+        break;
+      case 'crown':
+        ctx.font = emojiSize + 'px serif';
+        ctx.fillText('👑', foreHead.x, foreHead.y - emojiSize * 0.1);
+        break;
+      case 'hearts':
+        ctx.font = (emojiSize * 0.6) + 'px serif';
+        ctx.fillText('❤️', leftEyeCenter.x, leftEyeCenter.y);
+        ctx.fillText('❤️', rightEyeCenter.x, rightEyeCenter.y);
+        // floating hearts
+        for (var i = 0; i < 3; i++) {
+          ctx.font = (emojiSize * 0.3) + 'px serif';
+          var hx = foreHead.x + (Math.random() - 0.5) * faceWidth;
+          var hy = foreHead.y - emojiSize * 0.5 - Math.random() * emojiSize;
+          ctx.fillText('💕', hx, hy);
+        }
+        break;
+      case 'clown':
+        ctx.font = (emojiSize * 0.6) + 'px serif';
+        ctx.fillText('🔴', noseTip.x, noseTip.y);
+        ctx.font = (emojiSize * 0.8) + 'px serif';
+        ctx.fillText('🤡', foreHead.x, foreHead.y);
+        ctx.font = (emojiSize * 0.4) + 'px serif';
+        ctx.fillText('🎈', positions[16].x + emojiSize * 0.3, foreHead.y);
+        break;
+      case 'alien':
+        ctx.font = emojiSize + 'px serif';
+        ctx.fillText('👽', foreHead.x, foreHead.y);
+        ctx.font = (emojiSize * 0.4) + 'px serif';
+        ctx.fillText('🛸', foreHead.x + faceWidth * 0.4, foreHead.y - emojiSize * 0.5);
+        ctx.fillText('✨', foreHead.x - faceWidth * 0.3, foreHead.y - emojiSize * 0.3);
+        break;
+    }
+  }
+
+  function drawFullScreenEffect(ctx, w, h, effect) {
+    var count = 15;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    if (effect === 'sparkle') {
+      for (var i = 0; i < count; i++) {
+        ctx.font = (20 + Math.random() * 30) + 'px serif';
+        ctx.globalAlpha = 0.5 + Math.random() * 0.5;
+        ctx.fillText('✨', Math.random() * w, Math.random() * h);
+      }
+    } else if (effect === 'fire') {
+      for (var i = 0; i < count; i++) {
+        ctx.font = (20 + Math.random() * 40) + 'px serif';
+        ctx.globalAlpha = 0.5 + Math.random() * 0.5;
+        ctx.fillText('🔥', Math.random() * w, h * 0.5 + Math.random() * h * 0.5);
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function avgPoints(positions, indices) {
+    var sx = 0, sy = 0;
+    indices.forEach(function(i) { sx += positions[i].x; sy += positions[i].y; });
+    return { x: sx / indices.length, y: sy / indices.length };
+  }
+
+  // ==========================================================
+  // ===== PHOTO FILTERS ======================================
+  // ==========================================================
+  var photoOriginalImage = null;
+  var photoCanvas = null;
+  var photoCtx = null;
+  var currentPhotoFilter = 'none';
+  var currentPhotoFrame = 'none';
+  var photoStickers = []; // { emoji, x, y, size }
+  var draggingSticker = null;
+
+  var colorFilters = [
+    { id: 'none', label: 'Original' },
+    { id: 'vintage', label: 'Vintage' },
+    { id: 'bw', label: 'B&W' },
+    { id: 'warm', label: 'Warm' },
+    { id: 'cool', label: 'Cool' },
+    { id: 'contrast', label: 'High Contrast' },
+    { id: 'fade', label: 'Fade' }
+  ];
+
+  var stickerEmojis = ['🔥','⭐','💯','😂','❤️','🎉','👑','💀','🏆','😎','🤩','💪','🎵','💎','🦋','🌈','👻','🍕','🎮','💜'];
+
+  var frameList = [
+    { id: 'none', label: 'None' },
+    { id: 'polaroid', label: 'Polaroid' },
+    { id: 'rounded', label: 'Rounded' },
+    { id: 'filmstrip', label: 'Film Strip' },
+    { id: 'glitch', label: 'Glitch' }
+  ];
+
+  function handlePhotoFilterUpload(input) {
+    if (!input.files || !input.files[0]) return;
+    var file = input.files[0];
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = new Image();
+      img.onload = function() {
+        photoOriginalImage = img;
+        photoCanvas = document.getElementById('photoFilterCanvas');
+        photoCtx = photoCanvas.getContext('2d');
+        // Set canvas to square crop
+        var size = 400;
+        photoCanvas.width = size;
+        photoCanvas.height = size;
+        currentPhotoFilter = 'none';
+        currentPhotoFrame = 'none';
+        photoStickers = [];
+        document.getElementById('photoFilterUpload').style.display = 'none';
+        document.getElementById('photoCanvasWrap').style.display = '';
+        document.getElementById('photoFilterControls').style.display = '';
+        buildPhotoFilterUI();
+        drawPhotoCanvas();
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function buildPhotoFilterUI() {
+    // Color filters
+    var colorsEl = document.getElementById('photoTabColors');
+    colorsEl.innerHTML = colorFilters.map(function(f) {
+      return '<button class="photo-filter-opt' + (f.id === 'none' ? ' active' : '') + '" onclick="applyColorFilter(\'' + f.id + '\',this)">' + f.label + '</button>';
+    }).join('');
+
+    // Stickers
+    var stickersEl = document.getElementById('photoTabStickers');
+    stickersEl.innerHTML = stickerEmojis.map(function(e) {
+      return '<button class="sticker-btn" onclick="addPhotoSticker(\'' + e + '\')">' + e + '</button>';
+    }).join('') + '<div style="text-align:center;width:100%;color:#aaa;font-size:0.85rem;margin-top:8px;">Tap sticker to add, tap on photo to remove</div>';
+
+    // Frames
+    var framesEl = document.getElementById('photoTabFrames');
+    framesEl.innerHTML = frameList.map(function(f) {
+      return '<button class="frame-opt' + (f.id === 'none' ? ' active' : '') + '" onclick="applyFrame(\'' + f.id + '\',this)">' + f.label + '</button>';
+    }).join('');
+
+    // Make canvas interactive for sticker placement
+    photoCanvas.addEventListener('click', handlePhotoCanvasClick);
+  }
+
+  function switchPhotoTab(tab) {
+    document.querySelectorAll('.photo-filter-tab').forEach(function(b) { b.classList.remove('active'); });
+    event.target.classList.add('active');
+    document.getElementById('photoTabColors').style.display = tab === 'colors' ? '' : 'none';
+    document.getElementById('photoTabStickers').style.display = tab === 'stickers' ? '' : 'none';
+    document.getElementById('photoTabFrames').style.display = tab === 'frames' ? '' : 'none';
+  }
+
+  function applyColorFilter(id, btn) {
+    currentPhotoFilter = id;
+    document.querySelectorAll('#photoTabColors .photo-filter-opt').forEach(function(b) { b.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+    drawPhotoCanvas();
+  }
+
+  function applyFrame(id, btn) {
+    currentPhotoFrame = id;
+    document.querySelectorAll('#photoTabFrames .frame-opt').forEach(function(b) { b.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+    drawPhotoCanvas();
+  }
+
+  function addPhotoSticker(emoji) {
+    photoStickers.push({
+      emoji: emoji,
+      x: 150 + Math.random() * 100,
+      y: 150 + Math.random() * 100,
+      size: 40
+    });
+    drawPhotoCanvas();
+  }
+
+  function handlePhotoCanvasClick(e) {
+    var rect = photoCanvas.getBoundingClientRect();
+    var scaleX = photoCanvas.width / rect.width;
+    var scaleY = photoCanvas.height / rect.height;
+    var cx = (e.clientX - rect.left) * scaleX;
+    var cy = (e.clientY - rect.top) * scaleY;
+
+    // Check if clicked on a sticker (remove it)
+    for (var i = photoStickers.length - 1; i >= 0; i--) {
+      var s = photoStickers[i];
+      if (Math.abs(cx - s.x) < s.size && Math.abs(cy - s.y) < s.size) {
+        photoStickers.splice(i, 1);
+        drawPhotoCanvas();
+        return;
+      }
+    }
+  }
+
+  function drawPhotoCanvas() {
+    if (!photoOriginalImage || !photoCtx) return;
+    var c = photoCanvas;
+    var ctx = photoCtx;
+    var size = c.width;
+
+    // Draw image (center crop)
+    var img = photoOriginalImage;
+    var srcSize = Math.min(img.width, img.height);
+    var sx = (img.width - srcSize) / 2;
+    var sy = (img.height - srcSize) / 2;
+
+    // Frame offsets
+    var pad = 0;
+    if (currentPhotoFrame === 'polaroid') pad = 20;
+    else if (currentPhotoFrame === 'filmstrip') pad = 15;
+    else if (currentPhotoFrame === 'glitch') pad = 8;
+
+    ctx.clearRect(0, 0, size, size);
+
+    // Draw background for frames
+    if (currentPhotoFrame === 'polaroid') {
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, size, size);
+      var botPad = 50;
+      ctx.drawImage(img, sx, sy, srcSize, srcSize, pad, pad, size - pad * 2, size - pad - botPad);
+    } else if (currentPhotoFrame === 'filmstrip') {
+      ctx.fillStyle = '#111';
+      ctx.fillRect(0, 0, size, size);
+      ctx.drawImage(img, sx, sy, srcSize, srcSize, pad, pad * 2, size - pad * 2, size - pad * 4);
+      // Film holes
+      ctx.fillStyle = '#333';
+      for (var i = 0; i < 8; i++) {
+        var hx = pad + i * ((size - pad * 2) / 8) + 10;
+        ctx.fillRect(hx, 3, 12, 10);
+        ctx.fillRect(hx, size - 13, 12, 10);
+      }
+    } else if (currentPhotoFrame === 'glitch') {
+      ctx.drawImage(img, sx, sy, srcSize, srcSize, pad, pad, size - pad * 2, size - pad * 2);
+      // Glitch border effect
+      ctx.strokeStyle = '#ff00ff';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(2, 4, size - 4, size - 8);
+      ctx.strokeStyle = '#00ffff';
+      ctx.strokeRect(5, 1, size - 10, size - 2);
+      ctx.strokeStyle = '#ff0';
+      ctx.strokeRect(0, 6, size, size - 12);
+    } else {
+      ctx.drawImage(img, sx, sy, srcSize, srcSize, 0, 0, size, size);
+    }
+
+    if (currentPhotoFrame === 'rounded') {
+      // Apply rounded corners by clearing outside
+      ctx.globalCompositeOperation = 'destination-in';
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, 30);
+      ctx.fill();
+      ctx.globalCompositeOperation = 'source-over';
+      // Border
+      ctx.strokeStyle = '#00ffff';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.roundRect(2, 2, size - 4, size - 4, 28);
+      ctx.stroke();
+    }
+
+    // Apply color filter
+    if (currentPhotoFilter !== 'none') {
+      var imageData = ctx.getImageData(0, 0, size, size);
+      var data = imageData.data;
+      applyPixelFilter(data, currentPhotoFilter);
+      ctx.putImageData(imageData, 0, 0);
+    }
+
+    // Draw stickers
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    photoStickers.forEach(function(s) {
+      ctx.font = s.size + 'px serif';
+      ctx.fillText(s.emoji, s.x, s.y);
+    });
+  }
+
+  function applyPixelFilter(data, filter) {
+    for (var i = 0; i < data.length; i += 4) {
+      var r = data[i], g = data[i+1], b = data[i+2];
+      switch(filter) {
+        case 'vintage':
+          data[i]   = Math.min(255, r * 0.9 + 40);
+          data[i+1] = Math.min(255, g * 0.7 + 20);
+          data[i+2] = Math.min(255, b * 0.5 + 10);
+          break;
+        case 'bw':
+          var gray = r * 0.299 + g * 0.587 + b * 0.114;
+          data[i] = data[i+1] = data[i+2] = gray;
+          break;
+        case 'warm':
+          data[i]   = Math.min(255, r + 25);
+          data[i+1] = Math.min(255, g + 10);
+          data[i+2] = Math.max(0, b - 15);
+          break;
+        case 'cool':
+          data[i]   = Math.max(0, r - 15);
+          data[i+1] = Math.min(255, g + 5);
+          data[i+2] = Math.min(255, b + 30);
+          break;
+        case 'contrast':
+          data[i]   = clampContrast(r);
+          data[i+1] = clampContrast(g);
+          data[i+2] = clampContrast(b);
+          break;
+        case 'fade':
+          data[i]   = Math.min(255, r * 0.8 + 50);
+          data[i+1] = Math.min(255, g * 0.8 + 50);
+          data[i+2] = Math.min(255, b * 0.8 + 50);
+          break;
+      }
+    }
+  }
+
+  function clampContrast(v) {
+    return Math.min(255, Math.max(0, ((v / 255 - 0.5) * 1.5 + 0.5) * 255));
+  }
+
+  function resetPhotoFilter() {
+    currentPhotoFilter = 'none';
+    currentPhotoFrame = 'none';
+    photoStickers = [];
+    document.querySelectorAll('#photoTabColors .photo-filter-opt').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('#photoTabFrames .frame-opt').forEach(function(b) { b.classList.remove('active'); });
+    var firstColorBtn = document.querySelector('#photoTabColors .photo-filter-opt');
+    if (firstColorBtn) firstColorBtn.classList.add('active');
+    var firstFrameBtn = document.querySelector('#photoTabFrames .frame-opt');
+    if (firstFrameBtn) firstFrameBtn.classList.add('active');
+    drawPhotoCanvas();
+  }
+
+  async function postFilteredPhoto() {
+    var user = getCurrentUser();
+    if (!user) { alert('Please log in first!'); return; }
+    if (!photoCanvas) { alert('No photo to post!'); return; }
+
+    var btn = document.querySelector('.photo-post-btn');
+    btn.disabled = true;
+    btn.textContent = 'CHECKING...';
+
+    // Convert canvas to blob
+    var blob = await new Promise(function(resolve) { photoCanvas.toBlob(resolve, 'image/png'); });
+
+    // Check for human faces
+    try {
+      var tempImg = new Image();
+      var tempUrl = URL.createObjectURL(blob);
+      tempImg.src = tempUrl;
+      await new Promise(function(resolve) { tempImg.onload = resolve; });
+      var detections = await faceapi.detectAllFaces(tempImg, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.65 }));
+      URL.revokeObjectURL(tempUrl);
+      if (detections && detections.length > 0) {
+        alert('Real human face detected! Anime & cartoon faces are fine, but no real people faces for safety!');
+        btn.disabled = false;
+        btn.textContent = 'POST TO FEED 🚀';
+        return;
+      }
+    } catch(e) {
+      console.warn('Face detection skipped', e);
+    }
+
+    btn.textContent = 'UPLOADING...';
+
+    // Upload to Firebase Storage
+    var id = 'filtered_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+    var ref = storage.ref('uploads/' + id + '/filtered.png');
+    try {
+      await ref.put(blob);
+      var downloadURL = await ref.getDownloadURL();
+      await db.ref('videos/' + id).set({
+        title: 'Filtered Photo 📸',
+        url: downloadURL,
+        type: 'image',
+        author: user,
+        created: Date.now()
+      });
+      btn.textContent = 'POSTED! ✅';
+      setTimeout(function() {
+        btn.disabled = false;
+        btn.textContent = 'POST TO FEED 🚀';
+        // Reset
+        document.getElementById('photoFilterUpload').style.display = '';
+        document.getElementById('photoCanvasWrap').style.display = 'none';
+        document.getElementById('photoFilterControls').style.display = 'none';
+        document.getElementById('photoFilterFile').value = '';
+        photoOriginalImage = null;
+        photoStickers = [];
+        showPage('feed');
+      }, 1500);
+    } catch(e) {
+      alert('Upload failed: ' + e.message);
+      btn.disabled = false;
+      btn.textContent = 'POST TO FEED 🚀';
+    }
+  }
 </script>
 </body>
 </html>
