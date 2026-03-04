@@ -3431,6 +3431,107 @@
     text-align: center;
   }
 
+  /* ===== GUESS THE LYRICS ===== */
+  .lyrics-box {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(138,43,226,0.4);
+    border-radius: 20px;
+    padding: 24px;
+    max-width: 450px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .lyrics-text {
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.6;
+    margin: 15px 0;
+    font-style: italic;
+  }
+  .lyrics-hint { color: #aaa; font-size: 0.85rem; margin-bottom: 15px; }
+  .lyrics-options { display: flex; flex-direction: column; gap: 10px; }
+  .lyrics-opt {
+    background: rgba(138,43,226,0.15);
+    border: 2px solid rgba(138,43,226,0.3);
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 16px;
+    font-family: 'Comic Neue', cursive;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .lyrics-opt:hover { border-color: #8a2be2; background: rgba(138,43,226,0.3); }
+  .lyrics-opt.correct { background: rgba(0,255,0,0.3); border-color: #0f0; }
+  .lyrics-opt.wrong { background: rgba(255,0,0,0.3); border-color: #f00; }
+
+  /* ===== TIC TAC TOE ===== */
+  .ttt-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    max-width: 300px;
+    margin: 15px auto;
+  }
+  .ttt-cell {
+    aspect-ratio: 1;
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(0,255,255,0.3);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #fff;
+  }
+  .ttt-cell:hover { background: rgba(0,255,255,0.1); border-color: #00ffff; }
+  .ttt-cell.x { color: #00ffff; }
+  .ttt-cell.o { color: #ff00ff; }
+  .ttt-cell.win { background: rgba(255,215,0,0.2); border-color: gold; box-shadow: 0 0 15px rgba(255,215,0,0.4); }
+  .ttt-status {
+    text-align: center;
+    font-family: 'Bangers', cursive;
+    font-size: 1.3rem;
+    color: #00ffff;
+    margin: 12px 0;
+  }
+  .ttt-lobby {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .ttt-lobby-item {
+    background: rgba(255,255,255,0.06);
+    border: 2px solid rgba(0,255,255,0.2);
+    border-radius: 16px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .ttt-lobby-item:hover { border-color: #00ffff; background: rgba(0,255,255,0.1); }
+  .ttt-player-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ttt-player-info .inline-avatar-img,
+  .ttt-player-info .inline-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
   /* ===== FACE FILTERS PAGE ===== */
   .face-filter-container {
     position: relative;
@@ -4111,12 +4212,15 @@
 
 <!-- ===== GAMES PAGE ===== -->
 <div class="container hidden" id="gamesPage">
-  <div class="page-title" style="color: #00ffff;">🎮 MEME GAMES 🎮</div>
+  <div class="page-title" style="color: #00ffff;">🎮 GAMES 🎮</div>
+  <div id="gamesPlayerInfo" style="text-align:center;margin-bottom:12px;"></div>
   <div class="game-tabs">
-    <button class="game-tab active" onclick="switchGameTab('trivia',this)">🧠 Trivia</button>
+    <button class="game-tab active" onclick="switchGameTab('trivia',this)">🧠 Meme Trivia</button>
     <button class="game-tab" onclick="switchGameTab('wyr',this)">🤔 WYR</button>
     <button class="game-tab" onclick="switchGameTab('caption',this)">💬 Caption</button>
     <button class="game-tab" onclick="switchGameTab('memegen',this)">🖼️ Meme Gen</button>
+    <button class="game-tab" onclick="switchGameTab('lyrics',this)">🎵 Lyrics</button>
+    <button class="game-tab" onclick="switchGameTab('tictactoe',this)">❌⭕ Tic Tac Toe</button>
   </div>
   <!-- Trivia Section -->
   <div class="game-section active" id="gameTrivia">
@@ -4133,6 +4237,14 @@
   <!-- Meme Generator Section -->
   <div class="game-section" id="gameMemegen">
     <div id="memegenContent"></div>
+  </div>
+  <!-- Guess the Lyrics Section -->
+  <div class="game-section" id="gameLyrics">
+    <div id="lyricsContent"></div>
+  </div>
+  <!-- Tic Tac Toe Section -->
+  <div class="game-section" id="gameTictactoe">
+    <div id="tictactoeContent"></div>
   </div>
 </div>
 
@@ -8227,13 +8339,26 @@
     if (tab === 'wyr') loadWYR();
     if (tab === 'caption') loadCaptionThis();
     if (tab === 'memegen') initMemeGen();
+    if (tab === 'lyrics') startLyrics();
+    if (tab === 'tictactoe') loadTicTacToe();
   }
 
   function initGames() {
     if (!gamesInitialized) {
       gamesInitialized = true;
+      showGamesPlayerInfo();
       startTrivia();
     }
+  }
+
+  function showGamesPlayerInfo() {
+    var user = getCurrentUser();
+    if (!user) return;
+    var el = document.getElementById('gamesPlayerInfo');
+    if (!el) return;
+    el.innerHTML = '<div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);padding:8px 18px;border-radius:20px;border:1px solid rgba(0,255,255,0.2);">' +
+      getAvatarHtml(user) + ' <span style="color:#fff;font-weight:700;">' + escapeHtml(user) + '</span>' +
+      '</div>';
   }
 
   // --- MEME TRIVIA ---
@@ -8439,7 +8564,7 @@
       }
       list.innerHTML = entries.map(function(e, i) {
         var crown = i === 0 ? '👑 ' : '';
-        return '<div class="caption-item"><div><div class="cap-text">' + crown + escapeHtml(e.val.caption) + '</div><div class="cap-user">— ' + escapeHtml(e.val.username) + '</div></div><button class="cap-vote" onclick="voteCaptionItem(\'' + currentCaptionImg.id + '\',\'' + e.key + '\')">⬆ ' + (e.val.votes || 0) + '</button></div>';
+        return '<div class="caption-item"><div><div class="cap-text">' + crown + escapeHtml(e.val.caption) + '</div><div class="cap-user" style="display:flex;align-items:center;gap:4px;">' + getAvatarHtml(e.val.username) + ' ' + escapeHtml(e.val.username) + '</div></div><button class="cap-vote" onclick="voteCaptionItem(\'' + currentCaptionImg.id + '\',\'' + e.key + '\')">⬆ ' + (e.val.votes || 0) + '</button></div>';
       }).join('');
     });
   }
@@ -8566,6 +8691,277 @@
       // Canvas tainted by cross-origin image
       alert('Hold down on the meme to save it! (cross-origin images block direct save)');
     }
+  }
+
+  // ==========================================================
+  // ===== GUESS THE LYRICS ===================================
+  // ==========================================================
+  var lyricsQuestions = [
+    { lyrics: '"We don\'t talk about Bruno, no, no, no..."', artist: 'Encanto', options: ['Encanto', 'Moana', 'Frozen', 'Coco'] },
+    { lyrics: '"I got my mind on my money and my money on my mind"', artist: 'Snoop Dogg', options: ['Dr. Dre', 'Snoop Dogg', '50 Cent', 'Eminem'] },
+    { lyrics: '"Cause baby you\'re a firework, come on show \'em what you\'re worth"', artist: 'Katy Perry', options: ['Taylor Swift', 'Katy Perry', 'Lady Gaga', 'Rihanna'] },
+    { lyrics: '"I\'m just a kid and life is a nightmare"', artist: 'Simple Plan', options: ['Blink-182', 'Green Day', 'Simple Plan', 'Good Charlotte'] },
+    { lyrics: '"Never gonna give you up, never gonna let you down"', artist: 'Rick Astley', options: ['Rick Astley', 'Michael Jackson', 'George Michael', 'Phil Collins'] },
+    { lyrics: '"Hello, it\'s me, I was wondering if after all these years you\'d like to meet"', artist: 'Adele', options: ['Adele', 'Sam Smith', 'Ed Sheeran', 'Beyonce'] },
+    { lyrics: '"I don\'t care what they\'re gonna say, let the storm rage on"', artist: 'Frozen (Let It Go)', options: ['Moana', 'Tangled', 'Frozen (Let It Go)', 'Brave'] },
+    { lyrics: '"We will, we will rock you"', artist: 'Queen', options: ['AC/DC', 'Queen', 'Led Zeppelin', 'The Beatles'] },
+    { lyrics: '"So I put my hands up, they\'re playing my song, the butterflies fly away"', artist: 'Miley Cyrus', options: ['Selena Gomez', 'Demi Lovato', 'Miley Cyrus', 'Ariana Grande'] },
+    { lyrics: '"Somebody once told me the world is gonna roll me"', artist: 'Smash Mouth', options: ['Smash Mouth', 'Weezer', 'Third Eye Blind', 'Barenaked Ladies'] },
+    { lyrics: '"I\'m blue, da ba dee da ba daa"', artist: 'Eiffel 65', options: ['Aqua', 'Eiffel 65', 'Vengaboys', 'Crazy Town'] },
+    { lyrics: '"Baby, baby, baby, ohhh"', artist: 'Justin Bieber', options: ['One Direction', 'Justin Bieber', 'The Weeknd', 'Charlie Puth'] },
+    { lyrics: '"I came in like a wrecking ball"', artist: 'Miley Cyrus', options: ['Katy Perry', 'Miley Cyrus', 'P!nk', 'Sia'] },
+    { lyrics: '"Is this the real life? Is this just fantasy?"', artist: 'Queen', options: ['The Beatles', 'Pink Floyd', 'Queen', 'Led Zeppelin'] },
+    { lyrics: '"I\'m walking on sunshine, whoa oh"', artist: 'Katrina & The Waves', options: ['Cyndi Lauper', 'Katrina & The Waves', 'The Go-Go\'s', 'Blondie'] },
+    { lyrics: '"Cause all of me loves all of you"', artist: 'John Legend', options: ['Ed Sheeran', 'John Legend', 'Bruno Mars', 'Sam Smith'] },
+    { lyrics: '"Just a small town girl, livin\' in a lonely world"', artist: 'Journey', options: ['Bon Jovi', 'Journey', 'Foreigner', 'REO Speedwagon'] },
+    { lyrics: '"I feel it coming in the air tonight"', artist: 'Phil Collins', options: ['Peter Gabriel', 'Phil Collins', 'Sting', 'George Michael'] },
+    { lyrics: '"Uptown funk you up, uptown funk you up"', artist: 'Bruno Mars', options: ['Pharrell', 'Bruno Mars', 'The Weeknd', 'Usher'] },
+    { lyrics: '"You used to call me on my cell phone"', artist: 'Drake', options: ['The Weeknd', 'Post Malone', 'Drake', 'Travis Scott'] }
+  ];
+  var lyricsStarted = false;
+  var lyricsScore = 0;
+  var lyricsQ = 0;
+  var lyricsOrder = [];
+
+  function startLyrics() {
+    if (lyricsStarted && lyricsQ < lyricsOrder.length) return; // don't restart mid-game
+    lyricsStarted = true;
+    lyricsScore = 0;
+    lyricsQ = 0;
+    lyricsOrder = shuffleArray(lyricsQuestions).slice(0, 10);
+    showLyricsQuestion();
+  }
+
+  function showLyricsQuestion() {
+    var el = document.getElementById('lyricsContent');
+    if (lyricsQ >= lyricsOrder.length) {
+      el.innerHTML = '<div class="lyrics-box">' +
+        '<div style="font-size:3rem;margin-bottom:15px;">🎵🏆🎵</div>' +
+        '<div style="color:#8a2be2;font-family:\'Bangers\',cursive;font-size:1.8rem;">FINAL SCORE: ' + lyricsScore + '/' + lyricsOrder.length + '</div>' +
+        '<div style="color:#aaa;margin:15px 0;">' + (lyricsScore >= 8 ? 'MUSIC GENIUS! 🎤' : lyricsScore >= 5 ? 'Not bad! 🎶' : 'Keep listening! 🎧') + '</div>' +
+        '<button onclick="lyricsStarted=false;startLyrics()" style="background:linear-gradient(135deg,#8a2be2,#ff00ff);color:#fff;border:none;padding:14px 30px;border-radius:25px;font-family:\'Bangers\',cursive;font-size:1.2rem;cursor:pointer;">PLAY AGAIN</button></div>';
+      return;
+    }
+    var q = lyricsOrder[lyricsQ];
+    var opts = shuffleArray(q.options);
+    el.innerHTML = '<div class="lyrics-box">' +
+      '<div style="color:#8a2be2;font-weight:700;font-size:0.9rem;">Question ' + (lyricsQ + 1) + '/' + lyricsOrder.length + ' | Score: ' + lyricsScore + '</div>' +
+      '<div class="lyrics-text">' + q.lyrics + '</div>' +
+      '<div class="lyrics-hint">Who sings this? 🤔</div>' +
+      '<div class="lyrics-options">' + opts.map(function(o) {
+        return '<button class="lyrics-opt" onclick="answerLyrics(this,\'' + o.replace(/'/g, "\\'") + '\',\'' + q.artist.replace(/'/g, "\\'") + '\')">' + o + '</button>';
+      }).join('') + '</div></div>';
+  }
+
+  function answerLyrics(btn, picked, correct) {
+    var btns = btn.parentElement.querySelectorAll('.lyrics-opt');
+    btns.forEach(function(b) {
+      b.disabled = true;
+      b.style.pointerEvents = 'none';
+      if (b.textContent === correct) b.classList.add('correct');
+    });
+    if (picked === correct) {
+      lyricsScore++;
+      btn.classList.add('correct');
+    } else {
+      btn.classList.add('wrong');
+    }
+    lyricsQ++;
+    setTimeout(showLyricsQuestion, 1200);
+  }
+
+  // ==========================================================
+  // ===== TIC TAC TOE (2-Player via Firebase) ================
+  // ==========================================================
+  var tttGameId = null;
+  var tttListener = null;
+  var tttLobbyListener = null;
+
+  function loadTicTacToe() {
+    var el = document.getElementById('tictactoeContent');
+    var user = getCurrentUser();
+    el.innerHTML = '<div class="ttt-lobby">' +
+      '<div style="text-align:center;margin-bottom:20px;">' +
+      '<button onclick="createTTTGame()" style="background:linear-gradient(135deg,#00ffff,#ff00ff);color:#0f0024;border:none;padding:14px 30px;border-radius:25px;font-family:\'Bangers\',cursive;font-size:1.2rem;cursor:pointer;">CREATE GAME</button>' +
+      '</div>' +
+      '<div style="color:#00ffff;font-weight:700;text-align:center;margin-bottom:12px;">OR JOIN A GAME:</div>' +
+      '<div id="tttLobbyList"></div>' +
+      '</div>';
+    loadTTTLobby();
+  }
+
+  function loadTTTLobby() {
+    if (tttLobbyListener) db.ref('games/tictactoe').off('value', tttLobbyListener);
+    tttLobbyListener = db.ref('games/tictactoe').orderByChild('status').equalTo('waiting').on('value', function(snap) {
+      var list = document.getElementById('tttLobbyList');
+      if (!list) return;
+      var games = snap.val() || {};
+      var user = getCurrentUser();
+      var html = '';
+      var count = 0;
+      Object.keys(games).forEach(function(gid) {
+        var g = games[gid];
+        if (g.playerX === user) return; // don't show own game
+        count++;
+        html += '<div class="ttt-lobby-item" onclick="joinTTTGame(\'' + gid + '\')">' +
+          '<div class="ttt-player-info">' + getAvatarHtml(g.playerX) + ' <span style="color:#fff;font-weight:700;">' + escapeHtml(g.playerX) + '</span></div>' +
+          '<span style="color:#00ffff;font-weight:700;">JOIN ➡️</span></div>';
+      });
+      if (count === 0) html = '<div style="text-align:center;color:#888;padding:20px;">No games waiting. Create one!</div>';
+      list.innerHTML = html;
+    });
+  }
+
+  function createTTTGame() {
+    var user = getCurrentUser();
+    if (!user) return;
+    tttGameId = 'ttt_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+    db.ref('games/tictactoe/' + tttGameId).set({
+      playerX: user,
+      playerO: '',
+      board: ',,,,,,,,',
+      turn: 'X',
+      status: 'waiting',
+      winner: '',
+      created: Date.now()
+    });
+    showTTTBoard(tttGameId);
+  }
+
+  function joinTTTGame(gid) {
+    var user = getCurrentUser();
+    if (!user) return;
+    tttGameId = gid;
+    db.ref('games/tictactoe/' + gid).once('value', function(snap) {
+      var g = snap.val();
+      if (!g || g.status !== 'waiting') { alert('Game no longer available!'); loadTicTacToe(); return; }
+      if (g.playerX === user) { alert('You created this game!'); return; }
+      db.ref('games/tictactoe/' + gid).update({ playerO: user, status: 'playing' });
+      showTTTBoard(gid);
+    });
+  }
+
+  function showTTTBoard(gid) {
+    if (tttLobbyListener) { db.ref('games/tictactoe').off('value', tttLobbyListener); tttLobbyListener = null; }
+    var el = document.getElementById('tictactoeContent');
+    el.innerHTML = '<div id="tttPlayerDisplay" style="text-align:center;margin-bottom:10px;"></div>' +
+      '<div class="ttt-status" id="tttStatus">Waiting for opponent...</div>' +
+      '<div class="ttt-board" id="tttBoard"></div>' +
+      '<div style="text-align:center;margin-top:15px;">' +
+      '<button onclick="leaveTTTGame()" style="background:rgba(255,0,0,0.5);color:#fff;border:none;padding:10px 24px;border-radius:20px;font-family:\'Comic Neue\',cursive;font-weight:700;cursor:pointer;">LEAVE GAME</button></div>';
+
+    if (tttListener) db.ref('games/tictactoe/' + tttGameId).off('value', tttListener);
+    tttListener = db.ref('games/tictactoe/' + gid).on('value', function(snap) {
+      var g = snap.val();
+      if (!g) return;
+      renderTTTBoard(g, gid);
+    });
+  }
+
+  function renderTTTBoard(g, gid) {
+    var user = getCurrentUser();
+    var board = g.board.split(',');
+    var mySymbol = (g.playerX === user) ? 'X' : 'O';
+    var isMyTurn = (g.status === 'playing' && g.turn === mySymbol);
+
+    // Player display with profile pics
+    var playerDisplay = document.getElementById('tttPlayerDisplay');
+    if (playerDisplay) {
+      var xInfo = '<span style="display:inline-flex;align-items:center;gap:6px;color:#00ffff;font-weight:700;">' + getAvatarHtml(g.playerX) + ' ' + escapeHtml(g.playerX) + ' (X)</span>';
+      var oInfo = g.playerO ? '<span style="display:inline-flex;align-items:center;gap:6px;color:#ff00ff;font-weight:700;">' + getAvatarHtml(g.playerO) + ' ' + escapeHtml(g.playerO) + ' (O)</span>' : '<span style="color:#888;">Waiting...</span>';
+      playerDisplay.innerHTML = xInfo + ' <span style="color:gold;font-weight:700;margin:0 10px;">VS</span> ' + oInfo;
+    }
+
+    // Status
+    var statusEl = document.getElementById('tttStatus');
+    if (g.status === 'waiting') {
+      statusEl.textContent = 'Waiting for opponent to join...';
+      statusEl.style.color = '#888';
+    } else if (g.status === 'done') {
+      if (g.winner === 'draw') {
+        statusEl.innerHTML = "IT'S A DRAW! 🤝";
+        statusEl.style.color = 'gold';
+      } else {
+        var winnerName = g.winner === 'X' ? g.playerX : g.playerO;
+        statusEl.innerHTML = (winnerName === user ? 'YOU WIN! 🏆' : winnerName + ' WINS!');
+        statusEl.style.color = g.winner === 'X' ? '#00ffff' : '#ff00ff';
+      }
+    } else {
+      statusEl.textContent = isMyTurn ? "YOUR TURN! (" + mySymbol + ")" : "Opponent's turn...";
+      statusEl.style.color = isMyTurn ? '#0f0' : '#888';
+    }
+
+    // Board
+    var boardEl = document.getElementById('tttBoard');
+    var winCells = g.status === 'done' && g.winner !== 'draw' ? getWinningCells(board) : [];
+    var html = '';
+    for (var i = 0; i < 9; i++) {
+      var val = board[i] || '';
+      var cls = val === 'X' ? 'x' : val === 'O' ? 'o' : '';
+      if (winCells.indexOf(i) >= 0) cls += ' win';
+      var clickable = (g.status === 'playing' && isMyTurn && val === '') ? ' onclick="makeTTTMove(\'' + gid + '\',' + i + ',\'' + mySymbol + '\')"' : '';
+      html += '<div class="ttt-cell ' + cls + '"' + clickable + '>' + val + '</div>';
+    }
+    boardEl.innerHTML = html;
+  }
+
+  function makeTTTMove(gid, idx, symbol) {
+    db.ref('games/tictactoe/' + gid).once('value', function(snap) {
+      var g = snap.val();
+      if (!g || g.status !== 'playing') return;
+      var user = getCurrentUser();
+      var mySymbol = (g.playerX === user) ? 'X' : 'O';
+      if (g.turn !== mySymbol) return;
+      var board = g.board.split(',');
+      if (board[idx] !== '') return;
+      board[idx] = symbol;
+
+      var winner = checkTTTWinner(board);
+      var newStatus = winner ? 'done' : (board.every(function(c) { return c !== ''; }) ? 'done' : 'playing');
+      var newWinner = winner ? winner : (newStatus === 'done' ? 'draw' : '');
+      var newTurn = symbol === 'X' ? 'O' : 'X';
+
+      db.ref('games/tictactoe/' + gid).update({
+        board: board.join(','),
+        turn: newTurn,
+        status: newStatus,
+        winner: newWinner
+      });
+    });
+  }
+
+  function checkTTTWinner(board) {
+    var lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    for (var i = 0; i < lines.length; i++) {
+      var a = lines[i][0], b = lines[i][1], c = lines[i][2];
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) return board[a];
+    }
+    return null;
+  }
+
+  function getWinningCells(board) {
+    var lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    for (var i = 0; i < lines.length; i++) {
+      var a = lines[i][0], b = lines[i][1], c = lines[i][2];
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) return [a, b, c];
+    }
+    return [];
+  }
+
+  function leaveTTTGame() {
+    if (tttListener && tttGameId) {
+      db.ref('games/tictactoe/' + tttGameId).off('value', tttListener);
+      tttListener = null;
+      // If game was waiting, delete it
+      db.ref('games/tictactoe/' + tttGameId).once('value', function(snap) {
+        var g = snap.val();
+        if (g && g.status === 'waiting') {
+          db.ref('games/tictactoe/' + tttGameId).remove();
+        }
+      });
+    }
+    tttGameId = null;
+    loadTicTacToe();
   }
 
   // ==========================================================
