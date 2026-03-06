@@ -3841,6 +3841,103 @@
     transition: all 0.2s;
   }
   .photo-post-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(0,255,255,0.5); }
+
+  /* ===== AILA BOT PAGE ===== */
+  .aila-chat-container {
+    max-width: 600px;
+    margin: 0 auto;
+    min-height: 400px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 15px;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.3);
+    border: 2px solid rgba(0,255,255,0.2);
+  }
+  .aila-welcome { text-align: center; padding: 20px; }
+  .aila-suggestion {
+    background: rgba(0,255,255,0.1);
+    border: 1px solid rgba(0,255,255,0.3);
+    color: #00ffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+  .aila-suggestion:hover { background: rgba(0,255,255,0.25); transform: scale(1.05); }
+  .aila-msg {
+    margin: 10px 0;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .aila-msg.user { flex-direction: row-reverse; }
+  .aila-msg-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+  .aila-msg.bot .aila-msg-avatar { background: linear-gradient(135deg, #00ffff, #ff00ff); }
+  .aila-msg.user .aila-msg-avatar { background: linear-gradient(135deg, #ff00ff, #ffff00); }
+  .aila-msg-bubble {
+    padding: 12px 16px;
+    border-radius: 18px;
+    max-width: 80%;
+    line-height: 1.5;
+    font-size: 0.95rem;
+  }
+  .aila-msg.bot .aila-msg-bubble {
+    background: rgba(0,255,255,0.1);
+    border: 1px solid rgba(0,255,255,0.2);
+    color: #fff;
+    border-bottom-left-radius: 4px;
+  }
+  .aila-msg.user .aila-msg-bubble {
+    background: rgba(255,0,255,0.15);
+    border: 1px solid rgba(255,0,255,0.3);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+  .aila-input-bar {
+    max-width: 600px;
+    margin: 15px auto 0;
+    display: flex;
+    gap: 10px;
+  }
+  .aila-input-bar input {
+    flex: 1;
+    padding: 14px 18px;
+    border-radius: 25px;
+    border: 2px solid rgba(0,255,255,0.3);
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    font-family: 'Comic Neue', cursive;
+    font-size: 1rem;
+    outline: none;
+  }
+  .aila-input-bar input:focus { border-color: #00ffff; box-shadow: 0 0 12px rgba(0,255,255,0.3); }
+  .aila-send-btn {
+    background: linear-gradient(135deg, #00ffff, #ff00ff);
+    border: none;
+    color: #0f0024;
+    padding: 14px 24px;
+    border-radius: 25px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+  .aila-send-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(0,255,255,0.5); }
+  .aila-typing { color: #aaa; font-style: italic; padding: 8px 16px; }
 </style>
 </head>
 <body>
@@ -3867,6 +3964,7 @@
         <button onclick="showPage('games');closeMoreMenu()">🎮 Games</button>
         <button onclick="showPage('facefilters');closeMoreMenu()">🤪 Face Filters</button>
         <button onclick="showPage('photofilters');closeMoreMenu()">📸 Photo Filters</button>
+        <button onclick="showPage('aila');closeMoreMenu()">🤖 AILA Bot</button>
         <button onclick="showPage('toc');closeMoreMenu()">📋 All Features</button>
       </div>
     </div>
@@ -4332,7 +4430,8 @@
       <div onclick="showPage('live')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">🔴</span><div><div style="color:#fff;font-weight:700;">Livestreams</div><div style="color:#aaa;font-size:0.85rem;">Watch and start live streams</div></div></div>
       <div onclick="showPage('games')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">🎮</span><div><div style="color:#fff;font-weight:700;">Meme Games</div><div style="color:#aaa;font-size:0.85rem;">Trivia, WYR, Caption This, Meme Gen</div></div></div>
       <div onclick="showPage('facefilters')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">🤪</span><div><div style="color:#fff;font-weight:700;">Face Filters</div><div style="color:#aaa;font-size:0.85rem;">Fun camera filters (just for fun!)</div></div></div>
-      <div onclick="showPage('photofilters')" style="padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">📸</span><div><div style="color:#fff;font-weight:700;">Photo Filters</div><div style="color:#aaa;font-size:0.85rem;">Edit photos and post with filters</div></div></div>
+      <div onclick="showPage('photofilters')" style="padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">📸</span><div><div style="color:#fff;font-weight:700;">Photo Filters</div><div style="color:#aaa;font-size:0.85rem;">Edit photos and post with filters</div></div></div>
+      <div onclick="showPage('aila')" style="padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;"><span style="font-size:1.4rem;">🤖</span><div><div style="color:#fff;font-weight:700;">AILA Bot</div><div style="color:#aaa;font-size:0.85rem;">AI Learning App - chat with our AI!</div></div></div>
     </div>
   </div>
 </div>
@@ -4424,6 +4523,31 @@
       <button onclick="resetPhotoFilter()" style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,0,0,0.3);color:#ff6666;padding:10px 20px;border-radius:20px;font-family:'Comic Neue',cursive;font-weight:700;cursor:pointer;">🔄 Reset</button>
     </div>
     <button class="photo-post-btn" onclick="postFilteredPhoto()">POST TO FEED 🚀</button>
+  </div>
+</div>
+
+<!-- ===== AILA BOT PAGE ===== -->
+<div class="container hidden" id="ailaPage">
+  <div class="page-title" style="color: #00ffff;">🤖 AILA - AI Learning App 🤖</div>
+  <div class="aila-chat-container" id="ailaChatContainer">
+    <div class="aila-welcome">
+      <div style="font-size:4rem;margin-bottom:10px;">🤖</div>
+      <div style="color:#00ffff;font-family:'Bangers',cursive;font-size:1.8rem;">Hey! I'm AILA!</div>
+      <div style="color:#aaa;margin-top:8px;">Your AI bestie on vote.rizz! Ask me anything - rizz tips, jokes, meme facts, homework help, or just chat!</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:15px;">
+        <button class="aila-suggestion" onclick="ailaQuickAsk('Give me your best rizz line')">😏 Rizz me up</button>
+        <button class="aila-suggestion" onclick="ailaQuickAsk('Tell me a funny joke')">😂 Tell a joke</button>
+        <button class="aila-suggestion" onclick="ailaQuickAsk('Give me a random meme fact')">🧠 Meme fact</button>
+        <button class="aila-suggestion" onclick="ailaQuickAsk('What should I post on vote.rizz?')">💡 Post ideas</button>
+        <button class="aila-suggestion" onclick="ailaQuickAsk('Roast me lightly')">🔥 Roast me</button>
+        <button class="aila-suggestion" onclick="ailaQuickAsk('Give me a motivational quote')">💪 Motivate me</button>
+      </div>
+    </div>
+    <div id="ailaChatMessages"></div>
+  </div>
+  <div class="aila-input-bar">
+    <input type="text" id="ailaInput" placeholder="Ask AILA anything..." maxlength="500" onkeydown="if(event.key==='Enter')sendAilaMessage()">
+    <button onclick="sendAilaMessage()" class="aila-send-btn">Send 🚀</button>
   </div>
 </div>
 
@@ -5129,7 +5253,7 @@
 
   // ===== NAVIGATION =====
   function hideAllPages() {
-    ['feedPage', 'postPage', 'leaderboardPage', 'announcementsPage', 'rulesPage', 'profilePage', 'messagesPage', 'wheelPage', 'livePage', 'gamesPage', 'facefiltersPage', 'photofiltersPage', 'tocPage'].forEach(id => {
+    ['feedPage', 'postPage', 'leaderboardPage', 'announcementsPage', 'rulesPage', 'profilePage', 'messagesPage', 'wheelPage', 'livePage', 'gamesPage', 'facefiltersPage', 'photofiltersPage', 'ailaPage', 'tocPage'].forEach(id => {
       var el = document.getElementById(id);
       if (el) el.classList.add('hidden');
     });
@@ -5210,6 +5334,10 @@
         break;
       case 'photofilters':
         document.getElementById('photofiltersPage').classList.remove('hidden');
+        document.getElementById('nav-more').classList.add('active');
+        break;
+      case 'aila':
+        document.getElementById('ailaPage').classList.remove('hidden');
         document.getElementById('nav-more').classList.add('active');
         break;
       case 'toc':
@@ -8742,7 +8870,64 @@
     { name: 'SpongeBob', url: 'https://i.imgflip.com/1h7in3.jpg', topY: 0.08, botY: 0.85 },
     { name: 'Doge', url: 'https://i.imgflip.com/4t0m5.jpg', topY: 0.08, botY: 0.85 },
     { name: 'Woman Yelling', url: 'https://i.imgflip.com/2ybua0.jpg', topY: 0.08, botY: 0.85 },
-    { name: 'Bernie Asking', url: 'https://i.imgflip.com/3oevdk.jpg', topY: 0.08, botY: 0.85 }
+    { name: 'Bernie Asking', url: 'https://i.imgflip.com/3oevdk.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'One Does Not Simply', url: 'https://i.imgflip.com/4/1bij.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Futurama Fry', url: 'https://i.imgflip.com/4/1bhw.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Bad Luck Brian', url: 'https://i.imgflip.com/9ehk.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Disaster Girl', url: 'https://i.imgflip.com/4/gk5rs.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Hide Pain Harold', url: 'https://i.imgflip.com/1c1uej.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Roll Safe', url: 'https://i.imgflip.com/261o3j.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Left Exit 12', url: 'https://i.imgflip.com/4/22bdq8.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Is This a Pigeon', url: 'https://i.imgflip.com/4/1e7ql7.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Two Buttons', url: 'https://i.imgflip.com/1itoun.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Think Mark Think', url: 'https://i.imgflip.com/5c7lwq.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Ancient Aliens', url: 'https://i.imgflip.com/26am.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Grumpy Cat', url: 'https://i.imgflip.com/8p0a.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Success Kid', url: 'https://i.imgflip.com/1bhk.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Batman Slapping Robin', url: 'https://i.imgflip.com/9vct.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Waiting Skeleton', url: 'https://i.imgflip.com/2fm6x.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Grandma Internet', url: 'https://i.imgflip.com/grr.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Evil Kermit', url: 'https://i.imgflip.com/1e7ql7.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Spongebob Ight', url: 'https://i.imgflip.com/3kwur.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Tuxedo Winnie', url: 'https://i.imgflip.com/2ybua0.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Buff Doge vs Cheems', url: 'https://i.imgflip.com/43a45p.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Trade Offer', url: 'https://i.imgflip.com/54hjww.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Panik Kalm', url: 'https://i.imgflip.com/3qqcim.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Gru Plan', url: 'https://i.imgflip.com/2fbs6.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Clown Applying Makeup', url: 'https://i.imgflip.com/38el31.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Always Has Been', url: 'https://i.imgflip.com/46e43q.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Sad Pablo Escobar', url: 'https://i.imgflip.com/3oeSf4.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Running Away Balloon', url: 'https://i.imgflip.com/2da2wv.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'They Dont Know', url: 'https://i.imgflip.com/4pn1an.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Monkey Puppet', url: 'https://i.imgflip.com/2gnnjh.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'UNO Draw 25', url: 'https://i.imgflip.com/3lmzyx.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Sleeping Shaq', url: 'https://i.imgflip.com/4acd7j.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Epic Handshake', url: 'https://i.imgflip.com/28j0te.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Boardroom Meeting', url: 'https://i.imgflip.com/1nck6k.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Mocking SpongeBob', url: 'https://i.imgflip.com/1h7in3.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Mr Incredible Uncanny', url: 'https://i.imgflip.com/5xorvg.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Squidward Window', url: 'https://i.imgflip.com/2t8b4h.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Who Killed Hannibal', url: 'https://i.imgflip.com/28s2gu.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Side Eye Teddy', url: 'https://i.imgflip.com/3pnmg.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Flex Tape', url: 'https://i.imgflip.com/2dxkwi.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Mega Chad', url: 'https://i.imgflip.com/6312d5.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Peter Griffin News', url: 'https://i.imgflip.com/xmlp.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Disaster Puppy', url: 'https://i.imgflip.com/1qkz0p.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Pepe Silvia', url: 'https://i.imgflip.com/2wifvo.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Cat Vibing', url: 'https://i.imgflip.com/3oevdk.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Among Us', url: 'https://i.imgflip.com/4c3si2.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Squid Game', url: 'https://i.imgflip.com/5qwizs.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Pointing Mirror', url: 'https://i.imgflip.com/3igo27.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Bike Fall', url: 'https://i.imgflip.com/36kepl.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Ight Imma Head Out', url: 'https://i.imgflip.com/3cv0gf.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Guess Ill Die', url: 'https://i.imgflip.com/1jowie.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Confused Cat', url: 'https://i.imgflip.com/2ybua0.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Say The Line', url: 'https://i.imgflip.com/1w7ygt.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Thanos Snap', url: 'https://i.imgflip.com/2odset.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Shrek Good Question', url: 'https://i.imgflip.com/3qcbz6.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Stonks', url: 'https://i.imgflip.com/30bfim.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Not Stonks', url: 'https://i.imgflip.com/3a79r0.jpg', topY: 0.08, botY: 0.85 },
+    { name: 'Thomas Had Never', url: 'https://i.imgflip.com/27fg38.jpg', topY: 0.08, botY: 0.85 }
   ];
   var currentMemeTemplate = null;
   var memeCanvas = null;
@@ -10072,6 +10257,245 @@
       btn.disabled = false;
       btn.textContent = 'POST TO FEED 🚀';
     }
+  }
+
+  // ==========================================================
+  // ===== AILA BOT ============================================
+  // ==========================================================
+  var ailaHistory = [];
+
+  var ailaRizzLines = [
+    "Are you a magician? Because whenever I look at you, everyone else disappears. 😏",
+    "Do you have a map? I just got lost in your eyes. 🗺️✨",
+    "Are you Wi-Fi? Because I'm feeling a connection. 📶",
+    "If you were a vegetable, you'd be a cute-cumber. 🥒",
+    "Is your name Google? Because you have everything I've been searching for. 🔍",
+    "Do you believe in love at first sight, or should I walk by again? 😎",
+    "Are you a parking ticket? Because you've got 'fine' written all over you. 🎫",
+    "If beauty were time, you'd be an eternity. ⏰",
+    "Your hand looks heavy... let me hold it for you. 🤝",
+    "I'm not a photographer, but I can picture us together. 📸",
+    "Are you a bank loan? Because you've got my interest. 💰",
+    "I must be a snowflake, because I've fallen for you. ❄️",
+    "Do you have a Band-Aid? I just scraped my knee falling for you. 🩹",
+    "Are you a campfire? Because you're hot and I want s'more. 🔥",
+    "You must be tired, because you've been running through my mind all day. 🏃",
+    "Excuse me, do you have the time? I just want to remember the exact moment I met you. ⌚",
+    "If looks could kill, you'd be a weapon of mass destruction. 💣",
+    "Are you an alien? Because you just abducted my heart. 👽❤️",
+    "Your smile must be a black hole, nothing can escape its pull. 🌀",
+    "I'd say God bless you, but it looks like he already did. 🙏"
+  ];
+
+  var ailaJokes = [
+    "Why don't scientists trust atoms? Because they make up everything! 🔬😂",
+    "I told my wife she was drawing her eyebrows too high. She looked surprised. 😮",
+    "Why did the scarecrow win an award? He was outstanding in his field! 🌾",
+    "I'm reading a book about anti-gravity. It's impossible to put down! 📚",
+    "Why don't eggs tell jokes? They'd crack each other up! 🥚",
+    "What do you call a fake noodle? An impasta! 🍝",
+    "Why did the math book look so sad? Because it had too many problems. 📖",
+    "What do you call a bear with no teeth? A gummy bear! 🐻",
+    "Why don't skeletons fight each other? They don't have the guts! 💀",
+    "I used to hate facial hair, but then it grew on me. 🧔",
+    "What's a computer's favorite snack? Microchips! 💻",
+    "Why did the bicycle fall over? It was two-tired! 🚲",
+    "What do you call a dog magician? A Labracadabrador! 🐕✨",
+    "I told a chemistry joke but got no reaction. ⚗️",
+    "Why can't you hear a pterodactyl going to the bathroom? Because the P is silent! 🦕"
+  ];
+
+  var ailaMemeFacts = [
+    "The word 'meme' was coined by Richard Dawkins in 1976 in his book 'The Selfish Gene'! 📖",
+    "Doge (the Shiba Inu) is a real dog named Kabosu from Japan! 🐕",
+    "The 'Distracted Boyfriend' meme is actually a stock photo taken in 2015 by photographer Antonio Guillem! 📸",
+    "Rickrolling started on 4chan in 2007 and is still going strong! Never gonna give you up~ 🎵",
+    "The 'This Is Fine' dog was created by KC Green in his webcomic 'Gunshow' in 2013! 🔥🐕",
+    "Grumpy Cat's real name was Tardar Sauce! She had feline dwarfism which caused her unique look. 😾",
+    "The 'Woman Yelling at Cat' meme combines a Real Housewives scene with a cat named Smudge! 🐱",
+    "'Loss' (the meme about 4 panels) comes from a 2008 Ctrl+Alt+Del comic strip. | || || |_ 📰",
+    "Bad Luck Brian's yearbook photo was taken in 2006 - his real name is Kyle Craven! 📷",
+    "The Trollface was drawn by Carlos Ramirez (Whynne) in 2008 using MS Paint! 🎨",
+    "Pepe the Frog was created by Matt Furie in his comic 'Boy's Club' in 2005! 🐸",
+    "The 'Stonks' meme man was originally a 3D model from 2017 called 'Meme Man'! 📈",
+    "Hide the Pain Harold is a real person - András Arató, a Hungarian electrical engineer! ⚡",
+    "'Surprised Pikachu' became a meme in 2018, 20 years after the original episode aired! ⚡🐭",
+    "The Drake meme template is from his music video for 'Hotline Bling' (2015)! 📱"
+  ];
+
+  var ailaPostIdeas = [
+    "Post a 'rate my fit' with your best outfit and ask people to vote! 👔🔥",
+    "Make a hot take about which school lunch is the GOAT. Controversial = engagement! 🍕",
+    "Post a 'this or that' comparison - like Nike vs Adidas, cats vs dogs! 🤔",
+    "Share your best meme creation from the Meme Gen and ask for captions! 🖼️",
+    "Do a 'guess who said it' with funny quotes from your friend group! 💬",
+    "Post your most unhinged take and see who agrees. Chaos = rizz! 🌪️",
+    "Rate your day from 1-10 and explain why - people love relatable content! 📊",
+    "Challenge someone to a game of Tic Tac Toe or RPS on the Games page! 🎮",
+    "Share a throwback photo and ask 'was this era peak?' 📸",
+    "Post unpopular opinions about popular things. The replies will go crazy! 🔥"
+  ];
+
+  var ailaRoasts = [
+    "You're like a software update - whenever I see you, I think 'not now.' 💻😂",
+    "You bring everyone so much joy... when you leave. 🚪",
+    "I'd roast you harder, but I don't want to burn what's already well done. 🔥",
+    "You're not stupid, you just have bad luck thinking. 🧠",
+    "You're the reason they put instructions on shampoo bottles. 🧴",
+    "If you were a spice, you'd be flour. 🫓",
+    "You're like a cloud - everything brightens up when you go away. ☁️",
+    "I'd agree with you but then we'd both be wrong. 🤷",
+    "You have something on your chin... no, the third one. 😂",
+    "Light roast tho, you're actually cool fr fr 😎💯"
+  ];
+
+  var ailaMotivation = [
+    "You're built different and the world isn't ready for what you're about to do. Keep going! 💪🔥",
+    "Every expert was once a beginner. Your grind today is tomorrow's flex. 📈",
+    "The comeback is always stronger than the setback. Stay locked in! 🎯",
+    "You didn't come this far just to come this far. Keep pushing! 🚀",
+    "Main character energy is a choice. Choose it every single day. 🌟",
+    "Haters are just confused fans. Let them watch while you win. 👑",
+    "Hard work beats talent when talent doesn't work hard. You got this! 💯",
+    "Today's struggles are tomorrow's strengths. Pain is just growth in disguise. 🌱",
+    "You're literally one decision away from a completely different life. Make it count! ⚡",
+    "Stop doubting yourself. You're literally cracked at this thing called life! 🏆"
+  ];
+
+  var ailaGeneralResponses = [
+    "That's actually a great question! I think {topic} is super interesting. What's your take on it? 🤔",
+    "Hmm, let me think about that... Okay so basically, that's lowkey fire! 🔥",
+    "No cap, that's a valid point! I respect the energy! 💯",
+    "Bruh, that's deep. You're out here thinking big thoughts! 🧠✨",
+    "Real talk, I vibe with that. Tell me more! 😎",
+    "That's giving main character energy fr fr! 🌟",
+    "Interesting! Did you know vote.rizz has games too? Check them out! 🎮",
+    "I love that energy! Keep being awesome! 💪",
+    "W response honestly. You're built different! 👑",
+    "That's bussin! I fw your vibe heavy! 🔥💯"
+  ];
+
+  function getAilaResponse(message) {
+    var msg = message.toLowerCase().trim();
+
+    if (msg.match(/rizz|flirt|pick.?up|line|smooth/)) {
+      return ailaRizzLines[Math.floor(Math.random() * ailaRizzLines.length)];
+    }
+    if (msg.match(/joke|funny|laugh|humor|lol|lmao/)) {
+      return ailaJokes[Math.floor(Math.random() * ailaJokes.length)];
+    }
+    if (msg.match(/meme.?fact|meme.?history|meme.?trivia|fact about meme/)) {
+      return ailaMemeFacts[Math.floor(Math.random() * ailaMemeFacts.length)];
+    }
+    if (msg.match(/post.?idea|what.?should.?i.?post|content.?idea|what.?to.?post/)) {
+      return ailaPostIdeas[Math.floor(Math.random() * ailaPostIdeas.length)];
+    }
+    if (msg.match(/roast|burn|diss|flame/)) {
+      return ailaRoasts[Math.floor(Math.random() * ailaRoasts.length)];
+    }
+    if (msg.match(/motivat|inspir|sad|down|depress|feel.?bad|cheer|encourage/)) {
+      return ailaMotivation[Math.floor(Math.random() * ailaMotivation.length)];
+    }
+    if (msg.match(/hello|hey|hi|sup|what'?s.?up|yo\b|howdy|greetings/)) {
+      var greetings = [
+        "Heyyy! Welcome to AILA! 🤖✨ What's good?",
+        "Yooo what's up! I'm AILA, your AI bestie! How can I help? 😎",
+        "Hey hey! AILA here, ready to vibe! What do you need? 🔥",
+        "Sup! I'm literally SO happy you're here! Ask me anything! 💜",
+        "Hiii! AILA at your service! Rizz tips, jokes, meme facts - you name it! 🚀"
+      ];
+      return greetings[Math.floor(Math.random() * greetings.length)];
+    }
+    if (msg.match(/who.?are.?you|what.?are.?you|your.?name|about.?you/)) {
+      return "I'm AILA - the AI Learning App bot! 🤖 I live right here on vote.rizz! I can give you rizz lines, tell jokes, share meme facts, suggest post ideas, roast you (lightly), and motivate you! I'm basically your AI bestie! 💜✨";
+    }
+    if (msg.match(/help|what.?can.?you.?do|commands|options/)) {
+      return "Here's what I can do! 🤖\n\n😏 Ask for RIZZ lines\n😂 Ask me to tell a JOKE\n🧠 Ask for MEME FACTS\n💡 Ask for POST IDEAS\n🔥 Ask me to ROAST you\n💪 Ask me to MOTIVATE you\n\nOr just chat with me about anything! I'm here for you! 💜";
+    }
+    if (msg.match(/thank|thanks|thx|ty\b|appreciate/)) {
+      var thanks = [
+        "Aww you're welcome! That's what I'm here for! 💜🤖",
+        "No problem at all! Come back anytime! 😊✨",
+        "You're so welcome! AILA loves helping! 🥰",
+        "Anytime bestie! That's literally my job and I love it! 💯"
+      ];
+      return thanks[Math.floor(Math.random() * thanks.length)];
+    }
+    if (msg.match(/bye|goodbye|see.?ya|later|gotta.?go|peace/)) {
+      var byes = [
+        "Peace out! Come back soon! AILA will miss you! 🤖💜👋",
+        "Later bestie! Remember: you've got main character energy! 👑✨",
+        "Byeee! Don't forget to post on vote.rizz! 🚀",
+        "See ya! Stay based! 😎💯"
+      ];
+      return byes[Math.floor(Math.random() * byes.length)];
+    }
+    if (msg.match(/love|crush|relationship|date|dating|boyfriend|girlfriend/)) {
+      var love = [
+        "Ooh love advice? First rule: confidence is the ultimate rizz! Just be yourself (but like, the best version). 😏💕",
+        "Hot take: the best relationships start as friendships. Don't rush it! 🌟",
+        "Real talk: if they don't match your energy, they're not your person. Know your worth! 👑",
+        "My best dating advice: be funny, be kind, and have good memes. That's literally it. 😂💯"
+      ];
+      return love[Math.floor(Math.random() * love.length)];
+    }
+    if (msg.match(/school|homework|study|class|teacher|test|exam/)) {
+      var school = [
+        "School tip: the Pomodoro technique is lowkey a cheat code. 25 min study, 5 min break! 📚⏰",
+        "Pro tip: teach the material to someone else (or a rubber duck). If you can explain it, you know it! 🦆",
+        "Real talk: consistency beats cramming every time. Study a little bit every day! 📈",
+        "Make flashcards but make them fun! Add memes to help you remember stuff! 🧠🔥"
+      ];
+      return school[Math.floor(Math.random() * school.length)];
+    }
+
+    // Default: general response
+    var resp = ailaGeneralResponses[Math.floor(Math.random() * ailaGeneralResponses.length)];
+    return resp.replace('{topic}', message.split(' ').slice(0, 3).join(' '));
+  }
+
+  function addAilaMessage(text, isBot) {
+    var container = document.getElementById('ailaChatMessages');
+    var welcome = document.querySelector('.aila-welcome');
+    if (welcome) welcome.style.display = 'none';
+
+    var msgDiv = document.createElement('div');
+    msgDiv.className = 'aila-msg ' + (isBot ? 'bot' : 'user');
+    msgDiv.innerHTML = '<div class="aila-msg-avatar">' + (isBot ? '🤖' : '😎') + '</div>' +
+      '<div class="aila-msg-bubble">' + text.replace(/\n/g, '<br>') + '</div>';
+    container.appendChild(msgDiv);
+
+    var chatContainer = document.getElementById('ailaChatContainer');
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+  function sendAilaMessage() {
+    var input = document.getElementById('ailaInput');
+    var msg = input.value.trim();
+    if (!msg) return;
+
+    input.value = '';
+    addAilaMessage(msg, false);
+
+    // Simulate typing delay
+    var typingDiv = document.createElement('div');
+    typingDiv.className = 'aila-typing';
+    typingDiv.id = 'ailaTyping';
+    typingDiv.textContent = 'AILA is typing...';
+    document.getElementById('ailaChatMessages').appendChild(typingDiv);
+    document.getElementById('ailaChatContainer').scrollTop = document.getElementById('ailaChatContainer').scrollHeight;
+
+    setTimeout(function() {
+      var typing = document.getElementById('ailaTyping');
+      if (typing) typing.remove();
+      var response = getAilaResponse(msg);
+      addAilaMessage(response, true);
+    }, 500 + Math.random() * 1000);
+  }
+
+  function ailaQuickAsk(msg) {
+    document.getElementById('ailaInput').value = msg;
+    sendAilaMessage();
   }
 </script>
 </body>
