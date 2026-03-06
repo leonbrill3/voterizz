@@ -3955,6 +3955,7 @@
     <button onclick="showPage('announcements')" id="nav-announcements">Announcements</button>
     <button onclick="showPage('messages')" id="nav-messages">Messages</button>
     <button onclick="viewingUser=null;showPage('profile')" id="nav-profile">Profile</button>
+    <button onclick="showPage('aila')" id="nav-aila">🤖 AILA</button>
     <div class="more-dropdown-wrap">
       <button onclick="toggleMoreMenu()" id="nav-more">More ▾</button>
       <div class="more-dropdown" id="moreDropdown">
@@ -5338,7 +5339,7 @@
         break;
       case 'aila':
         document.getElementById('ailaPage').classList.remove('hidden');
-        document.getElementById('nav-more').classList.add('active');
+        document.getElementById('nav-aila').classList.add('active');
         break;
       case 'toc':
         document.getElementById('tocPage').classList.remove('hidden');
